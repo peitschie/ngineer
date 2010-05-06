@@ -7,3 +7,5 @@ UnitTests/test-results
 test-results
 NGineer/bin
 UnitTests/bin
+NGineer.userprefs
+*.pidb
