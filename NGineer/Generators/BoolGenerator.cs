@@ -1,14 +1,14 @@
+
 using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace NGineer.Generators
 {
-	public class IntGenerator : IGenerator<int>
+
+	public class BoolGenerator : IGenerator<bool>
 	{
 		private readonly Random _random;
 		
-		public IntGenerator(int seed)
+		public BoolGenerator(int seed)
 		{
 			_random = new Random(seed);
 		}
@@ -18,9 +18,9 @@ namespace NGineer.Generators
 			return this.Generate();
 		}
 		
-		public int Generate()
+		public bool Generate()
 		{
-			return _random.Next();
+			return _random.Next(2) == 1;
 		}
 	}
 }

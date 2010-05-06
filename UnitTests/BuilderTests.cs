@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 
 
-namespace NGineer
+namespace NGineer.UnitTests
 {
 	[TestFixture]
 	public class BuilderTests

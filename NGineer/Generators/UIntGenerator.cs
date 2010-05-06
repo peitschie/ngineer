@@ -1,14 +1,14 @@
+
 using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace NGineer.Generators
 {
-	public class IntGenerator : IGenerator<int>
+
+	public class UIntGenerator : IGenerator<uint>
 	{
 		private readonly Random _random;
 		
-		public IntGenerator(int seed)
+		public UIntGenerator(int seed)
 		{
 			_random = new Random(seed);
 		}
@@ -18,9 +18,10 @@ namespace NGineer.Generators
 			return this.Generate();
 		}
 		
-		public int Generate()
+		public uint Generate()
 		{
-			return _random.Next();
+			var nextValue = _random.Next();
+			return Convert.ToUInt32(nextValue < 0 ? -nextValue : nextValue);
 		}
 	}
 }

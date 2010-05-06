@@ -5,7 +5,6 @@ using System.Text;
 namespace NGineer.Generators
 {
 
-
 	public class StringGenerator : IGenerator<string>
 	{
 		private readonly Random _random;

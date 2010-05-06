@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>JunkPile</RootNamespace>
+    <RootNamespace>NGineer</RootNamespace>
     <AssemblyName>JunkPile</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -42,6 +42,9 @@
     <Compile Include="Generators\IntGenerator.cs" />
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Generators\StringGenerator.cs" />
+    <Compile Include="Generators\UIntGenerator.cs" />
+    <Compile Include="Generators\BoolGenerator.cs" />
+    <Compile Include="Generators\BuilderGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

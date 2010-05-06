@@ -15,6 +15,7 @@ namespace NGineer
 		{
 			WithGenerator(new IntGenerator(seed));
 			WithGenerator(new StringGenerator(seed));
+			WithGenerator(new UIntGenerator(seed));
 		}
 		
 		public IBuilder WithGenerator<TType>(IGenerator<TType> generator)
