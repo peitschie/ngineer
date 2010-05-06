@@ -1,0 +1,40 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ctype="Workspace" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="UnitTests/BuilderTests.cs" ctype="Workbench">
+    <Files>
+      <File FileName="AssemblyInfo.cs" Line="7" Column="34" />
+      <File FileName="Builder.cs" Line="6" Column="11" />
+      <File FileName="IBuilder.cs" Line="3" Column="1" />
+      <File FileName="Main.cs" Line="4" Column="18" />
+      <File FileName="Generators/IGenerator.cs" Line="5" Column="19" />
+      <File FileName="Generators/IntGenerator.cs" Line="5" Column="19" />
+      <File FileName="Generators/StringGenerator.cs" Line="8" Column="1" />
+      <File FileName="UnitTests/BuilderTests.cs" Line="14" Column="44" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="NGineer" expanded="True" />
+          <Node name="UnitTests" expanded="True">
+            <Node name="References" expanded="True" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True" selected="True">
+          <Node name="UnitTests" expanded="True">
+            <Node name="NGineer" expanded="True">
+              <Node name="BuilderTests" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

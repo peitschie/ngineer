@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGineer", "NGineer\NGineer.csproj", "{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}"
+EndProject
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "Packages", "NGineer\Packages.mdproj", "{4D9634FC-A544-4BD2-8135-FA74BA04F544}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{824116AC-3FD3-421A-B645-3008A3E38AA6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D9634FC-A544-4BD2-8135-FA74BA04F544}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D9634FC-A544-4BD2-8135-FA74BA04F544}.Release|x86.ActiveCfg = Release|Any CPU
+		{824116AC-3FD3-421A-B645-3008A3E38AA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{824116AC-3FD3-421A-B645-3008A3E38AA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{824116AC-3FD3-421A-B645-3008A3E38AA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{824116AC-3FD3-421A-B645-3008A3E38AA6}.Release|x86.Build.0 = Release|Any CPU
+		{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}.Debug|x86.ActiveCfg = Debug|x86
+		{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}.Debug|x86.Build.0 = Debug|x86
+		{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}.Release|x86.ActiveCfg = Release|x86
+		{C7F8F59F-611C-44CE-BB53-A12B6506D1D9}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = NGineer.csproj
+	EndGlobalSection
+EndGlobal
