@@ -114,7 +114,7 @@ namespace NGineer
 
         private object DoBuild(Type type, BuildContext builder)
         {
-            var obj = GetGenerator(type).Generate(type, builder);
+            var obj = GetGeneratorOrDefault(type).Generate(type, builder);
             obj = DoSetters(type, obj, builder);
             return obj;
         }
@@ -124,14 +124,20 @@ namespace NGineer
             return Setters.Where(s => s.IsForType(type)).Aggregate(obj, (current, setter) => setter.Set(current, builder));
         }
 
-        private IGenerator GetGenerator(Type type, bool returnDefault = true)
+		private IGenerator GetGeneratorOrDefault(Type type)
+        {
+            var thisGenerator = GetGenerator(type);
+            return thisGenerator == null ? _defaultGenerator : thisGenerator;
+        }
+		
+        private IGenerator GetGenerator(Type type)
         {
             var thisGenerator = _generators.FirstOrDefault(g => g.GeneratesType(type, this));
             if(thisGenerator == null && Parent != null)
             {
-                thisGenerator = Parent.GetGenerator(type, false);
+                thisGenerator = Parent.GetGenerator(type);
             }
-            return returnDefault ? (thisGenerator ?? _defaultGenerator) : thisGenerator;
+            return thisGenerator;
         }
 	}
 

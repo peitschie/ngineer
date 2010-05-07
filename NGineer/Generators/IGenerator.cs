@@ -13,7 +13,7 @@ namespace NGineer.Generators
         object Generate(FieldInfo field, IBuilder builder);
 	}
 	
-	public interface IGenerator<out TType> : IGenerator
+	public interface IGenerator<TType> : IGenerator
 	{
         new TType Generate(Type type, IBuilder builder);
         new TType Generate(PropertyInfo property, IBuilder builder);

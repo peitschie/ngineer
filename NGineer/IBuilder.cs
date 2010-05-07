@@ -26,7 +26,7 @@ namespace NGineer
         IBuilder Seal();
     }
 
-    public interface IBuilder<out TBuildType> : IBuilder
+    public interface IBuilder<TBuildType> : IBuilder
 	{
         new IBuilder<TBuildType> WithGenerator(IGenerator generator);
         new IBuilder<TBuildType> SetMaximumDepth(int depth);
