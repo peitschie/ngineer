@@ -17,7 +17,7 @@ namespace NGineer
         IBuilder SetValuesFor<TType>(Action<TType, IBuilder> setter);
         IBuilder SetValuesFor<TType>(Func<TType, IBuilder, TType> setter);
 		
-		IBuilder SetDefaultListSize(int minimum, int maximum);
+		IBuilder SetCollectionSize(int minimum, int maximum);
 
         /// <summary>
         /// Marks this builder as sealed.  This prevents accidently overriding values, depths or generators.
@@ -40,7 +40,7 @@ namespace NGineer
         new IBuilder<TBuildType> SetValuesFor<TType>(Action<TType, IBuilder> setter);
         new IBuilder<TBuildType> SetValuesFor<TType>(Func<TType, IBuilder, TType> setter);
 
-		new IBuilder<TBuildType> SetDefaultListSize(int minimum, int maximum);		
+		new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);		
 		
         new IBuilder<TBuildType> Seal();
 	}

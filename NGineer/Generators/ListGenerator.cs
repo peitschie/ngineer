@@ -23,7 +23,7 @@ namespace NGineer.Generators
 
         public bool GeneratesType(Type type, IBuilder builder)
         {
-            return typeof (IList<>).IsAssignableFrom(type);
+            return typeof (IList<>).IsGenericAssignableFrom(type);
         }
 
         public object Generate(Type type, IBuilder builder)

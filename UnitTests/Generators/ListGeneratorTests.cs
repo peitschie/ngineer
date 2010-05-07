@@ -18,6 +18,18 @@ namespace NGineer.UnitTests.Generators
         }
 
         [Test]
+        public void GeneratesType_IList_String()
+        {
+            Assert.IsTrue(_generator.GeneratesType(typeof(IList<string>), null));
+        }
+		
+		[Test]
+        public void GeneratesType_List_String()
+        {
+            Assert.IsTrue(_generator.GeneratesType(typeof(List<string>), null));
+        }
+		
+        [Test]
         public void Create_Simple_FixedSizedListOfStrings()
         {
             var builderMock = new Mock<IBuilder>();

@@ -40,9 +40,9 @@ namespace NGineer.BuildHelpers
             return this;
         }
 
-		public IBuilder SetDefaultListSize(int minimum, int maximum)
+		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
-			_parent.SetDefaultListSize(minimum, maximum);
+			_parent.SetCollectionSize(minimum, maximum);
 			return this;
 		}
 		

@@ -62,7 +62,7 @@ namespace NGineer
 			return this;
 		}
 
-		public IBuilder SetDefaultListSize(int minimum, int maximum)
+		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
 			_defaultListGenerator.MinimumListItems = minimum;
@@ -178,9 +178,9 @@ namespace NGineer
             return this;
         }
 		
-		public new IBuilder<TType> SetDefaultListSize(int minimum, int maximum)
+		public new IBuilder<TType> SetCollectionSize(int minimum, int maximum)
 		{
-			base.SetDefaultListSize(minimum, maximum);
+			base.SetCollectionSize(minimum, maximum);
 			return this;
 		}		
 

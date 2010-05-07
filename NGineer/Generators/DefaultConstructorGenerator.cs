@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using NGineer.BuildHelpers;
+using NGineer.Utils;
 
 namespace NGineer.Generators
 {
@@ -23,7 +24,7 @@ namespace NGineer.Generators
             object newObj = InvokeDefaultConstructor(type);
             if (newObj == null)
             {
-                throw new BuilderException("Unable to construct type " + type);
+                throw new BuilderException("Unable to construct {0} as no default constructor was found".With(type));
             }
 
             foreach (var property in type.GetProperties().Where(p => p.CanWrite))

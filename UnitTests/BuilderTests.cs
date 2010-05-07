@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NGineer.BuildHelpers;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 
 namespace NGineer.UnitTests
@@ -81,6 +82,7 @@ namespace NGineer.UnitTests
         {
             var newClass = new Builder(1).SetValuesFor<int>(n => 190).Seal();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
+			Assert.Throws<BuilderException>(() => newClass.SetCollectionSize(10, 100));
             Assert.Throws<BuilderException>(() => newClass.SetValuesFor<int>(n => 10));
             Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
         }
@@ -93,6 +95,17 @@ namespace NGineer.UnitTests
                 .Build<SimpleClass>();
 
             Assert.IsNotNull(newClass.StringProperty);
+        }
+		
+		[Test]
+        public void Build_SetCollectionSize_Settable()
+        {
+            var newClass = new Builder(1)
+                .SetCollectionSize(50, 60)
+                .Build<IList<SimpleClass>>();
+
+			Assert.IsNotNull(newClass);
+            Assert.IsTrue(50 <= newClass.Count && newClass.Count <= 60);
         }
 
         [Test]
