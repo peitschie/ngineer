@@ -13,8 +13,8 @@ namespace NGineer.UnitTests
 		{
 			var newClass = new Builder(1).Build(typeof(TestClass));
 			Assert.IsNotNull(newClass);
-			Assert.IsInstanceOfType(typeof(TestClass), newClass);
-			var newClassTyped = newClass as TestClass;
+            Assert.IsInstanceOf<TestClass>(newClass);
+			var newClassTyped = (TestClass)newClass;
 			Assert.IsNotNull(newClassTyped.Property1);
 			Assert.IsNotNull(newClassTyped.Property2);
 		}
@@ -55,31 +55,32 @@ namespace NGineer.UnitTests
 			Assert.IsNotNull(newClass.RecursiveReference);
 			Assert.IsNotNull(newClass.RecursiveReference.RecursiveReference);
 			Assert.IsNotNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference);
+			Assert.IsNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference.RecursiveReference);
 						
 		}
-	}
-	
-	public class RecursiveClass
-	{
-		public int IntProperty { get; set; }
-		public RecursiveClass RecursiveReference { get; set; }
-	}
-	
-	public class SimpleClass
-	{
-		public int IntProperty { get; set; }
-		public string StringProperty { get; set; }
-		public TestClass2 TestClass2Property { get; set; }
-	}
-	
-	public class TestClass2
-	{
-	}
-	
-	public class TestClass
-	{
-		public int Property1 { get; set; }
-		
-		public TestClass2 Property2 { get; set; }
+
+        public class RecursiveClass
+        {
+            public int IntProperty { get; set; }
+            public RecursiveClass RecursiveReference { get; set; }
+        }
+
+        public class SimpleClass
+        {
+            public int IntProperty { get; set; }
+            public string StringProperty { get; set; }
+            public TestClass2 TestClass2Property { get; set; }
+        }
+
+        public class TestClass2
+        {
+        }
+
+        public class TestClass
+        {
+            public int Property1 { get; set; }
+
+            public TestClass2 Property2 { get; set; }
+        }
 	}
 }

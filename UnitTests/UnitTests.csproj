@@ -50,6 +50,9 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\Libraries\Moq\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\Libraries\NUnit\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -60,6 +63,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuilderTests.cs" />
     <Compile Include="Generators\BuilderGeneratorTests.cs" />
+    <Compile Include="Generators\ListGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
