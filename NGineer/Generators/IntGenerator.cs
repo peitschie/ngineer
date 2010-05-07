@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NGineer.Generators
 {
-	public class IntGenerator : IGenerator<int>
+    public class IntGenerator : SimpleGenerator<int>
 	{
 		private readonly Random _random;
 		
@@ -12,13 +12,8 @@ namespace NGineer.Generators
 		{
 			_random = new Random(seed);
 		}
-		
-		object IGenerator.Generate()
-		{
-			return this.Generate();
-		}
-		
-		public int Generate()
+
+        protected override int Generate()
 		{
 			return _random.Next();
 		}

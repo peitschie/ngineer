@@ -6,6 +6,5 @@ namespace NGineer
 	public interface IBuilder
 	{
 		object Build(Type type);
-		TType Build<TType>();
 	}
 }

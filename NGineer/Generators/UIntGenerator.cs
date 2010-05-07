@@ -4,7 +4,7 @@ using System;
 namespace NGineer.Generators
 {
 
-	public class UIntGenerator : IGenerator<uint>
+    public class UIntGenerator : SimpleGenerator<uint>
 	{
 		private readonly Random _random;
 		
@@ -12,13 +12,8 @@ namespace NGineer.Generators
 		{
 			_random = new Random(seed);
 		}
-		
-		object IGenerator.Generate()
-		{
-			return this.Generate();
-		}
-		
-		public uint Generate()
+
+        protected override uint Generate()
 		{
 			var nextValue = _random.Next();
 			return Convert.ToUInt32(nextValue < 0 ? -nextValue : nextValue);

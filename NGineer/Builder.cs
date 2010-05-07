@@ -2,29 +2,31 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using NGineer.Generators;
+using NGineer.Utils;
 
 namespace NGineer
 {
 	public class Builder : IBuilder
 	{
-		private readonly Dictionary<Type, IGenerator> _generators = new Dictionary<Type, IGenerator>();
+		private readonly IList<IGenerator> _generators = new List<IGenerator>();
+	    private readonly IGenerator _defaultGenerator;
 		private int _maximumDepth = 20;
-		
 		
 		public Builder(int seed)
 		{
+		    _defaultGenerator = new DefaultConstructorGenerator(seed);
 			WithGenerator(new IntGenerator(seed));
 			WithGenerator(new StringGenerator(seed));
 			WithGenerator(new UIntGenerator(seed));
 		}
-		
-		public IBuilder WithGenerator<TType>(IGenerator<TType> generator)
+
+        public Builder WithGenerator(IGenerator generator)
 		{
-			_generators.Add(typeof(TType), generator);
+			_generators.Add(generator);
 			return this;
 		}
-		
-		public IBuilder SetMaximumDepth(int depth)
+
+        public Builder SetMaximumDepth(int depth)
 		{
 			_maximumDepth = depth;
 			return this;
@@ -37,38 +39,49 @@ namespace NGineer
 		
 		public object Build(Type type)
 		{
-			return DoBuild(type, 0);
+            return DoBuild(type, new BuildContext(_maximumDepth, DoBuild));
 		}
+
+        private object DoBuild(Type type, BuildContext builder)
+        {
+            return GetGenerator(type).Generate(type, builder);
+        }
 		
-		private object DoBuild(Type type, int level)
-		{
-			object newObj = null;
-			if(level <= _maximumDepth)
-			{
-				if(_generators.ContainsKey(type))
-				{
-					newObj = _generators[type].Generate();
-				}
-				else
-				{
-					var constructors = type.GetConstructors();
-					foreach(var constructor in constructors)
-					{
-						if(constructor.GetParameters().Length == 0)
-						{
-							newObj = constructor.Invoke(new object[0]);
-						}
-					}
-					if(newObj != null)
-					{
-						foreach(var property in type.GetProperties().Where(p => p.CanWrite))
-						{
-							property.SetValue(newObj, DoBuild(property.PropertyType, level+1), null);
-						}
-					}
-				}
-			}
-			return newObj;
-		}
+        private IGenerator GetGenerator(Type type)
+        {
+            return _generators.FirstOrDefault(g => g.GeneratesType(type, this)) ?? _defaultGenerator;
+        }
 	}
+
+    public class BuildContext : IBuilder
+    {
+        private readonly int _maximumDepth;
+        private readonly Func<Type, BuildContext, object> _buildAction;
+        private int _currentLevel;
+
+        public BuildContext(int maximumDepth, Func<Type, BuildContext, object> buildAction)
+        {
+            _maximumDepth = maximumDepth;
+            _buildAction = buildAction;
+        }
+
+        public object Build(Type type)
+        {
+            if (_currentLevel == _maximumDepth)
+                return null;
+
+            _currentLevel++;
+            var obj = _buildAction(type, this);
+            _currentLevel--;
+            return obj;
+        }
+    }
+
+    public class BuilderException : Exception
+    {
+        public BuilderException(string s) : base(s)
+        {
+            
+        }
+    }
 }

@@ -58,6 +58,11 @@
     <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generators\DefaultConstructorGenerator.cs" />
+    <Compile Include="Generators\SimpleGenerator.cs" />
+    <Compile Include="Generators\SingleTypeGenerator.cs" />
+    <Compile Include="Generators\ListGenerator.cs" />
+    <Compile Include="Utils\GenericAssignableFrom.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Builder.cs" />
@@ -68,6 +73,7 @@
     <Compile Include="Generators\UIntGenerator.cs" />
     <Compile Include="Generators\BoolGenerator.cs" />
     <Compile Include="Generators\BuilderGenerator.cs" />
+    <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

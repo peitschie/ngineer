@@ -4,7 +4,7 @@ using System;
 namespace NGineer.Generators
 {
 
-	public class BoolGenerator : IGenerator<bool>
+    public class BoolGenerator : SimpleGenerator<bool>
 	{
 		private readonly Random _random;
 		
@@ -12,13 +12,8 @@ namespace NGineer.Generators
 		{
 			_random = new Random(seed);
 		}
-		
-		object IGenerator.Generate()
-		{
-			return this.Generate();
-		}
-		
-		public bool Generate()
+
+        protected override bool Generate()
 		{
 			return _random.Next(2) == 1;
 		}
