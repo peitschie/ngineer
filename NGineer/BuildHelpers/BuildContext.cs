@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NGineer.Generators;
 
 namespace NGineer.BuildHelpers
@@ -40,6 +40,12 @@ namespace NGineer.BuildHelpers
             return this;
         }
 
+		public IBuilder SetDefaultListSize(int minimum, int maximum)
+		{
+			_parent.SetDefaultListSize(minimum, maximum);
+			return this;
+		}
+		
         public IBuilder CreateNew()
         {
             return _parent.CreateNew();

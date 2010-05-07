@@ -14,12 +14,15 @@ namespace NGineer
 	    private readonly int _seed;
 	    private readonly IList<IGenerator> _generators = new List<IGenerator>();
 	    private readonly IGenerator _defaultGenerator;
+		private readonly ListGenerator _defaultListGenerator;
 		private int _maximumDepth = 20;
 	    private bool _sealed;
 
 	    public Builder(int seed)
 		{
 		    _defaultGenerator = new DefaultConstructorGenerator();
+			_defaultListGenerator = new ListGenerator(seed, 10, 20);
+			WithGenerator(_defaultListGenerator);
 			WithGenerator(new ObjectGenerator(seed));
 			WithGenerator(new DateTimeGenerator(seed));
 			WithGenerator(new EnumGenerator(seed));
@@ -59,6 +62,14 @@ namespace NGineer
 			return this;
 		}
 
+		public IBuilder SetDefaultListSize(int minimum, int maximum)
+		{
+			AssertBuilderIsntSealed();
+			_defaultListGenerator.MinimumListItems = minimum;
+			_defaultListGenerator.MaximumListItems = maximum;
+			return this;	
+		}
+		
         #region Set values
 
         public IBuilder SetValuesFor<TType>(Action<TType> setter)
@@ -89,14 +100,14 @@ namespace NGineer
             return this;
 	    }
 
+	    #endregion
+		
 	    public IBuilder Seal()
 	    {
 	        _sealed = true;
 	        return this;
-	    }
-
-	    #endregion
-
+	    }		
+		
         public IBuilder CreateNew()
 	    {
 	        return new Builder(_seed, this);
@@ -166,6 +177,12 @@ namespace NGineer
             base.SetMaximumDepth(depth);
             return this;
         }
+		
+		public new IBuilder<TType> SetDefaultListSize(int minimum, int maximum)
+		{
+			base.SetDefaultListSize(minimum, maximum);
+			return this;
+		}		
 
         public new IBuilder<TType> SetValuesFor<TType1>(Action<TType1> setter)
         {
@@ -189,8 +206,8 @@ namespace NGineer
         {
             base.SetValuesFor(setter);
             return this;
-        }
-
+        }		
+		
         public new IBuilder<TType> Seal()
         {
             base.Seal();

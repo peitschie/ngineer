@@ -9,16 +9,17 @@ namespace NGineer.Generators
 {
     public class ListGenerator : IGenerator
     {
-        private readonly int _minListItems;
-        private readonly int _maxListItems;
         private readonly Random _random;
 
         public ListGenerator(int seed, int minListItems, int maxListItems)
         {
-            _minListItems = minListItems;
-            _maxListItems = maxListItems;
+            MinimumListItems = minListItems;
+            MaximumListItems = maxListItems;
             _random = new Random(seed);
         }
+		
+		public int MinimumListItems { get; set; }
+		public int MaximumListItems { get; set; }
 
         public bool GeneratesType(Type type, IBuilder builder)
         {
@@ -36,7 +37,7 @@ namespace NGineer.Generators
             }
 
             var list = (IList)constructor.Invoke(new object[0]);
-            var listSize = _minListItems + _random.Next(_maxListItems - _minListItems);
+            var listSize = MinimumListItems + _random.Next(MaximumListItems - MinimumListItems);
             for(int i = 0; i < listSize; i++)
             {
                 list.Add(builder.Build(listType));
