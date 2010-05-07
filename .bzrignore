@@ -9,3 +9,9 @@ NGineer/bin
 UnitTests/bin
 NGineer.userprefs
 *.pidb
+*.user
+NGineer.suo
+Output
+_ReSharper.NGineer
+NGineer/obj
+UnitTests/obj
