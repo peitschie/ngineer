@@ -65,6 +65,7 @@
     <Compile Include="Generators\BuilderGeneratorTests.cs" />
     <Compile Include="Generators\EnumGeneratorTests.cs" />
     <Compile Include="Generators\ListGeneratorTests.cs" />
+    <Compile Include="Generators\GeneratorTestFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

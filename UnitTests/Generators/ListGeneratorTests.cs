@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace NGineer.UnitTests.Generators
 {
     [TestFixture]
-    public class ListGeneratorTests
+    public class ListGeneratorTests : GeneratorTestFixture
     {
         private ListGenerator _generator;
 
@@ -16,17 +16,20 @@ namespace NGineer.UnitTests.Generators
         {
             _generator = new ListGenerator(1, 10, 10);
         }
-
+	
         [Test]
-        public void GeneratesType_IList_String()
+        public override void GeneratesTypes_AcceptsTypes()
         {
             Assert.IsTrue(_generator.GeneratesType(typeof(IList<string>), null));
+			Assert.IsTrue(_generator.GeneratesType(typeof(List<string>), null));
         }
 		
 		[Test]
-        public void GeneratesType_List_String()
+        public override void GeneratesTypes_RejectsTypes()
         {
-            Assert.IsTrue(_generator.GeneratesType(typeof(List<string>), null));
+            Assert.IsFalse(_generator.GeneratesType(typeof(ListGeneratorTests), null));
+			Assert.IsFalse(_generator.GeneratesType(typeof(string), null));
+			Assert.IsFalse(_generator.GeneratesType(typeof(IDictionary<string, string>), null));
         }
 		
         [Test]
