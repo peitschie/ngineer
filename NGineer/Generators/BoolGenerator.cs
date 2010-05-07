@@ -6,16 +6,13 @@ namespace NGineer.Generators
 
     public class BoolGenerator : SimpleGenerator<bool>
 	{
-		private readonly Random _random;
-		
-		public BoolGenerator(int seed)
-		{
-			_random = new Random(seed);
-		}
+        public BoolGenerator(int seed) : base(seed)
+        {
+        }
 
         protected override bool Generate()
 		{
-			return _random.Next(2) == 1;
+			return Random.Next(2) == 1;
 		}
 	}
 }

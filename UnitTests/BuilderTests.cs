@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NGineer.BuildHelpers;
 using NUnit.Framework;
 
 
@@ -74,7 +75,46 @@ namespace NGineer.UnitTests
             Assert.IsNotNull(newClass.StringProperty);
             Assert.IsNotNull(newClass.TestClass2Property);
         }
-        
+
+        [Test]
+        public void Seal_SealedBuilderPreventsModification()
+        {
+            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Seal();
+            Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
+            Assert.Throws<BuilderException>(() => newClass.SetValuesFor<int>(n => 10));
+            Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
+        }
+
+        [Test]
+        public void Build_SetupValueToOverrideBehaviour_SimpleClass()
+        {
+            var newClass = new Builder(1)
+                .SetValuesFor<string>((s, b) => b.Build(typeof(string)))
+                .Build<SimpleClass>();
+
+            Assert.IsNotNull(newClass.StringProperty);
+        }
+
+        [Test]
+        public void Build_SetupValueToOverrideBehaviour_RecursiveClass()
+        {
+            var newClass = new Builder(1)
+                .SetValuesFor<int>(n => 10)
+                .SetValuesFor<RecursiveClass>((s, b) =>
+                                                  {
+                                                      s.RecursiveReference = b.CreateNew()
+                                                          .SetValuesFor<int>(c => 20)
+                                                          .Build<RecursiveClass>();
+                                                      return s;
+                                                  })
+                .Seal()
+                .Build<RecursiveClass>();
+
+            Assert.IsNotNull(newClass.RecursiveReference);
+            Assert.AreEqual(10, newClass.IntProperty);
+            Assert.AreEqual(20, newClass.RecursiveReference.IntProperty);
+        }
+
         public class RecursiveClass
         {
             public int IntProperty { get; set; }

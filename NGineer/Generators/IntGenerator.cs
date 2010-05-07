@@ -6,16 +6,13 @@ namespace NGineer.Generators
 {
     public class IntGenerator : SimpleGenerator<int>
 	{
-		private readonly Random _random;
-		
-		public IntGenerator(int seed)
+		public IntGenerator(int seed) : base(seed)
 		{
-			_random = new Random(seed);
 		}
 
         protected override int Generate()
 		{
-			return _random.Next();
+			return Random.Next();
 		}
 	}
 }

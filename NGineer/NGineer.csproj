@@ -63,6 +63,7 @@
     <Compile Include="Generators\DateTimeGenerator.cs" />
     <Compile Include="Generators\DefaultConstructorGenerator.cs" />
     <Compile Include="Generators\EnumGenerator.cs" />
+    <Compile Include="Generators\ObjectGenerator.cs" />
     <Compile Include="Generators\SimpleGenerator.cs" />
     <Compile Include="Generators\SingleTypeGenerator.cs" />
     <Compile Include="Generators\ListGenerator.cs" />

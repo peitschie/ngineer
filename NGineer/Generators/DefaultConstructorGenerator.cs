@@ -7,10 +7,6 @@ namespace NGineer.Generators
 {
     public class DefaultConstructorGenerator : SingleTypeGenerator<object>
     {
-        public DefaultConstructorGenerator(int seed)
-        {
-        }
-
         private static object InvokeDefaultConstructor(Type type)
         {
             var constructor = type.GetConstructor(new Type[0]);

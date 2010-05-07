@@ -4,16 +4,13 @@ namespace NGineer.Generators
 {
     public class DateTimeGenerator : SimpleGenerator<DateTime>
     {
-        private readonly Random _random;
-
-        public DateTimeGenerator(int seed)
+        public DateTimeGenerator(int seed) : base(seed)
         {
-            _random = new Random(seed);
         }
 
         protected override DateTime Generate()
         {
-            return new DateTime(_random.Next());
+            return new DateTime(Random.Next());
         }
     }
 }

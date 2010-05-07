@@ -8,7 +8,7 @@ namespace NGineer.Generators
 	{
 		private readonly Func<TType> _constructor;
 		
-		public BuilderGenerator (int seed, Func<TType> constructor)
+		public BuilderGenerator (int seed, Func<TType> constructor) : base(seed)
 		{
 			_constructor = constructor;
 		}
