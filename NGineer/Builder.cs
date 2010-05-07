@@ -1,20 +1,24 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using NGineer.BuildHelpers;
 using NGineer.Generators;
-using NGineer.Utils;
 
 namespace NGineer
 {
 	public class Builder : IBuilder
 	{
 		private readonly IList<IGenerator> _generators = new List<IGenerator>();
+        private readonly IList<ISetter> _setters = new List<ISetter>();
 	    private readonly IGenerator _defaultGenerator;
 		private int _maximumDepth = 20;
 		
 		public Builder(int seed)
 		{
 		    _defaultGenerator = new DefaultConstructorGenerator(seed);
+			WithGenerator(new DateTimeGenerator(seed));
+			WithGenerator(new EnumGenerator(seed));
+			WithGenerator(new BoolGenerator(seed));
 			WithGenerator(new IntGenerator(seed));
 			WithGenerator(new StringGenerator(seed));
 			WithGenerator(new UIntGenerator(seed));
@@ -22,7 +26,9 @@ namespace NGineer
 
         public Builder WithGenerator(IGenerator generator)
 		{
-			_generators.Add(generator);
+            // each new generator should be inserted at the front of the queue to allow 
+            // easy overriding of which generator to use
+			_generators.Insert(0, generator);
 			return this;
 		}
 
@@ -31,6 +37,18 @@ namespace NGineer
 			_maximumDepth = depth;
 			return this;
 		}
+
+        public Builder SetValuesFor<TType>(Action<TType> setter)
+        {
+            _setters.Add(new Setter<TType>(WrapSetter(setter)));
+            return this;
+        }
+
+        public Builder SetValuesFor<TType>(Func<TType, TType> setter)
+        {
+            _setters.Add(new Setter<TType>(setter));
+            return this;
+        }
 		
 		public TType Build<TType>()
 		{
@@ -44,44 +62,28 @@ namespace NGineer
 
         private object DoBuild(Type type, BuildContext builder)
         {
-            return GetGenerator(type).Generate(type, builder);
+            var obj = GetGenerator(type).Generate(type, builder);
+            obj = DoSetters(type, obj);
+            return obj;
         }
 		
+        private object DoSetters(Type type, object obj)
+        {
+            return _setters.Where(s => s.IsForType(type)).Aggregate(obj, (current, setter) => setter.Set(current));
+        }
+
+	    private static Func<TType, TType> WrapSetter<TType>(Action<TType> setter)
+        {
+            return (s) =>
+                       {
+                           setter.Invoke(s);
+                           return s;
+                       };
+        }
+
         private IGenerator GetGenerator(Type type)
         {
             return _generators.FirstOrDefault(g => g.GeneratesType(type, this)) ?? _defaultGenerator;
         }
 	}
-
-    public class BuildContext : IBuilder
-    {
-        private readonly int _maximumDepth;
-        private readonly Func<Type, BuildContext, object> _buildAction;
-        private int _currentLevel;
-
-        public BuildContext(int maximumDepth, Func<Type, BuildContext, object> buildAction)
-        {
-            _maximumDepth = maximumDepth;
-            _buildAction = buildAction;
-        }
-
-        public object Build(Type type)
-        {
-            if (_currentLevel == _maximumDepth)
-                return null;
-
-            _currentLevel++;
-            var obj = _buildAction(type, this);
-            _currentLevel--;
-            return obj;
-        }
-    }
-
-    public class BuilderException : Exception
-    {
-        public BuilderException(string s) : base(s)
-        {
-            
-        }
-    }
 }

@@ -59,6 +59,22 @@ namespace NGineer.UnitTests
 						
 		}
 
+        [Test]
+        public void Build_SettersAreProperlyCalled_SimpleInt()
+        {
+            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Build<int>();
+            Assert.AreEqual(190, newClass);
+        }
+
+        [Test]
+        public void Build_SettersAreProperlyCalled_SimpleClass()
+        {
+            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Build<SimpleClass>();
+            Assert.AreEqual(190, newClass.IntProperty);
+            Assert.IsNotNull(newClass.StringProperty);
+            Assert.IsNotNull(newClass.TestClass2Property);
+        }
+        
         public class RecursiveClass
         {
             public int IntProperty { get; set; }

@@ -63,6 +63,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuilderTests.cs" />
     <Compile Include="Generators\BuilderGeneratorTests.cs" />
+    <Compile Include="Generators\EnumGeneratorTests.cs" />
     <Compile Include="Generators\ListGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>

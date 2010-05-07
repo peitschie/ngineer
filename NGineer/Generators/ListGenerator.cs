@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using NGineer.BuildHelpers;
 using NGineer.Utils;
 
 namespace NGineer.Generators
