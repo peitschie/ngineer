@@ -50,7 +50,7 @@ namespace NGineer.UnitTests
 		}
 		
 		[Test]
-		public void Build_MaximumRecursionLevelSettable()
+		public void Build_MaximumRecursionLevel_Settable()
 		{
 			var newClass = new Builder(1).SetMaximumDepth(3).Build<RecursiveClass>();
 			
@@ -59,6 +59,86 @@ namespace NGineer.UnitTests
 			Assert.IsNotNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference);
 			Assert.IsNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference.RecursiveReference);
 						
+		}
+		
+		[Test]
+		public void Build_MaximumRecursionLevel_ChildContainer_SetValueBuilderEnforced()
+		{
+			var newClass = (TestClassFourDeep)new Builder(1)
+				.SetMaximumDepth(2)
+				.SetValuesFor<TestClassFourDeep>((s, b) => {
+					s.PropertyTestClass = b.CreateNew()
+						.SetValuesFor<TestClassThreeDeep>((s1, b1) => {
+							s1.PropertyTestClass = b1.CreateNew()
+								.SetValuesFor<TestClass>((s2, b2) => {
+									s2.Property2 = b2.CreateNew().Build<TestClass2>();
+									return s2;
+								})
+								.Build<TestClass>();
+							return s1;	
+						})
+						.Build<TestClassThreeDeep>();
+					return s;	
+				})
+				.Build<TestClassFourDeep>();
+			
+			Assert.IsNotNull(newClass.PropertyTestClass);
+			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
+			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
+		}
+		
+		[Test]
+		public void Build_MaximumRecursionLevel_SetValueBuilderEnforced()
+		{
+			var newClass = (TestClassFourDeep)new Builder(1)
+				.SetMaximumDepth(2)
+				.SetValuesFor<TestClassFourDeep>((s, b) => {
+					s.PropertyTestClass = b
+						.SetValuesFor<TestClassThreeDeep>((s1, b1) => {
+							s1.PropertyTestClass = b1
+								.SetValuesFor<TestClass>((s2, b2) => {
+									s2.Property2 = b2.Build<TestClass2>();
+									return s2;
+								})
+								.Build<TestClass>();
+							return s1;	
+						})
+						.Build<TestClassThreeDeep>();
+					return s;	
+				})
+				.Build<TestClassFourDeep>();
+			
+			Assert.IsNotNull(newClass.PropertyTestClass);
+			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
+			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
+		}
+		
+		[Test]
+		public void Build_Setters_ChildSettersRunLast()
+		{
+			var newClass = new Builder(1)
+				.SetMaximumDepth(2)
+				.SetValuesFor<SimpleClass>(s => s.IntProperty = 10)
+				.CreateNew()
+				.SetValuesFor<SimpleClass>(s => s.IntProperty = 30)
+				.Build<SimpleClass>();
+			
+			Assert.AreEqual(30, newClass.IntProperty);
+		}
+		
+		[Test]
+		public void Build_SetValues_CanModifyWithinCall()
+		{
+			var newClass = new Builder(1)
+				.SetMaximumDepth(2)
+				.SetValuesFor<RecursiveClass>((s, b) => {
+					s.RecursiveReference = b
+							.SetValuesFor<RecursiveClass>(s1 => s1)
+							.Build<RecursiveClass>();
+					return s;	
+				});
+			newClass.Build<RecursiveClass>();
+			Assert.DoesNotThrow(() => newClass.Build<RecursiveClass>());
 		}
 
         [Test]
@@ -78,9 +158,9 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void Seal_SealedBuilderPreventsModification()
+        public void Sealed_SealedBuilderPreventsModification()
         {
-            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Seal();
+            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Sealed();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
 			Assert.Throws<BuilderException>(() => newClass.SetCollectionSize(10, 100));
             Assert.Throws<BuilderException>(() => newClass.SetValuesFor<int>(n => 10));
@@ -120,7 +200,7 @@ namespace NGineer.UnitTests
                                                           .Build<RecursiveClass>();
                                                       return s;
                                                   })
-                .Seal()
+                .Sealed()
                 .Build<RecursiveClass>();
 
             Assert.IsNotNull(newClass.RecursiveReference);
@@ -151,5 +231,15 @@ namespace NGineer.UnitTests
 
             public TestClass2 Property2 { get; set; }
         }
+		
+		public class TestClassThreeDeep
+		{
+			public TestClass PropertyTestClass { get; set; }
+		}
+		
+		public class TestClassFourDeep
+		{
+			public TestClassThreeDeep PropertyTestClass { get; set; }
+		}
 	}
 }

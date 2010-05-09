@@ -6,20 +6,50 @@ using NGineer.Generators;
 
 namespace NGineer
 {
-	public class Builder : IBuilder
+	public abstract class BaseBuilder : IBuilder
+	{
+		public abstract object DoBuild(Type type, BuildSession session);
+		public abstract object Build(Type type);
+        public abstract IBuilder WithGenerator(IGenerator generator);
+        public abstract IBuilder SetMaximumDepth(int depth);
+        
+		public abstract IBuilder CreateNew();
+		public abstract IBuilder CreateNew(BuildSession session);
+		
+        public abstract TType Build<TType>();
+
+        public abstract IBuilder SetValuesFor<TType>(Action<TType> setter);
+        public abstract IBuilder SetValuesFor<TType>(Func<TType, TType> setter);
+        public abstract IBuilder SetValuesFor<TType>(Action<TType, IBuilder> setter);
+        public abstract IBuilder SetValuesFor<TType>(Func<TType, IBuilder, TType> setter);
+		
+		public abstract IBuilder SetCollectionSize(int minimum, int maximum);
+
+        /// <summary>
+        /// Marks this builder as sealed.  This prevents accidently overriding values, depths or generators.
+        /// It is highly recommended that all builders be sealed after initial creation to prevent later tests
+        /// from modifying the container behaviour
+        /// </summary>
+        /// <returns></returns>
+        public abstract IBuilder Sealed();
+	}
+	
+	public class Builder : BaseBuilder
 	{
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
 
-	    private readonly int _seed;
+	    protected readonly int Seed;
 	    private readonly IList<IGenerator> _generators = new List<IGenerator>();
 	    private readonly IGenerator _defaultGenerator;
 		private readonly ListGenerator _defaultListGenerator;
 		private int _maximumDepth = 20;
 	    private bool _sealed;
+		private BuildSession _session;
 
 	    public Builder(int seed)
 		{
+			Seed = seed;
 		    _defaultGenerator = new DefaultConstructorGenerator();
 			_defaultListGenerator = new ListGenerator(seed, 10, 20);
 			WithGenerator(_defaultListGenerator);
@@ -31,14 +61,14 @@ namespace NGineer
 			WithGenerator(new StringGenerator(seed));
 			WithGenerator(new UIntGenerator(seed));
 		}
-
-        protected Builder(int seed, Builder parent) : this(seed)
+		
+        protected Builder(Builder parent, BuildSession session) : this(parent.Seed)
         {
-            _seed = seed;
+			_session = session;
             Parent = parent;
         }
 
-	    public IBuilder WithGenerator(IGenerator generator)
+	    public override IBuilder WithGenerator(IGenerator generator)
 		{
 	        AssertBuilderIsntSealed();
             // each new generator should be inserted at the front of the queue to allow 
@@ -55,14 +85,14 @@ namespace NGineer
             }
 	    }
 
-	    public IBuilder SetMaximumDepth(int depth)
+	    public override IBuilder SetMaximumDepth(int depth)
 		{
             AssertBuilderIsntSealed();
 			_maximumDepth = depth;
 			return this;
 		}
 
-		public IBuilder SetCollectionSize(int minimum, int maximum)
+		public override IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
 			_defaultListGenerator.MinimumListItems = minimum;
@@ -72,28 +102,28 @@ namespace NGineer
 		
         #region Set values
 
-        public IBuilder SetValuesFor<TType>(Action<TType> setter)
+        public override IBuilder SetValuesFor<TType>(Action<TType> setter)
         {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
         }
 
-        public IBuilder SetValuesFor<TType>(Func<TType, TType> setter)
+        public override IBuilder SetValuesFor<TType>(Func<TType, TType> setter)
         {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
         }
 
-	    public IBuilder SetValuesFor<TType>(Action<TType, IBuilder> setter)
+	    public override IBuilder SetValuesFor<TType>(Action<TType, IBuilder> setter)
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
 	    }
 
-	    public IBuilder SetValuesFor<TType>(Func<TType, IBuilder, TType> setter)
+	    public override IBuilder SetValuesFor<TType>(Func<TType, IBuilder, TType> setter)
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
@@ -102,37 +132,57 @@ namespace NGineer
 
 	    #endregion
 		
-	    public IBuilder Seal()
+	    public override IBuilder Sealed()
 	    {
 	        _sealed = true;
 	        return this;
 	    }		
 		
-        public IBuilder CreateNew()
+        public override IBuilder CreateNew()
 	    {
-	        return new Builder(_seed, this);
+	        return new Builder(this, _session);
 	    }
-
-	    public TType Build<TType>()
+		
+		public override IBuilder CreateNew(BuildSession session)
+	    {
+	        return new Builder(this, session);
+	    }
+		
+	    public override TType Build<TType>()
 		{
 			return (TType)Build(typeof(TType));
 		}
 
-	    public object Build(Type type)
+	    public override object Build(Type type)
 		{
-            return DoBuild(type, new BuildContext(_maximumDepth, this, DoBuild));
+			if(_session == null || _session.Disposed)
+			{
+				_session = null;
+				using(var session = new BuildSession(this))
+				{
+	            	return DoBuild(type, session);
+				}
+			} 
+			else 
+			{
+				return DoBuild(type, _session);
+			}
 		}
 
-        private object DoBuild(Type type, BuildContext builder)
+        public override object DoBuild(Type type, BuildSession session)
         {
-            var obj = GetGeneratorOrDefault(type).Generate(type, builder);
-            obj = DoSetters(type, obj, builder);
+			if(session.BuildDepth > _maximumDepth)
+				return null;
+			
+            var obj = GetGeneratorOrDefault(type).Generate(type, session);
+            obj = DoSetters(type, obj, session);
             return obj;
         }
 		
-        private object DoSetters(Type type, object obj, BuildContext builder)
+        private object DoSetters(Type type, object obj, BuildSession builder)
         {
-            return Setters.Where(s => s.IsForType(type)).Aggregate(obj, (current, setter) => setter.Set(current, builder));
+			var setters = Setters.Where(s => s.IsForType(type)).ToArray();
+            return setters.Aggregate(obj, (current, setter) => setter.Set(current, builder));
         }
 
 		private IGenerator GetGeneratorOrDefault(Type type)
@@ -154,17 +204,11 @@ namespace NGineer
 
     public class Builder<TType> : Builder, IBuilder<TType>
     {
-        private readonly int _seed;
-
         public Builder(int seed) : base(seed)
-        {
-            _seed = seed;
-        }
+        {}
 
-        private Builder(int seed, Builder builder) : base(seed, builder)
-        {
-            _seed = seed;
-        }
+        protected Builder(Builder builder) : base(builder, null)
+        {}
 
         public new IBuilder<TType> WithGenerator(IGenerator generator)
         {
@@ -208,17 +252,17 @@ namespace NGineer
             return this;
         }		
 		
-        public new IBuilder<TType> Seal()
+        public new IBuilder<TType> Sealed()
         {
-            base.Seal();
+            base.Sealed();
             return this;
         }
 
         public new IBuilder<TType> CreateNew()
         {
-            return new Builder<TType>(_seed, this);
+            return new Builder<TType>(this);
         }
-
+		
         public TType Build()
         {
             return Build<TType>();

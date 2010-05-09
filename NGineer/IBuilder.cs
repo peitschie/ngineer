@@ -25,7 +25,7 @@ namespace NGineer
         /// from modifying the container behaviour
         /// </summary>
         /// <returns></returns>
-        IBuilder Seal();
+        IBuilder Sealed();
     }
 
     public interface IBuilder<TBuildType> : IBuilder
@@ -42,6 +42,6 @@ namespace NGineer
 
 		new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);		
 		
-        new IBuilder<TBuildType> Seal();
+        new IBuilder<TBuildType> Sealed();
 	}
 }
