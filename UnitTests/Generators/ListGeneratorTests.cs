@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using Moq;
+using NGineer.BuildHelpers;
 using NGineer.Generators;
 using NUnit.Framework;
 
@@ -20,25 +21,25 @@ namespace NGineer.UnitTests.Generators
         [Test]
         public override void GeneratesTypes_AcceptsTypes()
         {
-            Assert.IsTrue(_generator.GeneratesType(typeof(IList<string>), null));
-			Assert.IsTrue(_generator.GeneratesType(typeof(List<string>), null));
+            Assert.IsTrue(_generator.GeneratesType(typeof(IList<string>), null, null));
+            Assert.IsTrue(_generator.GeneratesType(typeof(List<string>), null, null));
         }
 		
 		[Test]
         public override void GeneratesTypes_RejectsTypes()
         {
-            Assert.IsFalse(_generator.GeneratesType(typeof(ListGeneratorTests), null));
-			Assert.IsFalse(_generator.GeneratesType(typeof(string), null));
-			Assert.IsFalse(_generator.GeneratesType(typeof(IDictionary<string, string>), null));
+            Assert.IsFalse(_generator.GeneratesType(typeof(ListGeneratorTests), null, null));
+            Assert.IsFalse(_generator.GeneratesType(typeof(string), null, null));
+            Assert.IsFalse(_generator.GeneratesType(typeof(IDictionary<string, string>), null, null));
         }
 		
         [Test]
         public void Create_Simple_FixedSizedListOfStrings()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof (string))).Returns("teststring");
+            builderMock.Setup(b => b.Build(typeof (string), It.IsAny<BuildSession>())).Returns("teststring");
 
-            var list = (IList<string>)_generator.Generate(typeof (IList<string>), builderMock.Object);
+            var list = (IList<string>)_generator.Create(typeof(IList<string>), builderMock.Object, null);
             Assert.AreEqual(10, list.Count);
             foreach (var result in list)
             {
@@ -50,9 +51,9 @@ namespace NGineer.UnitTests.Generators
         public void Create_Simple_FixedSizedListOfComplexClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
 
-            var list = (IList<ComplexClassType>)_generator.Generate(typeof(IList<ComplexClassType>), builderMock.Object);
+            var list = (IList<ComplexClassType>)_generator.Create(typeof(IList<ComplexClassType>), builderMock.Object, null);
             Assert.AreEqual(10, list.Count);
             foreach (var result in list)
             {
@@ -65,10 +66,10 @@ namespace NGineer.UnitTests.Generators
         public void Create_Simple_NestedFixedSizedListOfComplexClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
-            builderMock.Setup(b => b.Build(typeof(IList<ComplexClassType>))).Returns(_generator.Generate(typeof(IList<ComplexClassType>), builderMock.Object));
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
+            builderMock.Setup(b => b.Build(typeof(IList<ComplexClassType>), It.IsAny<BuildSession>())).Returns(_generator.Create(typeof(IList<ComplexClassType>), builderMock.Object, null));
 
-            var outerList = (IList<IList<ComplexClassType>>)_generator.Generate(typeof(IList<IList<ComplexClassType>>), builderMock.Object);
+            var outerList = (IList<IList<ComplexClassType>>)_generator.Create(typeof(IList<IList<ComplexClassType>>), builderMock.Object, null);
             Assert.AreEqual(10, outerList.Count);
             foreach (var innerList in outerList)
             {

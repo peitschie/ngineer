@@ -64,24 +64,33 @@ namespace NGineer.UnitTests
 		[Test]
 		public void Build_MaximumRecursionLevel_ChildContainer_SetValueBuilderEnforced()
 		{
-			var newClass = (TestClassFourDeep)new Builder(1)
-				.SetMaximumDepth(2)
-				.SetValuesFor<TestClassFourDeep>((s, b) => {
-					s.PropertyTestClass = b.CreateNew()
-						.SetValuesFor<TestClassThreeDeep>((s1, b1) => {
-							s1.PropertyTestClass = b1.CreateNew()
-								.SetValuesFor<TestClass>((s2, b2) => {
-									s2.Property2 = b2.CreateNew().Build<TestClass2>();
-									return s2;
+		    var sessions = new List<BuildSession>();
+			var newClass = new Builder(1)
+				.SetMaximumDepth(1)
+				.AfterPopulationOf<TestClassFourDeep>((t, b, s) => {
+                    sessions.Add(s);
+					t.PropertyTestClass = b.CreateNew()
+						.AfterPopulationOf<TestClassThreeDeep>((t1, b1, s1) => {
+                            sessions.Add(s1);
+							t1.PropertyTestClass = b1.CreateNew()
+								.AfterPopulationOf<TestClass>((t2, b2, s2) => {
+                                    sessions.Add(s2);
+									t2.Property2 = b2.CreateNew().Build<TestClass2>(s2);
+									return t2;
 								})
-								.Build<TestClass>();
-							return s1;	
+								.Build<TestClass>(s1);
+							return t1;	
 						})
-						.Build<TestClassThreeDeep>();
-					return s;	
+						.Build<TestClassThreeDeep>(s);
+					return t;	
 				})
 				.Build<TestClassFourDeep>();
-			
+
+		    var session = sessions.First();
+		    foreach (var buildSession in sessions)
+		    {
+                Assert.AreSame(session, buildSession);
+		    }
 			Assert.IsNotNull(newClass.PropertyTestClass);
 			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
 			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
@@ -90,21 +99,23 @@ namespace NGineer.UnitTests
 		[Test]
 		public void Build_MaximumRecursionLevel_SetValueBuilderEnforced()
 		{
-			var newClass = (TestClassFourDeep)new Builder(1)
+			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
-				.SetValuesFor<TestClassFourDeep>((s, b) => {
-					s.PropertyTestClass = b
-						.SetValuesFor<TestClassThreeDeep>((s1, b1) => {
-							s1.PropertyTestClass = b1
-								.SetValuesFor<TestClass>((s2, b2) => {
-									s2.Property2 = b2.Build<TestClass2>();
-									return s2;
+				.AfterPopulationOf<TestClassFourDeep>((type, b, s) => {
+					type.PropertyTestClass = b
+                        .CreateNew()
+						.AfterPopulationOf<TestClassThreeDeep>((type1, b1, s1) => {
+							type1.PropertyTestClass = b1
+                                .CreateNew()
+								.AfterPopulationOf<TestClass>((type2, b2, s2) => {
+									type2.Property2 = b2.Build<TestClass2>(s2);
+									return type2;
 								})
-								.Build<TestClass>();
-							return s1;	
+								.Build<TestClass>(s1);
+							return type1;	
 						})
-						.Build<TestClassThreeDeep>();
-					return s;	
+						.Build<TestClassThreeDeep>(s);
+					return type;	
 				})
 				.Build<TestClassFourDeep>();
 			
@@ -118,40 +129,39 @@ namespace NGineer.UnitTests
 		{
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
-				.SetValuesFor<SimpleClass>(s => s.IntProperty = 10)
+				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 10)
 				.CreateNew()
-				.SetValuesFor<SimpleClass>(s => s.IntProperty = 30)
+				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 30)
 				.Build<SimpleClass>();
 			
 			Assert.AreEqual(30, newClass.IntProperty);
 		}
 		
 		[Test]
-		public void Build_SetValues_CanModifyWithinCall()
+		public void Build_SetValues_CantModifyWithinCall()
 		{
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
-				.SetValuesFor<RecursiveClass>((s, b) => {
-					s.RecursiveReference = b
-							.SetValuesFor<RecursiveClass>(s1 => s1)
-							.Build<RecursiveClass>();
-					return s;	
+				.AfterPopulationOf<RecursiveClass>((t, b, s) => {
+					t.RecursiveReference = b
+							.AfterPopulationOf<RecursiveClass>(s1 => s1)
+							.Build<RecursiveClass>(s);
+					return t;	
 				});
-			newClass.Build<RecursiveClass>();
-			Assert.DoesNotThrow(() => newClass.Build<RecursiveClass>());
+			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
 		}
 
         [Test]
         public void Build_SettersAreProperlyCalled_SimpleInt()
         {
-            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Build<int>();
+            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Build<int>();
             Assert.AreEqual(190, newClass);
         }
 
         [Test]
         public void Build_SettersAreProperlyCalled_SimpleClass()
         {
-            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Build<SimpleClass>();
+            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Build<SimpleClass>();
             Assert.AreEqual(190, newClass.IntProperty);
             Assert.IsNotNull(newClass.StringProperty);
             Assert.IsNotNull(newClass.TestClass2Property);
@@ -160,10 +170,10 @@ namespace NGineer.UnitTests
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
         {
-            var newClass = new Builder(1).SetValuesFor<int>(n => 190).Sealed();
+            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Sealed();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
 			Assert.Throws<BuilderException>(() => newClass.SetCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => newClass.SetValuesFor<int>(n => 10));
+            Assert.Throws<BuilderException>(() => newClass.AfterPopulationOf<int>(n => 10));
             Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
         }
 
@@ -171,7 +181,7 @@ namespace NGineer.UnitTests
         public void Build_SetupValueToOverrideBehaviour_SimpleClass()
         {
             var newClass = new Builder(1)
-                .SetValuesFor<string>((s, b) => b.Build(typeof(string)))
+                .AfterPopulationOf<string>((t, b, s) => b.Build(typeof(string), s))
                 .Build<SimpleClass>();
 
             Assert.IsNotNull(newClass.StringProperty);
@@ -192,13 +202,13 @@ namespace NGineer.UnitTests
         public void Build_SetupValueToOverrideBehaviour_RecursiveClass()
         {
             var newClass = new Builder(1)
-                .SetValuesFor<int>(n => 10)
-                .SetValuesFor<RecursiveClass>((s, b) =>
+                .AfterPopulationOf<int>(n => 10)
+                .AfterPopulationOf<RecursiveClass>((t, b, s) =>
                                                   {
-                                                      s.RecursiveReference = b.CreateNew()
-                                                          .SetValuesFor<int>(c => 20)
-                                                          .Build<RecursiveClass>();
-                                                      return s;
+                                                      t.RecursiveReference = b.CreateNew()
+                                                          .AfterPopulationOf<int>(c => 20)
+                                                          .Build<RecursiveClass>(s);
+                                                      return t;
                                                   })
                 .Sealed()
                 .Build<RecursiveClass>();
@@ -207,6 +217,74 @@ namespace NGineer.UnitTests
             Assert.AreEqual(10, newClass.IntProperty);
             Assert.AreEqual(20, newClass.RecursiveReference.IntProperty);
         }
+
+        [Test]
+        public void Build_AfterConstructionOf_PropertiesOnlySetOnce()
+        {
+            var newClass = new Builder(1)
+                .AfterConstructionOf<CountsPropertySets>(c => c.RecursiveProperty, (o, b, s) => null)
+                .Build<CountsPropertySets>();
+
+            Assert.AreEqual(1, newClass.GetSomePropertySets());
+            Assert.AreEqual(1, newClass.GetRecursivePropertySets());
+
+            Assert.IsNotNull(newClass.SomeProperty);
+            Assert.IsNull(newClass.RecursiveProperty);
+        }
+
+        [Test]
+        public void Build_AfterConstructionOf_ObjectAddedToStackAfterConstruction()
+        {
+            object constructedInstance = null;
+            new Builder(1)
+                .AfterConstructionOf<SimpleClass>(c => c.StringProperty, 
+                (o, b, s) =>
+                {
+                    constructedInstance = s.ConstructedObjects.FirstOrDefault(c => c is SimpleClass);
+                    return null;
+                })
+                .Build<SimpleClass>();
+
+            Assert.IsNotNull(constructedInstance);
+        }
+
+        public class CountsPropertySets
+        {
+            private int _somePropertySets;
+            public int GetSomePropertySets()
+            {
+                return _somePropertySets;
+            }
+
+            private int _someProperty;
+            public int SomeProperty
+            {
+                get { return _someProperty; }
+                set
+                {
+                    _someProperty = value;
+                    _somePropertySets++;
+                }
+            }
+
+            private int _recursivePropertySets;
+            public int GetRecursivePropertySets()
+            {
+                return _recursivePropertySets;
+            }
+
+            private CountsPropertySets _recursiveProperty;
+            public CountsPropertySets RecursiveProperty
+            {
+                get { return _recursiveProperty; }
+                set
+                {
+                    _recursiveProperty = value;
+                    _recursivePropertySets++;
+                }
+            }
+        }
+
 
         public class RecursiveClass
         {

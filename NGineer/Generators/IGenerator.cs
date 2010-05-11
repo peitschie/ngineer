@@ -1,22 +1,19 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
+using NGineer.BuildHelpers;
 
 namespace NGineer.Generators
 {
 	public interface IGenerator
 	{
-	    bool GeneratesType(Type type, IBuilder builder);
-        object Generate(Type type, IBuilder builder);
-        object Generate(PropertyInfo property, IBuilder builder);
-        object Generate(FieldInfo field, IBuilder builder);
+	    bool GeneratesType(Type type, IBuilder builder, BuildSession session);
+        object Create(Type type, IBuilder builder, BuildSession session);
+	    object Populate(object obj, IBuilder builder, BuildSession session);
 	}
 	
 	public interface IGenerator<TType> : IGenerator
 	{
-        new TType Generate(Type type, IBuilder builder);
-        new TType Generate(PropertyInfo property, IBuilder builder);
-        new TType Generate(FieldInfo field, IBuilder builder);
+        new TType Create(Type type, IBuilder builder, BuildSession session);
+        TType Populate(TType obj, IBuilder builder, BuildSession session);
 	}
 }

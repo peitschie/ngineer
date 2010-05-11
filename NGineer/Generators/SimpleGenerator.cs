@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using NGineer.BuildHelpers;
 
 namespace NGineer.Generators
 {
@@ -14,17 +15,12 @@ namespace NGineer.Generators
 
         protected abstract TType Generate();
 
-        public override TType Generate(FieldInfo field, IBuilder builder)
+        public override TType Populate(TType obj, IBuilder builder, BuildSession session)
         {
-            return Generate();
+            return obj;
         }
 
-        public override TType Generate(PropertyInfo property, IBuilder builder)
-        {
-            return Generate();
-        }
-
-        public override TType Generate(Type type, IBuilder builder)
+        public override TType Create(Type type, IBuilder builder, BuildSession session)
         {
             return Generate();
         }

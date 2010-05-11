@@ -1,8 +1,4 @@
-
-using System;
-using NUnit.Framework;
-
-namespace NGineer.UnitTests
+namespace NGineer.UnitTests.Generators
 {
 	public abstract class GeneratorTestFixture
 	{

@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.Generators
 		public void Constructor_GenerateString()
 		{
 			var generator = new BuilderGenerator<string>(1, () => "teststring");
-			Assert.AreEqual("teststring", generator.Generate(typeof(string), null));
+			Assert.AreEqual("teststring", generator.Create(typeof(string), null, null));
 		}
 	}
 }

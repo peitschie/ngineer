@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using NGineer.BuildHelpers;
 
 namespace NGineer.Generators
 {
@@ -12,14 +13,19 @@ namespace NGineer.Generators
             _random = new Random(seed);
         }
 
-        public bool GeneratesType(Type type, IBuilder builder)
+        public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return type.IsEnum;
         }
 
-        public object Generate(Type type, IBuilder builder)
+        public object Create(Type type, IBuilder builder, BuildSession session)
         {
             return GetRandomEnum(type);
+        }
+
+        public object Populate(object obj, IBuilder builder, BuildSession session)
+        {
+            return obj;
         }
 
         private object GetRandomEnum(Type type)
@@ -29,12 +35,12 @@ namespace NGineer.Generators
             return array.GetValue(index);
         }
 
-        public object Generate(PropertyInfo property, IBuilder builder)
+        public object Create(PropertyInfo property, IBuilder builder, BuildSession session)
         {
             return GetRandomEnum(property.PropertyType);
         }
 
-        public object Generate(FieldInfo field, IBuilder builder)
+        public object Create(FieldInfo field, IBuilder builder, BuildSession session)
         {
             return GetRandomEnum(field.FieldType);
         }
