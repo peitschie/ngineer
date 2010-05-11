@@ -8,7 +8,7 @@ namespace NGineer.Generators
 	{
 	    bool GeneratesType(Type type, IBuilder builder, BuildSession session);
         object Create(Type type, IBuilder builder, BuildSession session);
-	    object Populate(object obj, IBuilder builder, BuildSession session);
+	    object Populate(Type type, object obj, IBuilder builder, BuildSession session);
 	}
 	
 	public interface IGenerator<TType> : IGenerator

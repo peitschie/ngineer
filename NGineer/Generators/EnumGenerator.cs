@@ -23,7 +23,7 @@ namespace NGineer.Generators
             return GetRandomEnum(type);
         }
 
-        public object Populate(object obj, IBuilder builder, BuildSession session)
+        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             return obj;
         }

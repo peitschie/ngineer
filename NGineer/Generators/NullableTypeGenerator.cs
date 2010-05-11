@@ -1,34 +1,35 @@
 using System;
-using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using NGineer.BuildHelpers;
+using NGineer.Utils;
 
 namespace NGineer.Generators
 {
-    public class IntGenerator : IGenerator
-	{
-        private static readonly Type[] Types = new[] {typeof (int), typeof (Int32)};
+    public class NullableTypeGenerator : IGenerator
+    {
         private readonly Random _random;
-        
 
-		public IntGenerator(int seed)
-		{
+        public NullableTypeGenerator(int seed)
+        {
             _random = new Random(seed);
-		}
-        
+        }
+
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return Types.Contains(type);
+            return typeof (Nullable<>).IsGenericAssignableFrom(type);
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return _random.Next();
+            return null;
         }
 
         public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            return obj;
+            var nullableType = type.GetGenericArguments()[0];
+            return _random.Next(5) == 0 ? null : builder.Build(nullableType, session);
         }
-	}
+    }
 }

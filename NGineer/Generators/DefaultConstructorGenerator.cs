@@ -18,14 +18,13 @@ namespace NGineer.Generators
             return true;
         }
 
-        public object Populate(object obj, IBuilder builder, BuildSession session)
+        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            var type = obj.GetType();
             foreach (var property in type.GetProperties().Where(p => p.CanWrite && !session.ConstructedMembers.Contains(p)))
             {
                 property.SetValue(obj, builder.Build(property.PropertyType, session), null);
             }
-            foreach (var field in type.GetFields().Where(f => f.IsPublic && !session.ConstructedMembers.Contains(f)))
+            foreach (var field in type.GetFields().Where(f => f.IsPublic && !session.ConstructedMembers.Contains(f) && !f.IsLiteral))
             {
                 field.SetValue(obj, builder.Build(field.FieldType, session));
             }

@@ -48,7 +48,6 @@ namespace NGineer
 	    protected readonly int Seed;
 	    private readonly IList<IGenerator> _generators = new List<IGenerator>();
 	    private readonly IGenerator _defaultGenerator;
-		private readonly ListGenerator _defaultListGenerator;
 		private int _maximumDepth = 20;
 	    private bool _sealed;
 
@@ -56,9 +55,9 @@ namespace NGineer
 		{
 			Seed = seed;
 		    _defaultGenerator = new DefaultConstructorGenerator();
-			_defaultListGenerator = new ListGenerator(seed, 10, 20);
-			WithGenerator(_defaultListGenerator);
-			WithGenerator(new ObjectGenerator(seed));
+			WithGenerator(new ListGenerator(seed, 10, 20));
+			WithGenerator(new ArrayGenerator(seed, 10, 20));
+			WithGenerator(new NullableTypeGenerator(seed));
 			WithGenerator(new DateTimeGenerator(seed));
 			WithGenerator(new EnumGenerator(seed));
 			WithGenerator(new BoolGenerator(seed));
@@ -99,8 +98,12 @@ namespace NGineer
 		public override IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
-			_defaultListGenerator.MinimumListItems = minimum;
-			_defaultListGenerator.MaximumListItems = maximum;
+            var generators = _generators.Select(g => g as ICollectionGenerator).Where(g => g != null).ToArray();
+		    foreach (var generator in generators)
+		    {
+                generator.MinimumListItems = minimum;
+                generator.MaximumListItems = maximum;    
+		    }
 			return this;	
 		}
 		
@@ -201,7 +204,7 @@ namespace NGineer
             var obj = generator.Create(type, this, session);
 	        session.ConstructedObjects.Add(obj);
             obj = DoMemberSetters(type, obj, session);
-            obj = generator.Populate(obj, this, session);
+            obj = generator.Populate(type, obj, this, session);
             obj = DoGeneralSetters(type, obj, session);
 	        session.BuildDepth--;
             return obj;

@@ -10,12 +10,12 @@ namespace NGineer.Generators
 
         public abstract TType Populate(TType obj, IBuilder builder, BuildSession session);
 
-        public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
+        public virtual bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return typeof (TType).Equals(type);
         }
 
-        public object Populate(object obj, IBuilder builder, BuildSession session)
+        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             return Populate((TType) obj, builder, session);
         }

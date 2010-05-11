@@ -7,7 +7,7 @@ using NGineer.Utils;
 
 namespace NGineer.Generators
 {
-    public class ListGenerator : IGenerator
+    public class ListGenerator : IGenerator, ICollectionGenerator
     {
         private readonly Random _random;
 
@@ -23,7 +23,8 @@ namespace NGineer.Generators
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return typeof (IList<>).IsGenericAssignableFrom(type);
+            return typeof (IList<>).IsGenericAssignableFrom(type) 
+                || typeof(IEnumerable<>).IsGenericAssignableFrom(type);
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)
@@ -31,18 +32,17 @@ namespace NGineer.Generators
             var listType = type.GetGenericArguments()[0];
             var constructorType = typeof (List<>).MakeGenericType(listType);
             var constructor = constructorType.GetConstructor(new Type[0]);
-            if(constructor == null)
+            if (constructor == null)
             {
                 throw new BuilderException("Unable to construct {0} as no default constructor was found".With(type));
             }
 
-            var list = (IList)constructor.Invoke(new object[0]);
-            
+            var list = (IList) constructor.Invoke(new object[0]);
 
             return list;
         }
 
-        public object Populate(object obj, IBuilder builder, BuildSession session)
+        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             var listType = obj.GetType().GetGenericArguments()[0];
             var list = (IList) obj;
@@ -52,16 +52,6 @@ namespace NGineer.Generators
                 list.Add(builder.Build(listType, session));
             }
             return list;
-        }
-
-        public object Create(PropertyInfo property, IBuilder builder, BuildSession session)
-        {
-            return Create(property.PropertyType, builder, session);
-        }
-
-        public object Create(FieldInfo field, IBuilder builder, BuildSession session)
-        {
-            return Create(field.FieldType, builder, session);
         }
     }
 }
