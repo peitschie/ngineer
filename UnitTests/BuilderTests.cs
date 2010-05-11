@@ -233,6 +233,17 @@ namespace NGineer.UnitTests
         }
 
         [Test]
+        public void Build_AfterConstructionOf_NullableProperty()
+        {
+            IBuilder builder = null;
+            Assert.DoesNotThrow(() => builder = new Builder(1)
+                .AfterConstructionOf<ClassWithNullable>(c => c.Property1, (int?)1));
+
+            var obj = builder.Build<ClassWithNullable>();
+            Assert.AreEqual(1, obj.Property1.Value);
+        }
+
+        [Test]
         public void Build_AfterConstructionOf_ObjectAddedToStackAfterConstruction()
         {
             object constructedInstance = null;
@@ -323,6 +334,11 @@ namespace NGineer.UnitTests
 
         public class TestClass2
         {
+        }
+
+        public class ClassWithNullable
+        {
+            public int? Property1 { get; set; }
         }
 
         public class TestClass

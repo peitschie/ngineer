@@ -18,6 +18,7 @@ namespace NGineer
         IBuilder CreateNew();
 
         IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
+        IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value);
 
         IBuilder AfterPopulationOf<TType>(Action<TType> setter);
         IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter);
@@ -47,6 +48,7 @@ namespace NGineer
         new IBuilder<TBuildType> CreateNew();
 
         new IBuilder<TBuildType> AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
+        new IBuilder<TBuildType> AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value);
 
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Action<TType> setter);
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Func<TType, TType> setter);

@@ -90,7 +90,7 @@ namespace NGineer
 
 	    #region Set values
 
-        public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
+	    public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
         {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
@@ -144,6 +144,24 @@ namespace NGineer
                     throw new ArgumentOutOfRangeException();
             }
             return this;
+        }
+
+        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value)
+        {
+            return AfterConstructionOf(expression, (o, b, s) => value);
+        }
+
+        private MemberInfo GetMemberInfo<TType>(Expression<Func<TType, object>> expression)
+        {
+            if(expression.Body is MemberExpression)
+            {
+                return (expression.Body as MemberExpression).Member;
+            }
+            if(expression.Body is UnaryExpression)
+            {
+                throw new Exception();
+            }
+            throw new InvalidOperationException("Unsupported expression type");
         }
 
 	    #endregion
@@ -257,6 +275,12 @@ namespace NGineer
         }
 
         public new IBuilder<TType> AfterConstructionOf<T>(Expression<Func<T, object>> expression, Func<object, IBuilder, BuildSession, object> value)
+        {
+            base.AfterConstructionOf(expression, value);
+            return this;
+        }
+
+        public new IBuilder<TType> AfterConstructionOf<TType1>(Expression<Func<TType1, object>> expression, object value)
         {
             base.AfterConstructionOf(expression, value);
             return this;
