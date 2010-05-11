@@ -26,6 +26,7 @@ namespace NGineer
         
 
 		IBuilder SetCollectionSize(int minimum, int maximum);
+		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
 
         /// <summary>
         /// Marks this builder as sealed.  This prevents accidently overriding values, depths or generators.
@@ -52,7 +53,8 @@ namespace NGineer
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
 
-		new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);		
+		new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);
+        new IBuilder<TBuildType> SetNumberOfInstances<TType>(int minimum, int maximum);
 		
         new IBuilder<TBuildType> Sealed();
 	}

@@ -248,6 +248,28 @@ namespace NGineer.UnitTests
             Assert.IsNotNull(constructedInstance);
         }
 
+        [Test]
+        public void Build_SetMaximumInstances_ObjectsProperlyReused()
+        {
+            var builder = new Builder(1)
+                .SetNumberOfInstances<SimpleClass>(3, 3)
+                .SetCollectionSize(10, 10)
+                .Sealed();
+            var simpleClassArray = builder.Build<SimpleClass[]>();
+            var simpleClassList = new List<SimpleClass>();
+            int instances = 0;
+            foreach (var simpleClass in simpleClassArray)
+            {
+                var existing = simpleClassList.FirstOrDefault(s => ReferenceEquals(s, simpleClass));
+                if(existing == null)
+                {
+                    simpleClassList.Add(simpleClass);
+                    instances++;
+                }
+            }
+            Assert.AreEqual(3, instances);
+        }
+
         public class CountsPropertySets
         {
             private int _somePropertySets;

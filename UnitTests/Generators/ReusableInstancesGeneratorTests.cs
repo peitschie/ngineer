@@ -61,6 +61,20 @@ namespace NGineer.UnitTests.Generators
             }
         }
 
+        [Test]
+        public void Create_NullsInBuildSession_NoExceptionsThrown()
+        {
+            var session = new BuildSession();
+            Generator.SetNumberOfInstances<SimpleClass>(3, 3);
+
+            session.ConstructedObjects.Add(new SimpleClass());
+            session.ConstructedObjects.Add(null);
+            session.ConstructedObjects.Add(new SimpleClass());
+            session.ConstructedObjects.Add(new SimpleClass());
+
+            Assert.DoesNotThrow(() => CreateAndGenerate<SimpleClass>(null, session));
+        }
+
         public class SimpleClass {}
         
     }

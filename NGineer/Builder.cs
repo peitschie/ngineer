@@ -17,14 +17,18 @@ namespace NGineer
         protected readonly IList<IMemberSetter> MemberSetters = new List<IMemberSetter>();
 
 	    protected readonly int Seed;
-	    private readonly IList<IGenerator> _generators = new List<IGenerator>();
+	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
+	    private readonly ReusableInstancesGenerator _instancesGenerator;
 		private int _maximumDepth = 20;
 	    private bool _sealed;
 
 	    public Builder(int seed)
 		{
 			Seed = seed;
+            _userGenerators = new List<IGenerator>();
+
+            _instancesGenerator = new ReusableInstancesGenerator(seed);
 		    _defaultGenerator = new DefaultConstructorGenerator();
 			WithGenerator(new ListGenerator(seed, 10, 20));
 			WithGenerator(new ArrayGenerator(seed, 10, 20));
@@ -47,7 +51,7 @@ namespace NGineer
 	        AssertBuilderIsntSealed();
             // each new generator should be inserted at the front of the queue to allow 
             // easy overriding of which generator to use
-			_generators.Insert(0, generator);
+			_userGenerators.Insert(0, generator);
 			return this;
 		}
 
@@ -69,7 +73,7 @@ namespace NGineer
 		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
-            var generators = _generators.Select(g => g as ICollectionGenerator).Where(g => g != null).ToArray();
+            var generators = _userGenerators.Select(g => g as ICollectionGenerator).Where(g => g != null).ToArray();
 		    foreach (var generator in generators)
 		    {
                 generator.MinimumListItems = minimum;
@@ -77,8 +81,14 @@ namespace NGineer
 		    }
 			return this;	
 		}
-		
-        #region Set values
+
+	    public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
+	    {
+	        _instancesGenerator.SetNumberOfInstances<TType>(minimum, maximum);
+	        return this;
+	    }
+
+	    #region Set values
 
         public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
         {
@@ -217,7 +227,7 @@ namespace NGineer
 		
         private IGenerator GetGenerator(Type type, BuildSession session)
         {
-            var thisGenerator = _generators.FirstOrDefault(g => g.GeneratesType(type, this, session));
+            var thisGenerator = _instancesGenerator.GeneratesType(type, this, session) ? _instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, this, session));
             if(thisGenerator == null && Parent != null)
             {
                 thisGenerator = Parent.GetGenerator(type, session);
@@ -256,7 +266,13 @@ namespace NGineer
 		{
 			base.SetCollectionSize(minimum, maximum);
 			return this;
-		}		
+		}
+
+        public new IBuilder<TType> SetNumberOfInstances<TType1>(int minimum, int maximum)
+        {
+            base.SetNumberOfInstances<TType1>(minimum, maximum);
+            return this;
+        }
 
         public new IBuilder<TType> AfterPopulationOf<TType1>(Action<TType1> setter)
         {

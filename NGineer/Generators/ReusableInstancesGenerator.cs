@@ -44,7 +44,7 @@ namespace NGineer.Generators
 
         private static IEnumerable<object> GetAllInstancesOf(IEnumerable<object> list, Type type)
         {
-            return list.Where(o => type.IsAssignableFrom(o.GetType()));
+            return list.Where(o => o != null && type.IsAssignableFrom(o.GetType()));
         }
 
 
