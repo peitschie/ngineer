@@ -10,36 +10,7 @@ using NGineer.Utils;
 
 namespace NGineer
 {
-	public abstract class BaseBuilder : IBuilder
-	{
-        public abstract object Build(Type type);
-        public abstract object Build(Type type, BuildSession session);
-        public abstract TType Build<TType>();
-        public abstract TType Build<TType>(BuildSession session);
-	    
-	    public abstract IBuilder WithGenerator(IGenerator generator);
-        public abstract IBuilder SetMaximumDepth(int depth);
-        
-		public abstract IBuilder CreateNew();
-
-        public abstract IBuilder AfterPopulationOf<TType>(Action<TType> setter);
-        public abstract IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter);
-        public abstract IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
-        public abstract IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
-        public abstract IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
-
-		public abstract IBuilder SetCollectionSize(int minimum, int maximum);
-
-        /// <summary>
-        /// Marks this builder as sealed.  This prevents accidently overriding values, depths or generators.
-        /// It is highly recommended that all builders be sealed after initial creation to prevent later tests
-        /// from modifying the container behaviour
-        /// </summary>
-        /// <returns></returns>
-        public abstract IBuilder Sealed();
-	}
-	
-	public class Builder : BaseBuilder
+	public class Builder : IBuilder
 	{
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
@@ -71,7 +42,7 @@ namespace NGineer
             Parent = parent;
         }
 
-	    public override IBuilder WithGenerator(IGenerator generator)
+	    public IBuilder WithGenerator(IGenerator generator)
 		{
 	        AssertBuilderIsntSealed();
             // each new generator should be inserted at the front of the queue to allow 
@@ -88,14 +59,14 @@ namespace NGineer
             }
 	    }
 
-	    public override IBuilder SetMaximumDepth(int depth)
+	    public IBuilder SetMaximumDepth(int depth)
 		{
             AssertBuilderIsntSealed();
 			_maximumDepth = depth;
 			return this;
 		}
 
-		public override IBuilder SetCollectionSize(int minimum, int maximum)
+		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
             var generators = _generators.Select(g => g as ICollectionGenerator).Where(g => g != null).ToArray();
@@ -109,28 +80,28 @@ namespace NGineer
 		
         #region Set values
 
-        public override IBuilder AfterPopulationOf<TType>(Action<TType> setter)
+        public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
         {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
         }
 
-        public override IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter)
+        public IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter)
         {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
         }
 
-	    public override IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
+	    public IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
 	    }
 
-	    public override IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter)
+	    public IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter)
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
@@ -140,7 +111,7 @@ namespace NGineer
         /// <summary>
         /// http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
         /// </summary>
-        public override IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
+        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
         {
             var member = ((MemberExpression)expression.Body).Member;
             switch(member.MemberType)
@@ -167,33 +138,33 @@ namespace NGineer
 
 	    #endregion
 		
-	    public override IBuilder Sealed()
+	    public IBuilder Sealed()
 	    {
 	        _sealed = true;
 	        return this;
 	    }		
 		
-        public override IBuilder CreateNew()
+        public IBuilder CreateNew()
 	    {
 	        return new Builder(this);
 	    }
 		
-	    public override TType Build<TType>()
+	    public TType Build<TType>()
 		{
 			return Build<TType>(new BuildSession());
 		}
 
-        public override TType Build<TType>(BuildSession session)
+        public TType Build<TType>(BuildSession session)
         {
             return (TType)Build(typeof (TType), session);
         }
 
-        public override object Build(Type type)
+        public object Build(Type type)
         {
             return Build(type, new BuildSession());
         }
 
-	    public override object Build(Type type, BuildSession session)
+	    public object Build(Type type, BuildSession session)
         {
             Sealed();
             if (session.BuildDepth > _maximumDepth)
