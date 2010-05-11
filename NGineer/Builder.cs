@@ -123,7 +123,7 @@ namespace NGineer
         /// </summary>
         public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
         {
-            var member = ((MemberExpression)expression.Body).Member;
+            var member = MemberExpressions.GetMemberInfo(expression);
             switch(member.MemberType)
             {
                 case MemberTypes.Property:
@@ -149,19 +149,6 @@ namespace NGineer
         public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value)
         {
             return AfterConstructionOf(expression, (o, b, s) => value);
-        }
-
-        private MemberInfo GetMemberInfo<TType>(Expression<Func<TType, object>> expression)
-        {
-            if(expression.Body is MemberExpression)
-            {
-                return (expression.Body as MemberExpression).Member;
-            }
-            if(expression.Body is UnaryExpression)
-            {
-                throw new Exception();
-            }
-            throw new InvalidOperationException("Unsupported expression type");
         }
 
 	    #endregion

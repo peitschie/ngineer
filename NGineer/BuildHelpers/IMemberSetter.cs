@@ -1,4 +1,4 @@
-﻿namespace NGineer.BuildHelpers
+namespace NGineer.BuildHelpers
 {
     public interface IMemberSetter
     {
@@ -6,7 +6,7 @@
         void Set(object obj, IBuilder builder, BuildSession session);
     }
 
-    public interface IMemberSetter<in TType> : IMemberSetter
+    public interface IMemberSetter<TType> : IMemberSetter
     {
         bool IsForMember(TType member);
     }

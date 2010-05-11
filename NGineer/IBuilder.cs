@@ -38,7 +38,7 @@ namespace NGineer
         IBuilder Sealed();
     }
 
-    public interface IBuilder<out TBuildType> : IBuilder
+    public interface IBuilder<TBuildType> : IBuilder
 	{
         TBuildType Build();
         TBuildType Build(BuildSession session);

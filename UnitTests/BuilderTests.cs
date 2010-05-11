@@ -237,7 +237,7 @@ namespace NGineer.UnitTests
         {
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullable>(c => c.Property1, (int?)1));
+                .AfterConstructionOf<ClassWithNullable>(c => c.Property1, 1));
 
             var obj = builder.Build<ClassWithNullable>();
             Assert.AreEqual(1, obj.Property1.Value);
