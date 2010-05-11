@@ -12,6 +12,8 @@ namespace NGineer
 {
 	public class Builder : IBuilder
 	{
+		private const int DefaultBuildDepth = 20;
+		
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
         protected readonly IList<IMemberSetter> MemberSetters = new List<IMemberSetter>();
@@ -20,7 +22,7 @@ namespace NGineer
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
 	    private readonly ReusableInstancesGenerator _instancesGenerator;
-		private int _maximumDepth = 20;
+		private int? _maximumDepth;
 	    private bool _sealed;
 
 	    public Builder(int seed)
@@ -41,6 +43,19 @@ namespace NGineer
 			WithGenerator(new UIntGenerator(seed));
 		}
 		
+		public int BuildDepth
+		{
+			get 
+			{ 
+				int? depth = _maximumDepth;
+				if(_maximumDepth == null)
+				{
+					depth = (Parent != null) ? Parent.BuildDepth : DefaultBuildDepth;
+				}
+				return depth.Value;
+			}
+		}
+				
         protected Builder(Builder parent) : this(parent.Seed)
         {
             Parent = parent;
@@ -63,7 +78,7 @@ namespace NGineer
             }
 	    }
 
-	    public IBuilder SetMaximumDepth(int depth)
+	    public IBuilder SetMaximumDepth(int? depth)
 		{
             AssertBuilderIsntSealed();
 			_maximumDepth = depth;
@@ -182,7 +197,7 @@ namespace NGineer
 	    public object Build(Type type, BuildSession session)
         {
             Sealed();
-            if (session.BuildDepth > _maximumDepth)
+            if (session.BuildDepth > BuildDepth)
                 return null;
 
 	        session.BuildDepth++;
@@ -255,7 +270,7 @@ namespace NGineer
             return this;
         }
 
-        public new IBuilder<TType> SetMaximumDepth(int depth)
+        public new IBuilder<TType> SetMaximumDepth(int? depth)
         {
             base.SetMaximumDepth(depth);
             return this;

@@ -66,7 +66,7 @@ namespace NGineer.UnitTests
 		{
 		    var sessions = new List<BuildSession>();
 			var newClass = new Builder(1)
-				.SetMaximumDepth(1)
+				.SetMaximumDepth(2)
 				.AfterPopulationOf<TestClassFourDeep>((t, b, s) => {
                     sessions.Add(s);
 					t.PropertyTestClass = b.CreateNew()
@@ -99,15 +99,23 @@ namespace NGineer.UnitTests
 		[Test]
 		public void Build_MaximumRecursionLevel_SetValueBuilderEnforced()
 		{
+			List<BuildSession> sessions = new List<BuildSession>();
+			List<int> buildDepth = new List<int>();
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
 				.AfterPopulationOf<TestClassFourDeep>((type, b, s) => {
+					sessions.Add(s);
+					buildDepth.Add(s.BuildDepth);
 					type.PropertyTestClass = b
                         .CreateNew()
 						.AfterPopulationOf<TestClassThreeDeep>((type1, b1, s1) => {
+							sessions.Add(s1);
+							buildDepth.Add(s1.BuildDepth);
 							type1.PropertyTestClass = b1
                                 .CreateNew()
 								.AfterPopulationOf<TestClass>((type2, b2, s2) => {
+									sessions.Add(s2);
+									buildDepth.Add(s2.BuildDepth);
 									type2.Property2 = b2.Build<TestClass2>(s2);
 									return type2;
 								})
@@ -119,6 +127,12 @@ namespace NGineer.UnitTests
 				})
 				.Build<TestClassFourDeep>();
 			
+			Assert.AreEqual(new int[]{1,2,3}, buildDepth.ToArray());
+			var first = sessions.First();
+			foreach(var session in sessions)
+			{
+				Assert.AreSame(first, session);	
+			}
 			Assert.IsNotNull(newClass.PropertyTestClass);
 			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
 			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
@@ -280,6 +294,28 @@ namespace NGineer.UnitTests
             }
             Assert.AreEqual(3, instances);
         }
+		
+		[Test]
+		public void Hierarchy_BuildDepthInheritedFromParent()
+		{
+			var builder = new Builder(1);
+			var builder2 = builder.CreateNew();
+			builder.SetMaximumDepth(3);
+			Assert.AreEqual(builder.BuildDepth, builder2.BuildDepth);
+		}
+		
+		[Test]
+		public void Hierarchy_ChildCanBeOverridden()
+		{
+			var builder = new Builder(1);
+			var builder2 = builder.CreateNew();
+			builder.SetMaximumDepth(3);
+			builder2.SetMaximumDepth(5);
+			
+			Assert.AreNotEqual(builder.BuildDepth, builder2.BuildDepth);
+			Assert.AreEqual(3, builder.BuildDepth);
+			Assert.AreEqual(5, builder2.BuildDepth);
+		}
 
         public class CountsPropertySets
         {

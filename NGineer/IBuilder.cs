@@ -14,7 +14,7 @@ namespace NGineer
         TType Build<TType>(BuildSession session);
 
         IBuilder WithGenerator(IGenerator generator);
-        IBuilder SetMaximumDepth(int depth);
+        IBuilder SetMaximumDepth(int? depth);
         IBuilder CreateNew();
 
         IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
@@ -36,6 +36,8 @@ namespace NGineer
         /// </summary>
         /// <returns></returns>
         IBuilder Sealed();
+		
+		int BuildDepth { get; }
     }
 
     public interface IBuilder<TBuildType> : IBuilder
@@ -44,7 +46,7 @@ namespace NGineer
         TBuildType Build(BuildSession session);
 
         new IBuilder<TBuildType> WithGenerator(IGenerator generator);
-        new IBuilder<TBuildType> SetMaximumDepth(int depth);
+        new IBuilder<TBuildType> SetMaximumDepth(int? depth);
         new IBuilder<TBuildType> CreateNew();
 
         new IBuilder<TBuildType> AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
