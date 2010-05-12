@@ -56,7 +56,7 @@ namespace NGineer
 			}
 		}
 				
-        protected Builder(Builder parent) : this(parent.Seed)
+        protected Builder(Builder parent) : this(parent.Seed+1)
         {
             Parent = parent;
         }

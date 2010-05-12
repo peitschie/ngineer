@@ -16,7 +16,10 @@ namespace NGineer.BuildHelpers
 
         public override bool IsForMember(PropertyInfo property)
         {
-            return _property.Equals(property);
+            return property != null 
+                && Equals(_property.DeclaringType, property.DeclaringType)
+                && Equals(_property.PropertyType, property.PropertyType)
+                && Equals(_property.Name, property.Name);
         }
 
         public override void Set(object obj, IBuilder builder, BuildSession session)
