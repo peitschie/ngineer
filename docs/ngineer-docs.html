@@ -580,9 +580,12 @@ var books = new Builder(1)
 // The same author will be re-used for each book created.
 &lt;/code&gt;</pre>
 </div>
-<div title="DefaultTiddlers" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121215" modified="201005121238" changecount="2">
+<div title="DefaultTiddlers" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121215" modified="201005121404" changecount="3">
 <pre>[[Introduction]]
-[[Dive In]]</pre>
+[[Diving In]]</pre>
+</div>
+<div title="Design detail" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121409" changecount="1">
+<pre>... Notes about NGineer.NET design basics</pre>
 </div>
 <div title="Design justification" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" modified="201005121403" changecount="6">
 <pre>There are no two ways about it...  generating test objects is painful.  Things start out simple, and before you know it, you have either
@@ -596,15 +599,33 @@ Some more writings about these dangers can be found in the following links:
 * &lt;need links to useful sites about proper test data design&gt;
 One such approach for diminishing the maintenance overhead of test data, and improving clarity of test code is through a method called an &quot;object constructor&quot;.  Though NGineer.NET is not the first one ever created (NBuilder is another respected solution that has been around for a few years now).  However, through judicious use of reflection, a simple and intuitive &quot;fluent&quot; api and some good clean recursion fun, NGineer.NET is a re-designed and (hopefully) smarter object factory.</pre>
 </div>
-<div title="Diving In" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121257" modified="201005121402" changecount="28">
+<div title="Diving In" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121257" modified="201005121407" changecount="30">
 <pre>So, NGineer claims to make life simpler, but does it &quot;really work&quot;?  See some examples below and decide for yourself.
 &lt;code c#&gt;
 var builder = new Builder(1);
+
 int number = builder.Build&lt;int&gt;();
 string someText = builder.Build&lt;string&gt;();
 DateTime someDate = builder.Build&lt;DateTime&gt;();
 SomeEnum someDate = builder.Build&lt;SomeEnum&gt;(); // randomly select and return an enum value
 int? someDate = builder.Build&lt;int?&gt;(); // return an integer, or possibly a null value
+&lt;/code&gt;
+How about constructing a custom class
+&lt;code c#&gt;
+public class SimpleClass
+{
+   public int IntProperty { get; set; }
+   public SimpleClass HierarchialProperty { get; set; }
+}
+
+var simpleClass = new Builder(1)
+   .Build&lt;SimpleClass&gt;();
+// Assert.IsNotNull(simpleClass);
+// Assert.IsNotNull(simpleClass.HierarchialProperty);
+// Assert.IsNotNull(simpleClass.HierarchialProperty.HierarchialProperty);
+// ...
+// Constructs up to 5 levels by default.  Can be overridden using the SetMaximumDepth method
+// on the builder
 &lt;/code&gt;
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
 * [[Create complex hierarchy]]
@@ -628,9 +649,10 @@ The key features of NGineer.NET are:
 * Easy support added for new types using the IGenerator interface
 </pre>
 </div>
-<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005121240" changecount="4">
+<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005121411" changecount="7">
 <pre>[[Introduction]]
 [[Diving In]]
+[[Design detail]]
 [[Design justification]]</pre>
 </div>
 <div title="NGineer Documentation" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121148" changecount="1">
@@ -693,8 +715,8 @@ var customClass = new Builder(1)
 <div title="SiteSubtitle" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121150" changecount="1">
 <pre>A .NET object builder designed for easy generation of data for testing purposes</pre>
 </div>
-<div title="SiteTitle" creator="Philip Peitsch" modifier="PhilipPeitsch" created="201005121149" modified="201005121158" changecount="3">
-<pre>NGineer.NET</pre>
+<div title="SiteTitle" creator="Philip Peitsch" modifier="PhilipPeitsch" created="201005121149" modified="201005121410" changecount="4">
+<pre>//&quot;&quot;&quot;NGineer&quot;&quot;&quot;//.NET</pre>
 </div>
 <div title="StyleSheet" modifier="Jonny Gerold" created="200904132312" server.type="file" server.host="dl.getdropbox.com/u/52078/Notes/Notes.html" server.page.revision="200904132312">
 <pre>[[StyleSheetSyntaxHighlighter]]</pre>
