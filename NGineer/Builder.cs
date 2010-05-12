@@ -12,7 +12,7 @@ namespace NGineer
 {
 	public class Builder : IBuilder
 	{
-		private const int DefaultBuildDepth = 20;
+		private const int DefaultBuildDepth = 5;
 		
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
@@ -213,6 +213,10 @@ namespace NGineer
 
         private object DoMemberSetters(Type type, object obj, BuildSession session)
         {
+            if(Parent != null)
+            {
+                obj = Parent.DoMemberSetters(type, obj, session);
+            }
             foreach (var property in type.GetProperties())
             {
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
@@ -236,6 +240,10 @@ namespace NGineer
 
         private object DoGeneralSetters(Type type, object obj, BuildSession session)
         {
+            if(Parent != null)
+            {
+                obj = Parent.DoGeneralSetters(type, obj, session);
+            }
 			var setters = Setters.Where(s => s.IsForType(type)).ToArray();
             return setters.Aggregate(obj, (current, setter) => setter.Set(current, this, session));
         }

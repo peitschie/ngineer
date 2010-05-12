@@ -59,8 +59,14 @@ namespace NGineer.UnitTests
 			Assert.IsNotNull(newClass.RecursiveReference.RecursiveReference);
 			Assert.IsNotNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference);
 			Assert.IsNull(newClass.RecursiveReference.RecursiveReference.RecursiveReference.RecursiveReference);
-						
 		}
+
+        [Test]
+        [MaxTime(5000)]
+        public void Build_MaximumRecursionLevel_SetByDefault()
+        {
+            new Builder(1).Build<RecursiveClass>();
+        }
 		
 		[Test]
 		public void Build_MaximumRecursionLevel_ChildContainer_SetValueBuilderEnforced()
@@ -349,6 +355,57 @@ namespace NGineer.UnitTests
             var builder2 = builder.CreateNew();
 
             Assert.AreNotEqual(builder.Build<int>(), builder2.Build<int>());
+        }
+
+        [Test]
+        public void Hierarchy_ChildCallsParent_PopulatorOf()
+        {
+            var parentCalled = -1;
+            var childCalled = -1;
+            var callOrder = 0;
+            var builder = new Builder(1).AfterPopulationOf<SimpleClass>((o, b, s) =>
+                {
+                    parentCalled = callOrder++;
+                    o.IntProperty = 10;
+                });
+            var newClass = builder.CreateNew()
+                .AfterPopulationOf<SimpleClass>((o, b, s) =>
+                {
+                    childCalled = callOrder++;
+                    o.IntProperty = 11;
+                })
+                .Build<SimpleClass>();
+
+            Assert.AreNotEqual(-1, parentCalled, "Parent wasn't called");
+            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
+            Assert.IsTrue(childCalled > parentCalled, "Child called before parent");
+            Assert.AreEqual(11, newClass.IntProperty);
+        }
+
+        [Test]
+        public void Hierarchy_ChildCallsParentFirst_ConstructionOf()
+        {
+            var parentCalled = -1;
+            var childCalled = -1;
+            var callOrder = 0;
+            var builder = new Builder(1).AfterConstructionOf<SimpleClass>(c => c.IntProperty, 
+                (o, b, s) => {
+                    parentCalled = callOrder++;
+                    return 10;
+            });
+            var newClass = builder.CreateNew()
+                .AfterConstructionOf<SimpleClass>(c => c.IntProperty,
+                (o, b, s) =>
+                {
+                    childCalled = callOrder++;
+                    return 11;
+                })
+                .Build<SimpleClass>();
+
+            Assert.AreNotEqual(-1, parentCalled, "Parent wasn't called");
+            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
+            Assert.IsTrue(childCalled > parentCalled, "Child called before parent");
+            Assert.AreEqual(11, newClass.IntProperty);
         }
 
         public class CountsPropertySets
