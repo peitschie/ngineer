@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NGineer.Generators;
 using NGineer.Utils;
 
@@ -14,5 +15,10 @@ namespace NGineer.BuildHelpers
 
         private readonly List<object> _constructedObjects = new List<object>();
         public IList<object> ConstructedObjects { get { return _constructedObjects; } }
+
+        public int NumberOfInstances<TType>()
+        {
+            return ConstructedObjects.Count(o => o is TType);
+        }
     }
 }

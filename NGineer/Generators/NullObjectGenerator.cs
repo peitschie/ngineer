@@ -6,7 +6,7 @@ namespace NGineer.Generators
     public class NullObjectGenerator<TType> : SimpleGenerator<TType>
         where TType : class 
     {
-        public NullObjectGenerator(int seed) : base(seed)
+        public NullObjectGenerator() : base(0)
         {
         }
 

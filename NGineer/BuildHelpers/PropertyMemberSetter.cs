@@ -5,26 +5,42 @@ namespace NGineer.BuildHelpers
 {
     public class PropertyMemberSetter : MemberSetter<PropertyInfo>
     {
-        private readonly PropertyInfo _property;
+        protected readonly PropertyInfo Property;
         private readonly Func<object, IBuilder, BuildSession, object> _propertyValue;
 
         public PropertyMemberSetter(PropertyInfo property, Func<object, IBuilder, BuildSession, object> propertyValue)
         {
-            _property = property;
+            Property = property;
             _propertyValue = propertyValue;
         }
 
         public override bool IsForMember(PropertyInfo property)
         {
             return property != null 
-                && Equals(_property.DeclaringType, property.DeclaringType)
-                && Equals(_property.PropertyType, property.PropertyType)
-                && Equals(_property.Name, property.Name);
+                && Equals(Property.DeclaringType, property.DeclaringType)
+                && Equals(Property.PropertyType, property.PropertyType)
+                && Equals(Property.Name, property.Name);
         }
 
         public override void Set(object obj, IBuilder builder, BuildSession session)
         {
-            _property.SetValue(obj, _propertyValue(obj, builder, session), null);
+            Property.SetValue(obj, _propertyValue(obj, builder, session), null);
+        }
+    }
+
+    public class PropertyMemberSetter<TType> : PropertyMemberSetter
+    {
+        private readonly Func<TType, IBuilder, BuildSession, object> _propertyValue;
+
+        public PropertyMemberSetter(PropertyInfo property, Func<TType, IBuilder, BuildSession, object> propertyValue)
+            : base(property, null)
+        {
+            _propertyValue = propertyValue;
+        }
+
+        public override void Set(object obj, IBuilder builder, BuildSession session)
+        {
+            Property.SetValue(obj, _propertyValue((TType)obj, builder, session), null);
         }
     }
 }

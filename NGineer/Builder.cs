@@ -133,19 +133,17 @@ namespace NGineer
             return this;
 	    }
 
-        /// <summary>
-        /// http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
-        /// </summary>
-        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
+	    public IBuilder AfterConstructionOf<TType, TFuncType>(Expression<Func<TType, object>> expression, Func<TFuncType, IBuilder, BuildSession, object> value)
         {
+            // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
             var member = MemberExpressions.GetMemberInfo(expression);
-            switch(member.MemberType)
+            switch (member.MemberType)
             {
                 case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter(member.DeclaringType.GetProperty(member.Name), value));
+                    MemberSetters.Add(new PropertyMemberSetter<TFuncType>(member.DeclaringType.GetProperty(member.Name), value));
                     break;
                 case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter(member.DeclaringType.GetField(member.Name), value));
+                    MemberSetters.Add(new FieldMemberSetter<TFuncType>(member.DeclaringType.GetField(member.Name), value));
                     break;
                 case MemberTypes.Constructor:
                 case MemberTypes.Event:
@@ -161,9 +159,14 @@ namespace NGineer
             return this;
         }
 
+        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
+        {
+            return AfterConstructionOf<TType, object>(expression, value);
+        }
+        
         public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value)
         {
-            return AfterConstructionOf(expression, (o, b, s) => value);
+            return AfterConstructionOf<TType, TType>(expression, (o, b, s) => value);
         }
 
 	    #endregion
@@ -285,6 +288,12 @@ namespace NGineer
         }
 
         public new IBuilder<TType> AfterConstructionOf<T>(Expression<Func<T, object>> expression, Func<object, IBuilder, BuildSession, object> value)
+        {
+            base.AfterConstructionOf(expression, value);
+            return this;
+        }
+        
+        public new IBuilder<TType> AfterConstructionOf<T, T2>(Expression<Func<T, object>> expression, Func<T2, IBuilder, BuildSession, object> value)
         {
             base.AfterConstructionOf(expression, value);
             return this;
