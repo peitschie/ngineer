@@ -9,8 +9,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NGineer</RootNamespace>
     <AssemblyName>NGineer</AssemblyName>
-    <FileUpgradeFlags>40</FileUpgradeFlags>
-    <UpgradeBackupLocation>C:\Source\BondAdvance\bzr\working\Bond\Instrument\Backup1\</UpgradeBackupLocation>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
@@ -80,6 +82,10 @@
     <Compile Include="BuildHelpers\ISetter.cs" />
     <Compile Include="BuildHelpers\Setter.cs" />
     <Compile Include="Generators\StandardGenerators.cs" />
+    <Compile Include="Sequences\Counter.cs" />
+    <Compile Include="Sequences\IntSequence.cs" />
+    <Compile Include="Sequences\ISequence.cs" />
+    <Compile Include="Sequences\Sequence.cs" />
     <Compile Include="Utils\GenericAssignableFrom.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
