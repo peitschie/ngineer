@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("NGineer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Mock object factory")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Philip Peitsch")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Philip Peitsch")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

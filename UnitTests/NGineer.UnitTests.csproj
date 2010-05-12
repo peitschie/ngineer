@@ -8,7 +8,7 @@
     <ProjectGuid>{824116AC-3FD3-421A-B645-3008A3E38AA6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>NGineer.UnitTests</RootNamespace>
-    <AssemblyName>UnitTests</AssemblyName>
+    <AssemblyName>NGineer.UnitTests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
