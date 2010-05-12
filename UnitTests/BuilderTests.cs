@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NGineer.BuildHelpers;
+using NGineer.Generators;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -247,14 +248,38 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void Build_AfterConstructionOf_NullableProperty()
+        public void Build_AfterConstructionOf_NullableIntProperty()
         {
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullable>(c => c.Property1, 1));
+                .AfterConstructionOf<ClassWithNullableInt>(c => c.Property1, 9));
 
-            var obj = builder.Build<ClassWithNullable>();
-            Assert.AreEqual(1, obj.Property1.Value);
+            var obj = builder.Build<ClassWithNullableInt>();
+            Assert.AreEqual(9, obj.Property1.Value);
+        }
+
+        [Test]
+        public void Build_AfterConstructionOf_NullableDateTimeProperty()
+        {
+            var dateTime = DateTime.Now;
+            IBuilder builder = null;
+            Assert.DoesNotThrow(() => builder = new Builder(1)
+                .AfterConstructionOf<ClassWithNullableDateTime>(c => c.Property1, dateTime));
+
+            var obj = builder.Build<ClassWithNullableDateTime>();
+            Assert.AreEqual(dateTime, obj.Property1.Value);
+        }
+
+        [Test]
+        public void Build_AfterConstructionOf_Inherited_NullableDateTimeProperty()
+        {
+            var dateTime = DateTime.Now;
+            IBuilder builder = null;
+            Assert.DoesNotThrow(() => builder = new Builder(1)
+                .AfterConstructionOf<InheritsFromClassWithNullableDateTime>(c => c.Property1, dateTime));
+
+            var obj = builder.Build<InheritsFromClassWithNullableDateTime>();
+            Assert.AreEqual(dateTime, obj.Property1.Value);
         }
 
         [Test]
@@ -294,7 +319,7 @@ namespace NGineer.UnitTests
             }
             Assert.AreEqual(3, instances);
         }
-		
+	
 		[Test]
 		public void Hierarchy_BuildDepthInheritedFromParent()
 		{
@@ -316,6 +341,15 @@ namespace NGineer.UnitTests
 			Assert.AreEqual(3, builder.BuildDepth);
 			Assert.AreEqual(5, builder2.BuildDepth);
 		}
+
+        [Test]
+        public void Hierarchy_ChildDoesntBuildIdenticalObjectAsParent()
+        {
+            var builder = new Builder(1);
+            var builder2 = builder.CreateNew();
+
+            Assert.AreNotEqual(builder.Build<int>(), builder2.Build<int>());
+        }
 
         public class CountsPropertySets
         {
@@ -372,9 +406,18 @@ namespace NGineer.UnitTests
         {
         }
 
-        public class ClassWithNullable
+        public class ClassWithNullableInt
         {
             public int? Property1 { get; set; }
+        }
+
+        public class ClassWithNullableDateTime
+        {
+            public DateTime? Property1 { get; set; }
+        }
+
+        public class InheritsFromClassWithNullableDateTime : ClassWithNullableDateTime
+        {
         }
 
         public class TestClass
