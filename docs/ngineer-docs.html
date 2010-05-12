@@ -530,11 +530,11 @@ TertiaryDark: #666
 Error: #f88
 </pre>
 </div>
-<div title="DefaultTiddlers" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121215" changecount="1">
+<div title="DefaultTiddlers" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121215" modified="201005121238" changecount="2">
 <pre>[[Introduction]]
 [[Dive In]]</pre>
 </div>
-<div title="Introduction" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" changecount="1">
+<div title="Design justification" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" modified="201005121240" changecount="5">
 <pre>There are no two ways about it...  generating test objects is painful.  Things start out simple, and before you know it, you have either
 * Generating realms of static data shared between tests
 * Creating numerous functions to create static, shared data instead
@@ -547,17 +547,35 @@ The problem is, this test code and data structures carry two very important (and
 Some more writings about these dangers can be found in the following links:
 * &lt;need links to useful sites about proper test data design&gt;
 
-One such approach for diminishing the maintenance overhead of test data, and improving clarity of test code is through a method called an &quot;object constructor&quot;.  Though NGineer.NET is not the first one ever created (NBuilder is another respected solution that has been around for a few years now).  However, through judicious use of reflection, a simple and intuitive &quot;fluent&quot; api and some good clean recursion fun, NGineer.NET is a re-designed and (hopefully) smarter object factory.
+One such approach for diminishing the maintenance overhead of test data, and improving clarity of test code is through a method called an &quot;object constructor&quot;.  Though NGineer.NET is not the first one ever created (NBuilder is another respected solution that has been around for a few years now).  However, through judicious use of reflection, a simple and intuitive &quot;fluent&quot; api and some good clean recursion fun, NGineer.NET is a re-designed and (hopefully) smarter object factory.</pre>
+</div>
+<div title="Dive In" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121257" changecount="1">
+<pre>So, NGineer claims to make life simpler, but does it &quot;really work&quot;?  See some examples below and decide for yourself.
 
-The key features NGineer.NET supports are:
-* Build any (supported) type with a single builder factory.  You don't need to create an individual builder per type
-* Automatic navigation down object hierarchies. You don't need to manually define builders to build the properties on your class.  Just register appropriate generators and let NGineer figure it out. Default build depth is 5 levels deep, though this is easily configured by using the SetMaximumDepth method on the builder object
-* 
 </pre>
 </div>
-<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005121220" changecount="3">
+<div title="Introduction" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121243" modified="201005121251" changecount="5">
+<pre>NGineer.NET is an advanced hierarchal object builder exploiting some of the latest technologies available in C#3.0 and .NET 4.0.  It has been heavily inspired by [[NBuilder|http://nbuilder.org/]], though designed to overcome what some of the perceived deficiencies are in existing test object builders.
+
+NGineer.NET was designed with the following goals in mind:
+* Be useful by default. NGineer.NET should not require a lot of code to build a simple (or even a complex) class
+* Allow easy re-use and extension of builders.  Similar test data is often required for multiple tests, so allow this to be easily and safely shared and overridden as required
+* Make all object generation 100% reproducible.  Running the same test should create the same object hierarchy (unless specifically configured otherwise)
+
+The key features of NGineer.NET are:
+* &quot;Fluent&quot; api allows easy configuration of builders
+* Build any (supported) type with a single builder.  No need to create an individual builder per type
+* Automatic navigation and construction of object hierarchies. No need to manually define builders to build the properties on your class.  Simply  register some appropriate generators and let the NGineer figure it out. Default build depth is 5 levels deep, though this is easily configured using the SetMaximumDepth method on the builder object
+* Automatic construction of lists, arrays, enumerable and other collections.  The number of elements (min to max) each list contains is also configurable using the builder object
+* Override generation of individual properties and fields using the AfterConstructionOf&lt;&gt; syntax
+* Perform operations on objects after their construction and population is complete using the AfterPopulationOf&lt;&gt; syntax
+* Easy support added for new types using the IGenerator interface
+</pre>
+</div>
+<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005121240" changecount="4">
 <pre>[[Introduction]]
-[[Diving In]]</pre>
+[[Diving In]]
+[[Design justification]]</pre>
 </div>
 <div title="NGineer Documentation" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121148" changecount="1">
 <pre>NGineer</pre>
