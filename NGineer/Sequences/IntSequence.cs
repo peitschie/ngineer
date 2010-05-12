@@ -43,7 +43,7 @@ namespace NGineer.Sequences
 
         public SimpleIntSequence ResetOnChangeTo(Func<object, IBuilder, BuildSession, object> fetchValue)
         {
-            Properties = new Counter(fetchValue);
+            Properties.FetchValue = fetchValue;
             return this;
         }
     }
