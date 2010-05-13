@@ -658,11 +658,12 @@ The key features of NGineer.NET are:
 * Easy support added for new types using the IGenerator interface
 </pre>
 </div>
-<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005121411" changecount="7">
+<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005131300" changecount="8">
 <pre>[[Introduction]]
 [[Diving In]]
 [[Design detail]]
-[[Design justification]]</pre>
+[[Design justification]]
+[[Roadmap]]</pre>
 </div>
 <div title="NGineer Documentation" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121148" changecount="1">
 <pre>NGineer</pre>
@@ -720,6 +721,26 @@ var customClass = new Builder(1)
    .Build&lt;CustomClass&gt;(); 
 
 &lt;/code&gt;</pre>
+</div>
+<div title="Roadmap" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005131300" modified="201005131307" changecount="5">
+<pre>!!Future releases
+* Allow build depths to be set on a per-type basis (e.g., limit build depth to 0 below un-interesting parts of the test tree)
+* Easier sequence generation for common operations such as
+** consecutive numbering of peers
+** random but unique sequences
+* Allow more natural setter expressions for AfterConstructionOf members.  Need to parse the expression tree to get out the details for this
+* Clearer separation between generators and populators
+* Improve documentation
+** Add more complex examples
+** Improve graphics and explanations of design detail
+** More thorough explanation of object construction and priorities of various settings
+** Generate API documentation as part of build
+* Improve determining of collection sizes to attempt to get the closest match rather than the first match
+!!Features for 1.0
+* Full support for instance re-use
+* Full support for list and array creation
+* Support for most commonly used primitive and built-in types
+* Fully document all public interfaces</pre>
 </div>
 <div title="SiteSubtitle" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121150" changecount="1">
 <pre>A .NET object builder designed for easy generation of data for testing purposes</pre>

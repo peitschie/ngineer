@@ -16,9 +16,8 @@ namespace NGineer.Generators
             _random = new Random(seed);
         }
 
-        public ReusableInstancesGenerator SetNumberOfInstances<TType>(int min, int max)
+        public ReusableInstancesGenerator SetNumberOfInstances(Type type, int min, int max)
         {
-            var type = typeof (TType);
             var number = _random.Next(max - min) + min;
             if(_numberOfInstances.ContainsKey(type))
             {
@@ -29,6 +28,11 @@ namespace NGineer.Generators
                 _numberOfInstances.Add(type, number);
             }
             return this;
+        }
+
+        public ReusableInstancesGenerator SetNumberOfInstances<TType>(int min, int max)
+        {
+            return SetNumberOfInstances(typeof(TType), min, max);
         }
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)

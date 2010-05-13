@@ -374,7 +374,7 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void Build_SetMaximumInstances_ObjectsProperlyReused()
+        public void InstancesControl_SetMaximumInstances_ObjectsProperlyReused()
         {
             var builder = new Builder(1)
                 .SetNumberOfInstances<SimpleClass>(3, 3)
@@ -393,6 +393,21 @@ namespace NGineer.UnitTests
                 }
             }
             Assert.AreEqual(3, instances);
+        }
+
+        [Test]
+        public void InstancesControl_ObjectsNotRetouched_WhenReused()
+        {
+            var count = 0;
+            var builder = new Builder(1)
+                .AfterPopulationOf<CountsPropertySets>(c => c.SomeProperty = count++)
+                .SetCollectionSize(2,2)
+                .SetNumberOfInstances<CountsPropertySets>(1, 1)
+                .Sealed();
+            var instances = builder.Build<CountsPropertySets[]>();
+
+            Assert.AreSame(instances[0], instances[1]);
+            Assert.AreEqual(1, instances[0].SomeProperty);
         }
 	
 		[Test]
