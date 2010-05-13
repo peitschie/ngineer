@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Moq;
 using NGineer.BuildHelpers;
 using NGineer.Generators;
+using NGineer.Utils;
 using NUnit.Framework;
+using Range = NGineer.BuildHelpers.Range;
 
 namespace NGineer.UnitTests.Generators
 {
@@ -16,6 +19,51 @@ namespace NGineer.UnitTests.Generators
         public void GeneratorTestFixture_SetUp()
         {
             Generator = Construct();
+        }
+
+        [Test]
+        public void GeneratesTypes_AcceptsTypes()
+        {
+            foreach (var supportedType in SupportedTypes())
+            {
+                Assert.IsTrue(GeneratesType(supportedType), "Expected type {0} was not supported".With(supportedType));    
+            }
+        }
+
+        [Test]
+        public void GeneratesTypes_RejectsTypes()
+        {
+            foreach (var unsupportedType in UnsupportedTypes())
+            {
+                Assert.IsFalse(GeneratesType(unsupportedType), "Unexpected type {0} was supported".With(unsupportedType));
+            }
+        }
+
+        [Test]
+        public virtual void Create_AllSupportedTypes()
+        {
+            var builder = new Mock<IBuilder>();
+            builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
+            var defaultRange = new Range(1, 10);
+            var collectionTypes = new TypeRegistry<Range>();
+            var session = new BuildSession(collectionTypes, defaultRange);
+            foreach (var supportedType in SupportedTypes())
+            {
+                try
+                {
+                    Generator.Create(supportedType, builder.Object, session);
+                }
+                catch(BuilderCalledException)
+                {}
+                catch(Exception e)
+                {
+                    Assert.Fail("Unable to construct {0}: {1}", supportedType, e);
+                }
+            }
+        }
+
+        private class BuilderCalledException : Exception
+        {
         }
 
         protected bool GeneratesType(Type type)
@@ -47,7 +95,7 @@ namespace NGineer.UnitTests.Generators
             return (TGenerator) seededConstructor.Invoke(new object[] {100});
         }
 
-	    public abstract void GeneratesTypes_AcceptsTypes();
-		public abstract void GeneratesTypes_RejectsTypes();
+	    protected abstract Type[] SupportedTypes();
+		protected abstract Type[] UnsupportedTypes();
 	}
 }

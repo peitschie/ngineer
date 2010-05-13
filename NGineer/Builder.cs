@@ -44,7 +44,8 @@ namespace NGineer
 			WithGenerator(new DateTimeGenerator(seed));
 			WithGenerator(new EnumGenerator(seed));
 			WithGenerator(new BoolGenerator(seed));
-			WithGenerator(new IntGenerator(seed));
+			WithGenerator(new CharGenerator(seed));
+			WithGenerator(new BlittableTypesGenerator(seed));
 			WithGenerator(new StringGenerator(seed));
 			WithGenerator(new UIntGenerator(seed));
 		}
@@ -154,6 +155,13 @@ namespace NGineer
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
+            return this;
+	    }
+
+        public IBuilder AfterPopulationOf(ISetter setter)
+	    {
+	        AssertBuilderIsntSealed();
+            Setters.Add(setter);
             return this;
 	    }
 
@@ -338,6 +346,12 @@ namespace NGineer
 			base.SetCollectionSize(minimum, maximum);
 			return this;
 		}
+
+        public new IBuilder<TType> AfterPopulationOf(ISetter setter)
+        {
+            base.AfterPopulationOf(setter);
+            return this;
+        }
 
         public new IBuilder<TType> SetCollectionSize<TType1>(int minimum, int maximum)
         {

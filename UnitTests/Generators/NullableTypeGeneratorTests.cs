@@ -10,19 +10,22 @@ namespace NGineer.UnitTests.Generators
     [TestFixture]
     public class NullableTypeGeneratorTests : GeneratorTestFixture<NullableTypeGenerator>
     {
-
-        [Test]
-        public override void GeneratesTypes_AcceptsTypes()
+        protected override Type[] SupportedTypes()
         {
-            Assert.IsTrue(GeneratesType(typeof(Nullable<int>)));
-            Assert.IsTrue(GeneratesType(typeof(DateTime?)));
+            return new[]
+                {
+                    typeof (Nullable<int>),
+                    typeof (DateTime?),
+                };
         }
-		
-		[Test]
-        public override void GeneratesTypes_RejectsTypes()
+
+        protected override Type[] UnsupportedTypes()
         {
-            Assert.IsFalse(GeneratesType(typeof(int)));
-            Assert.IsFalse(GeneratesType(typeof(string)));
+            return new[]
+                {
+                    typeof (int),
+                    typeof (string),
+                };
         }
 
         [Test]

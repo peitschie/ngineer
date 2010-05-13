@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NGineer.BuildHelpers;
 using NGineer.Generators;
+using NGineer.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -29,6 +30,16 @@ namespace NGineer.UnitTests
 			var newClass2 = new Builder(1).Build<int>();
 			Assert.AreEqual(newClass, newClass2);
 		}
+
+        [Test]
+        public void AfterPopulationOf_UsingAdvanceSetterForGenerics()
+        {
+            var createdList = new List<int>();
+            var newClass = new Builder(1)
+                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => createdList))
+                .Build<List<int>>();
+            Assert.AreSame(createdList, newClass);
+        }
 		
 		[Test]
 		public void Builder_SeedReproducesTest_StringGenerator()
