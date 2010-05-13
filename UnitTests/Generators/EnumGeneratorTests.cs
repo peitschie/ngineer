@@ -1,3 +1,4 @@
+using System;
 using NGineer.Generators;
 using NUnit.Framework;
 
@@ -6,19 +7,23 @@ namespace NGineer.UnitTests.Generators
     [TestFixture]
     public class EnumGeneratorTests : GeneratorTestFixture<EnumGenerator>
     {
-		[Test]
-        public override void GeneratesTypes_AcceptsTypes()
+        protected override Type[] SupportedTypes()
         {
-            Assert.IsTrue(Generator.GeneratesType(typeof(TestEnum), null, null));
+            return new[]
+                {
+                    typeof (TestEnum),
+                };
         }
-		
-		[Test]
-        public override void GeneratesTypes_RejectsTypes()
+
+        protected override Type[] UnsupportedTypes()
         {
-            Assert.IsFalse(Generator.GeneratesType(typeof(EnumGeneratorTests), null, null));
-            Assert.IsFalse(Generator.GeneratesType(typeof(int), null, null));
+            return new[]
+                {
+                    typeof (EnumGeneratorTests),
+                    typeof (int),
+                };
         }
-		
+
         [Test]
         public void GenerateSimpleEnum()
         {

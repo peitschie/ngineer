@@ -68,10 +68,12 @@
     <Compile Include="BuildHelpers\PropertyMemberSetterTests.cs" />
     <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
+    <Compile Include="Generators\BoolGeneratorTests.cs" />
     <Compile Include="Generators\BuilderGeneratorTests.cs" />
     <Compile Include="Generators\ArrayGeneratorTests.cs" />
+    <Compile Include="Generators\CharGeneratorTests.cs" />
     <Compile Include="Generators\ReusableInstancesGeneratorTests.cs" />
-    <Compile Include="Generators\IntGeneratorTests.cs" />
+    <Compile Include="Generators\BlittableTypesGeneratorTests.cs" />
     <Compile Include="Generators\NullableTypeGeneratorTests.cs" />
     <Compile Include="Generators\EnumGeneratorTests.cs" />
     <Compile Include="Generators\ListGeneratorTests.cs" />

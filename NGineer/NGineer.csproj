@@ -71,6 +71,7 @@
     <Compile Include="BuildHelpers\Range.cs" />
     <Compile Include="BuildHelpers\TypeRegistry.cs" />
     <Compile Include="Generators\ArrayGenerator.cs" />
+    <Compile Include="Generators\CharGenerator.cs" />
     <Compile Include="Generators\NullableTypeGenerator.cs" />
     <Compile Include="Generators\DateTimeGenerator.cs" />
     <Compile Include="Generators\DefaultConstructorGenerator.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="IBuilder.cs" />
-    <Compile Include="Generators\IntGenerator.cs" />
+    <Compile Include="Generators\BlittableTypesGenerator.cs" />
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Generators\StringGenerator.cs" />
     <Compile Include="Generators\UIntGenerator.cs" />

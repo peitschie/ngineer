@@ -26,6 +26,7 @@ namespace NGineer
         IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter);
         IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
+        IBuilder AfterPopulationOf(ISetter setter);
 
         IBuilder SetCollectionSize<TType>(int minimum, int maximum);
 		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
@@ -61,6 +62,7 @@ namespace NGineer
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Func<TType, TType> setter);
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
+        new IBuilder<TBuildType> AfterPopulationOf(ISetter setter);
 
         new IBuilder<TBuildType> SetCollectionSize<TType>(int minimum, int maximum);
         new IBuilder<TBuildType> SetNumberOfInstances<TType>(int minimum, int maximum);

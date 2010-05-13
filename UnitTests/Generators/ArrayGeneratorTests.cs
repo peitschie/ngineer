@@ -16,23 +16,27 @@ namespace NGineer.UnitTests.Generators
             return new BuildSession(new TypeRegistry<Range>(), new Range(10, 10));
         }
 
-        [Test]
-        public override void GeneratesTypes_AcceptsTypes()
+        protected override Type[] SupportedTypes()
         {
-            Assert.IsTrue(GeneratesType(typeof(string[])));
-            Assert.IsTrue(GeneratesType(typeof(int[])));
+            return new[]
+                {
+                    typeof(string[]), 
+                    typeof(int[]),
+                };
         }
-		
-		[Test]
-        public override void GeneratesTypes_RejectsTypes()
+
+        protected override Type[] UnsupportedTypes()
         {
-            Assert.IsFalse(GeneratesType(typeof(List<string>)));
-            Assert.IsFalse(GeneratesType(typeof(IEnumerable<string>)));
-            Assert.IsFalse(GeneratesType(typeof(ListGeneratorTests)));
-            Assert.IsFalse(GeneratesType(typeof(string)));
-            Assert.IsFalse(GeneratesType(typeof(IDictionary<string, string>)));
+            return new[]
+                {
+                    typeof (List<string>),
+                    typeof (IEnumerable<string>),
+                    typeof (ListGeneratorTests),
+                    typeof (string),
+                    typeof (IDictionary<string, string>),
+                };
         }
-		
+
         [Test]
         public void Create_Simple_ArrayOfStrings()
         {
