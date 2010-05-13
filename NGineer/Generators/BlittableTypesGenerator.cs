@@ -57,6 +57,8 @@ namespace NGineer.Generators
                 }
                 Converters.Add(type, method);
             }
+			// call our methods to shut up the compilers!
+			NonBitConverterMethod(new byte[1], 0);
             var nonBitMethod = typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy);
             if(nonBitMethod == null)
             {

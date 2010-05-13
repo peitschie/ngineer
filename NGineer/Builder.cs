@@ -165,6 +165,12 @@ namespace NGineer
             return this;
 	    }
 
+		public IBuilder AfterConstructionOf(IMemberSetter setter)
+		{
+			MemberSetters.Add(setter);
+			return this;
+		}
+		
 	    public IBuilder AfterConstructionOf<TType, TFuncType>(Expression<Func<TType, object>> expression, Func<TFuncType, IBuilder, BuildSession, object> value)
         {
             // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
@@ -302,113 +308,4 @@ namespace NGineer
             return thisGenerator;
         }
 	}
-
-    public class Builder<TType> : Builder, IBuilder<TType>
-    {
-        public Builder(int seed) : base(seed)
-        {}
-
-        protected Builder(Builder builder) : base(builder)
-        {}
-
-        public new IBuilder<TType> WithGenerator(IGenerator generator)
-        {
-            base.WithGenerator(generator);
-            return this;
-        }
-
-        public new IBuilder<TType> SetMaximumDepth(int? depth)
-        {
-            base.SetMaximumDepth(depth);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterConstructionOf<T>(Expression<Func<T, object>> expression, Func<object, IBuilder, BuildSession, object> value)
-        {
-            base.AfterConstructionOf(expression, value);
-            return this;
-        }
-        
-        public new IBuilder<TType> AfterConstructionOf<T, T2>(Expression<Func<T, object>> expression, Func<T2, IBuilder, BuildSession, object> value)
-        {
-            base.AfterConstructionOf(expression, value);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterConstructionOf<TType1>(Expression<Func<TType1, object>> expression, object value)
-        {
-            base.AfterConstructionOf(expression, value);
-            return this;
-        }
-
-        public new IBuilder<TType> SetCollectionSize(int minimum, int maximum)
-		{
-			base.SetCollectionSize(minimum, maximum);
-			return this;
-		}
-
-        public new IBuilder<TType> AfterPopulationOf(ISetter setter)
-        {
-            base.AfterPopulationOf(setter);
-            return this;
-        }
-
-        public new IBuilder<TType> SetCollectionSize<TType1>(int minimum, int maximum)
-        {
-            base.SetCollectionSize(minimum, maximum);
-            return this;
-        }
-
-        public new IBuilder<TType> SetNumberOfInstances<TType1>(int minimum, int maximum)
-        {
-            base.SetNumberOfInstances<TType1>(minimum, maximum);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterPopulationOf<TType1>(Action<TType1> setter)
-        {
-            base.AfterPopulationOf(setter);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterPopulationOf<TType1>(Func<TType1, TType1> setter)
-        {
-            base.AfterPopulationOf(setter);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterPopulationOf<TType1>(Action<TType1, IBuilder, BuildSession> setter)
-        {
-            base.AfterPopulationOf(setter);
-            return this;
-        }
-
-        public new IBuilder<TType> AfterPopulationOf<TType1>(Func<TType1, IBuilder, BuildSession, TType1> setter)
-        {
-            base.AfterPopulationOf(setter);
-            return this;
-        }		
-		
-        public new IBuilder<TType> Sealed()
-        {
-            base.Sealed();
-            return this;
-        }
-
-        public new IBuilder<TType> CreateNew()
-        {
-            return new Builder<TType>(this);
-        }
-		
-        public TType Build()
-        {
-            return Build<TType>();
-        }
-
-        public TType Build(BuildSession session)
-        {
-            return Build<TType>(session);
-        }
-
-    }
 }
