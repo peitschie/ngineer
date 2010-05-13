@@ -199,6 +199,28 @@ namespace NGineer.UnitTests
         }
 
         [Test]
+        public void Sealed_BuildSealsBuilder()
+        {
+            var builder = new Builder(1).AfterPopulationOf<int>(n => 190);
+            builder.Build<int>();
+            Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
+            Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
+            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => 10));
+            Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
+        }
+
+        [Test]
+        public void Sealed_SealOnChildSealsParent()
+        {
+            var builder = new Builder(1).AfterPopulationOf<int>(n => 190);
+            builder.CreateNew().Sealed();
+            Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
+            Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
+            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => 10));
+            Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
+        }
+
+        [Test]
         public void Build_SetupValueToOverrideBehaviour_SimpleClass()
         {
             var newClass = new Builder(1)
@@ -209,7 +231,7 @@ namespace NGineer.UnitTests
         }
 		
 		[Test]
-        public void Build_SetCollectionSize_Settable()
+        public void CollectionSize_DefaultSettable()
         {
             var newClass = new Builder(1)
                 .SetCollectionSize(50, 60)
@@ -217,6 +239,42 @@ namespace NGineer.UnitTests
 
 			Assert.IsNotNull(newClass);
             Assert.IsTrue(50 <= newClass.Count && newClass.Count <= 60);
+        }
+
+        [Test]
+        public void CollectionSize_UseParentDefault_BeforeClassDefault()
+        {
+            var newClass = new Builder(1)
+                .SetCollectionSize(50, 50)
+                .CreateNew()
+                .Build<IList<SimpleClass>>();
+
+            Assert.AreEqual(50, newClass.Count);
+        }
+
+        [Test]
+        public void CollectionSize_SettablePerType()
+        {
+            var newClass = new Builder(1)
+                .SetCollectionSize(50, 50)
+                .SetCollectionSize<SimpleClass>(10, 10)
+                .Build<IList<SimpleClass>>();
+
+            Assert.IsNotNull(newClass);
+            Assert.AreEqual(10, newClass.Count);
+        }
+
+        [Test]
+        public void CollectionSize_SettablePerType_ChildInherits()
+        {
+            var newClass = new Builder(1)
+                .SetCollectionSize(50, 50)
+                .SetCollectionSize<SimpleClass>(10, 10)
+                .CreateNew()
+                .Build<IList<SimpleClass>>();
+
+            Assert.IsNotNull(newClass);
+            Assert.AreEqual(10, newClass.Count);
         }
 
         [Test]
@@ -408,6 +466,7 @@ namespace NGineer.UnitTests
             Assert.AreEqual(11, newClass.IntProperty);
         }
 
+        #region test classes
         public class CountsPropertySets
         {
             private int _somePropertySets;
@@ -492,6 +551,7 @@ namespace NGineer.UnitTests
 		public class TestClassFourDeep
 		{
 			public TestClassThreeDeep PropertyTestClass { get; set; }
-		}
-	}
+        }
+        #endregion
+    }
 }

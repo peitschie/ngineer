@@ -12,13 +12,19 @@ namespace NGineer
 {
 	public class Builder : IBuilder
 	{
-		private const int DefaultBuildDepth = 5;
+        protected static class Defaults
+        {
+            public const int BuildDepth = 5;
+            public static readonly Range CollectionSize = new Range(10, 20);
+        }
 		
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
         protected readonly IList<IMemberSetter> MemberSetters = new List<IMemberSetter>();
 
 	    protected readonly int Seed;
+	    private Range _defaultCollectionSize;
+	    private readonly TypeRegistry<Range> _collectionSizes;
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
 	    private readonly ReusableInstancesGenerator _instancesGenerator;
@@ -28,12 +34,12 @@ namespace NGineer
 	    public Builder(int seed)
 		{
 			Seed = seed;
+            _collectionSizes = new TypeRegistry<Range>();
             _userGenerators = new List<IGenerator>();
-
             _instancesGenerator = new ReusableInstancesGenerator(seed);
 		    _defaultGenerator = new DefaultConstructorGenerator();
-			WithGenerator(new ListGenerator(seed, 10, 20));
-			WithGenerator(new ArrayGenerator(seed, 10, 20));
+			WithGenerator(new ListGenerator(seed));
+			WithGenerator(new ArrayGenerator(seed));
 			WithGenerator(new NullableTypeGenerator(seed));
 			WithGenerator(new DateTimeGenerator(seed));
 			WithGenerator(new EnumGenerator(seed));
@@ -42,24 +48,41 @@ namespace NGineer
 			WithGenerator(new StringGenerator(seed));
 			WithGenerator(new UIntGenerator(seed));
 		}
-		
-		public int BuildDepth
+
+        protected Builder(Builder parent)
+            : this(parent.Seed + 1)
+        {
+            Parent = parent;
+            _collectionSizes = new TypeRegistry<Range>(Parent._collectionSizes);
+        }
+
+        #region Properties that take into account parent settings as well
+        public int BuildDepth
 		{
 			get 
 			{ 
 				int? depth = _maximumDepth;
 				if(_maximumDepth == null)
 				{
-					depth = (Parent != null) ? Parent.BuildDepth : DefaultBuildDepth;
+					depth = (Parent != null) ? Parent.BuildDepth : Defaults.BuildDepth;
 				}
 				return depth.Value;
 			}
 		}
-				
-        protected Builder(Builder parent) : this(parent.Seed+1)
-        {
-            Parent = parent;
-        }
+
+	    public Range DefaultCollectionSize
+	    {
+            get
+            {
+                var range = _defaultCollectionSize;
+                if(range == null)
+                {
+                    range = (Parent != null) ? Parent.DefaultCollectionSize : Defaults.CollectionSize;
+                }
+                return range;
+            }
+	    }
+        #endregion
 
 	    public IBuilder WithGenerator(IGenerator generator)
 		{
@@ -88,14 +111,15 @@ namespace NGineer
 		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
-            var generators = _userGenerators.Select(g => g as ICollectionGenerator).Where(g => g != null).ToArray();
-		    foreach (var generator in generators)
-		    {
-                generator.MinimumListItems = minimum;
-                generator.MaximumListItems = maximum;    
-		    }
+		    _defaultCollectionSize = new Range(minimum, maximum);
 			return this;	
 		}
+
+	    public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
+	    {
+	        _collectionSizes.SetForType<TType>(new Range(minimum, maximum));
+	        return this;
+	    }
 
 	    public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
 	    {
@@ -174,6 +198,10 @@ namespace NGineer
 	    public IBuilder Sealed()
 	    {
 	        _sealed = true;
+            if(Parent != null)
+            {
+                Parent.Sealed();
+            }
 	        return this;
 	    }		
 		
@@ -184,17 +212,17 @@ namespace NGineer
 		
 	    public TType Build<TType>()
 		{
-			return Build<TType>(new BuildSession());
+            return (TType)Build(typeof(TType));
 		}
 
-        public TType Build<TType>(BuildSession session)
+	    public TType Build<TType>(BuildSession session)
         {
             return (TType)Build(typeof (TType), session);
         }
 
         public object Build(Type type)
         {
-            return Build(type, new BuildSession());
+            return Build(type, new BuildSession(_collectionSizes, DefaultCollectionSize));
         }
 
 	    public object Build(Type type, BuildSession session)
@@ -310,6 +338,12 @@ namespace NGineer
 			base.SetCollectionSize(minimum, maximum);
 			return this;
 		}
+
+        public new IBuilder<TType> SetCollectionSize<TType1>(int minimum, int maximum)
+        {
+            base.SetCollectionSize(minimum, maximum);
+            return this;
+        }
 
         public new IBuilder<TType> SetNumberOfInstances<TType1>(int minimum, int maximum)
         {

@@ -28,6 +28,7 @@ namespace NGineer.UnitTests.Sequences
                 });
 
             Assert.AreEqual(0, _sequence.Next(null, null, null));
+            Assert.IsTrue(delegateCalled);
             Assert.AreEqual(1, _sequence.Next(null, null, null));
             Assert.AreEqual(2, _sequence.Next(null, null, null));
             Assert.AreEqual(3, _sequence.Next(null, null, null));

@@ -7,20 +7,15 @@ using NGineer.Utils;
 
 namespace NGineer.Generators
 {
-    public class ArrayGenerator : IGenerator, ICollectionGenerator
+    public class ArrayGenerator : IGenerator
     {
         private readonly Random _random;
 
-        public ArrayGenerator(int seed, int minListItems, int maxListItems)
+        public ArrayGenerator(int seed)
         {
-            MinimumListItems = minListItems;
-            MaximumListItems = maxListItems;
             _random = new Random(seed);
         }
 		
-		public int MinimumListItems { get; set; }
-		public int MaximumListItems { get; set; }
-
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return type.IsArray;
@@ -29,7 +24,8 @@ namespace NGineer.Generators
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
             var arrayType = type.GetElementType();
-            return Array.CreateInstance(arrayType, MinimumListItems + _random.Next(MaximumListItems - MinimumListItems));
+            var range = session.GetCollectionSize(arrayType);
+            return Array.CreateInstance(arrayType, range.Minimum + _random.Next(range.Maximum - range.Minimum));
         }
 
         public object Populate(Type type, object obj, IBuilder builder, BuildSession session)

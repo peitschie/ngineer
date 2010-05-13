@@ -4,16 +4,16 @@ using Moq;
 using NGineer.BuildHelpers;
 using NGineer.Generators;
 using NUnit.Framework;
+using Range = NGineer.BuildHelpers.Range;
 
 namespace NGineer.UnitTests.Generators
 {
     [TestFixture]
     public class ListGeneratorTests : GeneratorTestFixture<ListGenerator>
     {
-
-        protected override ListGenerator Construct()
+        protected BuildSession NewSession()
         {
-            return new ListGenerator(1, 10, 10);
+            return new BuildSession(new TypeRegistry<Range>(), new Range(10, 10));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace NGineer.UnitTests.Generators
             var builderMock = new Mock<IBuilder>();
             builderMock.Setup(b => b.Build(typeof (string), It.IsAny<BuildSession>())).Returns("teststring");
 
-            var list = CreateAndGenerate<IList<string>>(builderMock.Object, null);
+            var list = CreateAndGenerate<IList<string>>(builderMock.Object, NewSession());
             Assert.AreEqual(10, list.Count);
             foreach (var result in list)
             {
@@ -53,8 +53,26 @@ namespace NGineer.UnitTests.Generators
             var builderMock = new Mock<IBuilder>();
             builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
 
-            var list = CreateAndGenerate<IList<ComplexClassType>>(builderMock.Object, null);
+            var list = CreateAndGenerate<IList<ComplexClassType>>(builderMock.Object, NewSession());
             Assert.AreEqual(10, list.Count);
+            foreach (var result in list)
+            {
+                Assert.IsInstanceOf<ComplexClassType>(result);
+                Assert.IsNotNull(result);
+            }
+        }
+
+        [Test]
+        public void Create_ChecksCollectionSizeForComplexClassType()
+        {
+            var builderMock = new Mock<IBuilder>();
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
+            var registry = new TypeRegistry<Range>();
+            registry.SetForType<ComplexClassType>(new Range(20, 20));
+            var session = new BuildSession(registry, new Range(10, 10));
+
+            var list = CreateAndGenerate<IList<ComplexClassType>>(builderMock.Object, session);
+            Assert.AreEqual(20, list.Count);
             foreach (var result in list)
             {
                 Assert.IsInstanceOf<ComplexClassType>(result);
@@ -67,9 +85,9 @@ namespace NGineer.UnitTests.Generators
         {
             var builderMock = new Mock<IBuilder>();
             builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
-            builderMock.Setup(b => b.Build(typeof(IList<ComplexClassType>), It.IsAny<BuildSession>())).Returns(CreateAndGenerate<IList<ComplexClassType>>(builderMock.Object, null));
+            builderMock.Setup(b => b.Build(typeof(IList<ComplexClassType>), It.IsAny<BuildSession>())).Returns(CreateAndGenerate<IList<ComplexClassType>>(builderMock.Object, NewSession()));
 
-            var outerList = CreateAndGenerate<IList<IList<ComplexClassType>>>(builderMock.Object, null);
+            var outerList = CreateAndGenerate<IList<IList<ComplexClassType>>>(builderMock.Object, NewSession());
             Assert.AreEqual(10, outerList.Count);
             foreach (var innerList in outerList)
             {

@@ -13,9 +13,10 @@ namespace NGineer
         TType Build<TType>();
         TType Build<TType>(BuildSession session);
 
-        IBuilder WithGenerator(IGenerator generator);
         IBuilder SetMaximumDepth(int? depth);
-        IBuilder CreateNew();
+        IBuilder SetCollectionSize(int minimum, int maximum);
+
+        IBuilder WithGenerator(IGenerator generator);
 
         IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
         IBuilder AfterConstructionOf<TType, TCallType>(Expression<Func<TType, object>> expression, Func<TCallType, IBuilder, BuildSession, object> value);
@@ -25,10 +26,11 @@ namespace NGineer
         IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter);
         IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
-        
 
-		IBuilder SetCollectionSize(int minimum, int maximum);
+        IBuilder SetCollectionSize<TType>(int minimum, int maximum);
 		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
+
+        IBuilder CreateNew();
 
         /// <summary>
         /// Marks this builder as sealed.  This prevents accidently overriding values, depths or generators.
@@ -46,10 +48,11 @@ namespace NGineer
         TBuildType Build();
         TBuildType Build(BuildSession session);
 
-        new IBuilder<TBuildType> WithGenerator(IGenerator generator);
         new IBuilder<TBuildType> SetMaximumDepth(int? depth);
-        new IBuilder<TBuildType> CreateNew();
+        new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);
 
+        new IBuilder<TBuildType> WithGenerator(IGenerator generator);
+        
         new IBuilder<TBuildType> AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
         new IBuilder<TBuildType> AfterConstructionOf<TType, TCallType>(Expression<Func<TType, object>> expression, Func<TCallType, IBuilder, BuildSession, object> value);
         new IBuilder<TBuildType> AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value);
@@ -59,9 +62,11 @@ namespace NGineer
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         new IBuilder<TBuildType> AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
 
-		new IBuilder<TBuildType> SetCollectionSize(int minimum, int maximum);
+        new IBuilder<TBuildType> SetCollectionSize<TType>(int minimum, int maximum);
         new IBuilder<TBuildType> SetNumberOfInstances<TType>(int minimum, int maximum);
-		
+
+        new IBuilder<TBuildType> CreateNew();
+
         new IBuilder<TBuildType> Sealed();
 	}
 }

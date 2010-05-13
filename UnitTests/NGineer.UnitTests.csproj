@@ -64,7 +64,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuilderTests.cs" />
+    <Compile Include="BuildHelpers\BuildSessionTests.cs" />
     <Compile Include="BuildHelpers\PropertyMemberSetterTests.cs" />
+    <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
     <Compile Include="Generators\BuilderGeneratorTests.cs" />
     <Compile Include="Generators\ArrayGeneratorTests.cs" />
