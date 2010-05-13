@@ -14,7 +14,7 @@ namespace NGineer
         TType Build<TType>(BuildSession session);
 
         IBuilder SetMaximumDepth(int? depth);
-        IBuilder SetCollectionSize(int minimum, int maximum);
+
 
         IBuilder WithGenerator(IGenerator generator);
 
@@ -29,8 +29,12 @@ namespace NGineer
         IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
         IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
 
+        IBuilder SetCollectionSize(int minimum, int maximum);
+        IBuilder SetCollectionSize(Type type, int minimum, int maximum);
         IBuilder SetCollectionSize<TType>(int minimum, int maximum);
+
 		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
+        IBuilder SetNumberOfInstances(Type type, int minimum, int maximum);
 
         IBuilder CreateNew();
 
