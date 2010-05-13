@@ -68,8 +68,9 @@
     <Compile Include="BuildHelpers\MemberSetter.cs" />
     <Compile Include="BuildHelpers\PropertyMemberSetter.cs" />
     <Compile Include="BuildHelpers\RandomHelpers.cs" />
+    <Compile Include="BuildHelpers\Range.cs" />
+    <Compile Include="BuildHelpers\TypeRegistry.cs" />
     <Compile Include="Generators\ArrayGenerator.cs" />
-    <Compile Include="Generators\ICollectionGenerator.cs" />
     <Compile Include="Generators\NullableTypeGenerator.cs" />
     <Compile Include="Generators\DateTimeGenerator.cs" />
     <Compile Include="Generators\DefaultConstructorGenerator.cs" />

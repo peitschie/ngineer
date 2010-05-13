@@ -7,20 +7,15 @@ using NGineer.Utils;
 
 namespace NGineer.Generators
 {
-    public class ListGenerator : IGenerator, ICollectionGenerator
+    public class ListGenerator : IGenerator
     {
         private readonly Random _random;
 
-        public ListGenerator(int seed, int minListItems, int maxListItems)
+        public ListGenerator(int seed)
         {
-            MinimumListItems = minListItems;
-            MaximumListItems = maxListItems;
             _random = new Random(seed);
         }
 		
-		public int MinimumListItems { get; set; }
-		public int MaximumListItems { get; set; }
-
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return typeof (IList<>).IsGenericAssignableFrom(type) 
@@ -45,8 +40,9 @@ namespace NGineer.Generators
         public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             var listType = obj.GetType().GetGenericArguments()[0];
+            var range = session.GetCollectionSize(listType);
             var list = (IList) obj;
-            var listSize = MinimumListItems + _random.Next(MaximumListItems - MinimumListItems);
+            var listSize = range.Minimum + _random.Next(range.Maximum - range.Minimum);
             for (int i = 0; i < listSize; i++)
             {
                 list.Add(builder.Build(listType, session));

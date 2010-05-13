@@ -30,7 +30,7 @@ namespace NGineer.UnitTests.Generators
         [Test]
         public void GeneratesType_AfterMaxNumberOfSessionsReached()
         {
-            var session = new BuildSession();
+            var session = new BuildSession(null, null);
             Generator.SetNumberOfInstances<int>(3, 3);
 
             session.ConstructedObjects.Add(1);
@@ -46,7 +46,7 @@ namespace NGineer.UnitTests.Generators
         [Test]
         public void Create_ReturnsExisting_AfterMaxNumberOfSessionsReached()
         {
-            var session = new BuildSession();
+            var session = new BuildSession(null, null);
             Generator.SetNumberOfInstances<SimpleClass>(3, 3);
 
             session.ConstructedObjects.Add(new SimpleClass());
@@ -64,7 +64,7 @@ namespace NGineer.UnitTests.Generators
         [Test]
         public void Create_NullsInBuildSession_NoExceptionsThrown()
         {
-            var session = new BuildSession();
+            var session = new BuildSession(null, null);
             Generator.SetNumberOfInstances<SimpleClass>(3, 3);
 
             session.ConstructedObjects.Add(new SimpleClass());
