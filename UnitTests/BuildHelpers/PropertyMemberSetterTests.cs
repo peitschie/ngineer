@@ -23,6 +23,16 @@ namespace NGineer.UnitTests.BuildHelpers
             var memberSetter = new PropertyMemberSetter(property, null);
             Assert.DoesNotThrow(() => memberSetter.IsForMember(null));
         }
+
+        [Test]
+        public void IsForMember_InheritedProperty()
+        {
+            var child1Property = typeof(ClassChild1).GetProperty("Property1");
+            var child1PropertyMember = new PropertyMemberSetter(child1Property, null);
+
+            var child2Property = typeof(ClassChild2).GetProperty("Property1");
+            Assert.IsFalse(child1PropertyMember.IsForMember(child2Property));
+        }
     }
 
     public class ClassWithNullableInt
@@ -37,5 +47,19 @@ namespace NGineer.UnitTests.BuildHelpers
 
     public class InheritsFromClassWithNullableDateTime : ClassWithNullableDateTime
     {
+    }
+
+    public class ClassParent
+    {
+        public int Property1 { get; set; }
+    }
+
+    public class ClassChild1 : ClassParent { }
+    public class ClassChild2 : ClassParent { }
+
+    public class ClassBuildChildren
+    {
+        public ClassChild1 Child1 { get; set; }
+        public ClassChild2 Child2 { get; set; }
     }
 }
