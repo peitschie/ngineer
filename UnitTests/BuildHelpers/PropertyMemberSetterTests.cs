@@ -10,10 +10,19 @@ namespace NGineer.UnitTests.BuildHelpers
         [Test]
         public void Equality_Inherited_PropertyComparison()
         {
-            var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
-            var inheritedMember = new PropertyMemberSetter(inheritedProperty, null);
-            Assert.IsTrue(inheritedMember.IsForMember(parentProperty));
+            var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
+            var parentMember = new PropertyMemberSetter(parentProperty, null);
+            Assert.IsTrue(parentMember.IsForMember(inheritedProperty));
+        }
+
+        [Test]
+        public void Equality_SameObject_PropertyComparison()
+        {
+            var property1Property = typeof(ClassWithNullableDateTime).GetProperty("Property1");
+            var property1Member = new PropertyMemberSetter(property1Property, null);
+            var property2Property = typeof(ClassWithNullableDateTime).GetProperty("Property1");
+            Assert.IsTrue(property1Member.IsForMember(property2Property));
         }
 
         [Test]
