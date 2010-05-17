@@ -8,12 +8,21 @@ namespace NGineer.UnitTests.BuildHelpers
     public class PropertyMemberSetterTests
     {
         [Test]
-        public void Equality_Inherited_PropertyComparison()
+        public void InheritedProperty_ChildForParent()
         {
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
             var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
             var parentMember = new PropertyMemberSetter(parentProperty, null);
             Assert.IsTrue(parentMember.IsForMember(inheritedProperty));
+        }
+
+        [Test]
+        public void InheritedProperty_ChildNotForParent()
+        {
+            var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
+            var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
+            var inheritedMember = new PropertyMemberSetter(inheritedProperty, null);
+            Assert.IsFalse(inheritedMember.IsForMember(parentProperty));
         }
 
         [Test]
