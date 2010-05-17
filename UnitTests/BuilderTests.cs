@@ -289,6 +289,30 @@ namespace NGineer.UnitTests
         }
 
         [Test]
+        public void CollectionSize_SettablePerType_CanOverride_WithinPopulator_ReuseSession()
+        {
+            var newClass = new Builder(1)
+                .SetCollectionSize(50, 50)
+                .SetCollectionSize<int>(10, 10)
+				.SetCollectionSize<int[]>(30, 30)
+				.AfterPopulationOf<int[][]>((o, b, s) => {
+						for(int i = 0; i < o.Length; i++)
+						{
+							o[i] = b.CreateNew()
+									.SetCollectionSize<int>(20,20)
+									.Build<int[]>(s);
+						}
+						return o;
+					})
+                .Build<int[][]>();
+
+            Assert.IsNotNull(newClass);
+            Assert.AreEqual(30, newClass.Length);
+			Assert.AreEqual(20, newClass[0].Length);
+        }
+		
+		
+        [Test]
         public void Build_SetupValueToOverrideBehaviour_RecursiveClass()
         {
             var newClass = new Builder(1)
