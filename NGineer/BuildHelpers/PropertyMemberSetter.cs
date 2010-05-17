@@ -17,6 +17,7 @@ namespace NGineer.BuildHelpers
         public override bool IsForMember(PropertyInfo property)
         {
             return property != null 
+                && Property.ReflectedType.IsAssignableFrom(property.ReflectedType)
                 && Equals(Property.DeclaringType, property.DeclaringType)
                 && Equals(Property.PropertyType, property.PropertyType)
                 && Equals(Property.Name, property.Name);
