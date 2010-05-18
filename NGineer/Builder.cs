@@ -190,10 +190,10 @@ namespace NGineer
             switch (member.MemberType)
             {
                 case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter<TFuncType>(member.DeclaringType.GetProperty(member.Name), value));
+                    MemberSetters.Add(new PropertyMemberSetter<TFuncType>((PropertyInfo)member, value));
                     break;
                 case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter<TFuncType>(member.DeclaringType.GetField(member.Name), value));
+                    MemberSetters.Add(new FieldMemberSetter<TFuncType>((FieldInfo)member, value));
                     break;
                 case MemberTypes.Constructor:
                 case MemberTypes.Event:

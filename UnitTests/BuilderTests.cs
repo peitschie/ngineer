@@ -382,6 +382,18 @@ namespace NGineer.UnitTests
         }
 
         [Test]
+        public void Build_AfterConstructionOf_Inherited_NullableDateTimeProperty_NotUsedForSibling()
+        {
+            var dateTime = DateTime.Now;
+            IBuilder builder = null;
+            Assert.DoesNotThrow(() => builder = new Builder(1)
+                .AfterConstructionOf<InheritsFromClassWithNullableDateTime>(c => c.Property1, dateTime));
+
+            var obj = builder.Build<InheritsFromClassWithNullableDateTime2>();
+            Assert.AreNotEqual(dateTime, obj.Property1.Value);
+        }
+
+        [Test]
         public void Build_AfterConstructionOf_ObjectAddedToStackAfterConstruction()
         {
             object constructedInstance = null;
@@ -583,6 +595,10 @@ namespace NGineer.UnitTests
         }
 
         public class InheritsFromClassWithNullableDateTime : ClassWithNullableDateTime
+        {
+        }
+
+        public class InheritsFromClassWithNullableDateTime2 : ClassWithNullableDateTime
         {
         }
 
