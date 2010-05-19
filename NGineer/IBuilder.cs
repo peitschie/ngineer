@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
 
 namespace NGineer
 {
@@ -56,6 +57,14 @@ namespace NGineer
         IBuilder SetMaximumDepth(int? depth);
 
         /// <summary>
+        /// By default, if the specified maximum build depth is reached, the builder will simply return null for anything
+        /// deeper.  This method can be used to force the builder to throw an exception if the maximum build depth is reached.
+        /// This can be useful for ensuring a complete object hierarchy is being constructed
+        /// </summary>
+        /// <returns></returns>
+        IBuilder ThrowsWhenMaximumDepthReached();
+
+        /// <summary>
         /// Inject a custom generator to use for creating and populating new objects.
         /// These are injected in order, with the most recently injected generator taking
         /// the highest precedence first.
@@ -67,6 +76,9 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder WithGenerator(IGenerator generator);
+        IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator);
+        IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator);
+        IBuilder WithGenerator<TType>(Func<TType> generator);
 
         /// <summary>
         /// Registers a post-constructor member setter to fill out a specific property or field.
@@ -82,9 +94,9 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
-        IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value);
-        IBuilder AfterConstructionOf<TType, TCallType>(Expression<Func<TType, object>> expression, Func<TCallType, IBuilder, BuildSession, object> value);
-        IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value);
+        IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> value);
+        IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
+        IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
 
         /// <summary>
         /// Registers a post-population member that is called after the object has been constructed and populated
@@ -98,9 +110,7 @@ namespace NGineer
         /// </returns>
 		IBuilder AfterPopulationOf(ISetter setter);
         IBuilder AfterPopulationOf<TType>(Action<TType> setter);
-        IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter);
         IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
-        IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter);
 
         /// <summary>
         /// Sets the range of items to put in an array, list or other type of collection by default.

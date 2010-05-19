@@ -27,11 +27,11 @@ namespace NGineer.BuildHelpers
         }
     }
 
-    public class FieldMemberSetter<TType> : FieldMemberSetter
+    public class FieldMemberSetter<TType, TReturnType> : FieldMemberSetter
     {
-        private readonly Func<TType, IBuilder, BuildSession, object> _fieldValue;
+        private readonly Func<TType, IBuilder, BuildSession, TReturnType> _fieldValue;
 
-        public FieldMemberSetter(FieldInfo field, Func<TType, IBuilder, BuildSession, object> fieldValue)
+        public FieldMemberSetter(FieldInfo field, Func<TType, IBuilder, BuildSession, TReturnType> fieldValue)
             : base(field, null)
         {
             _fieldValue = fieldValue;

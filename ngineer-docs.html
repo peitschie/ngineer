@@ -530,7 +530,7 @@ TertiaryDark: #666
 Error: #f88
 </pre>
 </div>
-<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201005121400" changecount="2">
+<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201005182340" changecount="4">
 <pre>First, one lets define the types...
 &lt;code c#&gt;
 public class Book
@@ -566,12 +566,10 @@ Of course, at this point the page numbers are not terribly well ordered. Let's f
 var pageNumber = 1;
 var book = new Builder(1)
    // Order the page numbers sequentially from 1 =&gt; ??
-   .AfterConstructionOf&lt;Page&gt;(p =&gt; p.PageNumber, (obj, builder, session) =&gt; pageNumber++)
+   .AfterConstructionOf((Page p) =&gt; p.PageNumber, (obj, builder, session) =&gt; pageNumber++)
    .Build&lt;Book&gt;(); 
-// Notice the use of lambda expressions to set a specific property.  
-// These allow access to the current build session as well so existing objects
-// can be counted or reused
 &lt;/code&gt;
+Notice the use of lambda expressions to set a specific property.  These allow access to the current build session as well so existing objects can be counted or reused. Another thing of interest is the use of AfterConstructionOf((Page p)...) rather than AfterConstructionOf&lt;Page, int&gt;(..) notation.  The former notation allows C# to infer the types to be used, negating the need for them to be specifically defined, making life easier if the property type changes, while still enforcing static typing.
 !!Make our author into a best seller
 &lt;code c#&gt;
 var books = new Builder(1)

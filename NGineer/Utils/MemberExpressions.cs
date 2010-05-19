@@ -11,7 +11,10 @@ namespace NGineer.Utils
             if(expression is MemberExpression)
             {
 				var memberExpression = (MemberExpression)expression;
-				return memberExpression.Member;
+                // Need to ensure this returns the property setter for the requested type, not
+                // the type that defines the member.  I was unable to find a clean way of
+                // changing the property accessor to by on the requested type.
+				return memberExpression.Expression.Type.GetProperty(memberExpression.Member.Name);
             }
             if(expression is UnaryExpression)
             {
@@ -20,6 +23,11 @@ namespace NGineer.Utils
 				{
 					return GetMemberInfo(unaryExpression.Operand);
 				}
+            }
+            if(expression is LambdaExpression)
+            {
+                var lambdaExpression = (LambdaExpression) expression;
+                return GetMemberInfo(lambdaExpression.Body);
             }
             throw new InvalidOperationException("Cannot interpret member from {0}".With(expression.NodeType));
         }

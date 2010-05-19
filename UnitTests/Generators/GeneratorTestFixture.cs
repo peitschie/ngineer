@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Moq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
 using NGineer.Utils;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
@@ -46,7 +46,7 @@ namespace NGineer.UnitTests.Generators
             builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
             var defaultRange = new Range(1, 10);
             var collectionTypes = new TypeRegistry<Range>();
-            var session = new BuildSession(collectionTypes, defaultRange);
+            var session = new BuildSession(null, collectionTypes, defaultRange);
             foreach (var supportedType in SupportedTypes())
             {
                 try
@@ -79,7 +79,8 @@ namespace NGineer.UnitTests.Generators
         protected TType CreateAndGenerate<TType>(IGenerator generator, IBuilder builder, BuildSession session)
         {
             var obj = (TType)generator.Create(typeof(TType), builder, session);
-            return (TType)generator.Populate(typeof(TType), obj, builder, session);
+            generator.Populate(typeof(TType), obj, builder, session);
+            return obj;
         }
 
         protected virtual TGenerator Construct()

@@ -1,5 +1,5 @@
 using System;
-using NGineer.Generators;
+using NGineer.BuildGenerators;
 using NUnit.Framework;
 
 namespace NGineer.UnitTests.Generators

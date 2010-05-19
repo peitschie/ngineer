@@ -11,8 +11,8 @@ namespace NGineer.UnitTests
         {
 
             var newClass = new Builder(1)
-                .AfterConstructionOf<Slide>(c => c.ParentCase, 
-                    (o, b, s) => s.ConstructedObjects.Last(obj => typeof(Case).Equals(obj.GetType())))
+                .AfterConstructionOf((Slide c) => c.ParentCase, 
+                    (o, b, s) => (Case)s.ConstructedNodes.Last(node => typeof(Case).Equals(node.Object.GetType())).Object)
                 .Build<Case>();
             Assert.IsNotNull(newClass);
             foreach (var slide in newClass.Slides)

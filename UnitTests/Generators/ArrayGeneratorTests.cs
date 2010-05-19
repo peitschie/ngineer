@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System;
 using Moq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
 
@@ -13,7 +13,7 @@ namespace NGineer.UnitTests.Generators
     {
         protected BuildSession NewSession()
         {
-            return new BuildSession(new TypeRegistry<Range>(), new Range(10, 10));
+            return new BuildSession(null, new TypeRegistry<Range>(), new Range(10, 10));
         }
 
         protected override Type[] SupportedTypes()
@@ -73,7 +73,7 @@ namespace NGineer.UnitTests.Generators
             builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
             var registry = new TypeRegistry<Range>();
             registry.SetForType<ComplexClassType>(new Range(20, 20));
-            var session = new BuildSession(registry, new Range(10, 10));
+            var session = new BuildSession(null, registry, new Range(10, 10));
 
             var list = CreateAndGenerate<ComplexClassType[]>(builderMock.Object, session);
             Assert.AreEqual(20, list.Length);

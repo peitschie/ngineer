@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System;
 using Moq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
 using NUnit.Framework;
 
 namespace NGineer.UnitTests.Generators

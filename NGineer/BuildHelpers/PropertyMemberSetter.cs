@@ -29,11 +29,11 @@ namespace NGineer.BuildHelpers
         }
     }
 
-    public class PropertyMemberSetter<TType> : PropertyMemberSetter
+    public class PropertyMemberSetter<TType, TReturnType> : PropertyMemberSetter
     {
-        private readonly Func<TType, IBuilder, BuildSession, object> _propertyValue;
+        private readonly Func<TType, IBuilder, BuildSession, TReturnType> _propertyValue;
 
-        public PropertyMemberSetter(PropertyInfo property, Func<TType, IBuilder, BuildSession, object> propertyValue)
+        public PropertyMemberSetter(PropertyInfo property, Func<TType, IBuilder, BuildSession, TReturnType> propertyValue)
             : base(property, null)
         {
             _propertyValue = propertyValue;
