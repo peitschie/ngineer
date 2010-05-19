@@ -41,7 +41,12 @@ namespace NGineer
             _userGenerators = new List<IGenerator>();
             _instancesGenerator = new ReusableInstancesGenerator(seed);
             _defaultGenerator = new DefaultConstructorGenerator();
-            WithGenerator(new ListGenerator(seed));
+        }
+
+	    public Builder(int seed) : this(seed, false)
+		{
+            _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _builderCollectionSizes);
+			WithGenerator(new ListGenerator(seed));
             WithGenerator(new ArrayGenerator(seed));
             WithGenerator(new NullableTypeGenerator(seed));
             WithGenerator(new DateTimeGenerator(seed));
@@ -51,11 +56,6 @@ namespace NGineer
             WithGenerator(new BlittableTypesGenerator(seed));
             WithGenerator(new StringGenerator(seed));
             WithGenerator(new UIntGenerator(seed));
-        }
-
-	    public Builder(int seed) : this(seed, false)
-		{
-            _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _builderCollectionSizes);
 		}
 
         protected Builder(Builder parent)
