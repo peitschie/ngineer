@@ -1,7 +1,7 @@
 
 using System;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
 
     public class UIntGenerator : SimpleGenerator<uint>

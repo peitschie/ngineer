@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using NGineer.BuildHelpers;
-using NGineer.Utils;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public class ArrayGenerator : IGenerator
     {
@@ -28,7 +24,7 @@ namespace NGineer.Generators
             return Array.CreateInstance(arrayType, range.Minimum + _random.Next(range.Maximum - range.Minimum));
         }
 
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             var arrayType = type.GetElementType();
             var array = (Array) obj;
@@ -36,7 +32,6 @@ namespace NGineer.Generators
             {
                 array.SetValue(builder.Build(arrayType, session), i);
             }
-            return array;
         }
     }
 }

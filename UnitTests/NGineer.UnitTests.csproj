@@ -65,6 +65,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuilderTests.cs" />
     <Compile Include="BuildHelpers\BuildSessionTests.cs" />
+    <Compile Include="BuildHelpers\ObjectBuildRecordTests.cs" />
     <Compile Include="BuildHelpers\PropertyMemberSetterTests.cs" />
     <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Generators\EnumGeneratorTests.cs" />
     <Compile Include="Generators\ListGeneratorTests.cs" />
     <Compile Include="Generators\GeneratorTestFixture.cs" />
-    <Compile Include="Sequences\SimpleIntSequenceTests.cs" />
+    <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
   </ItemGroup>
   <ItemGroup>

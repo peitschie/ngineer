@@ -24,6 +24,11 @@ namespace NGineer.Utils
 					return GetMemberInfo(unaryExpression.Operand);
 				}
             }
+            if(expression is LambdaExpression)
+            {
+                var lambdaExpression = (LambdaExpression) expression;
+                return GetMemberInfo(lambdaExpression.Body);
+            }
             throw new InvalidOperationException("Cannot interpret member from {0}".With(expression.NodeType));
         }
 		

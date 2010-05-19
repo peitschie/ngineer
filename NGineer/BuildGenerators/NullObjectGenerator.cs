@@ -1,7 +1,5 @@
 
-using System;
-
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public class NullObjectGenerator<TType> : SimpleGenerator<TType>
         where TType : class 

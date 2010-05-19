@@ -4,17 +4,9 @@ using System.Linq;
 
 namespace NGineer.BuildHelpers
 {
-    public class TypeRegistry<TStoreType>
+    public class TypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
     {
-        private readonly TypeRegistry<TStoreType> _parent;
         private readonly HashSet<TypeRegistryEntry> _entries = new HashSet<TypeRegistryEntry>();
-
-        public TypeRegistry() {}
-
-        public TypeRegistry(TypeRegistry<TStoreType> parent)
-        {
-            _parent = parent;
-        }
 
         public TStoreType GetForType(Type type)
         {
@@ -24,7 +16,7 @@ namespace NGineer.BuildHelpers
 
         private TypeRegistryEntry GetEntryForType(Type type)
         {
-            return _entries.FirstOrDefault(t => t.IsForType(type)) ?? ((_parent != null) ? _parent.GetEntryForType(type) : null);
+            return _entries.FirstOrDefault(t => t.IsForType(type));
         }
 
         public TStoreType GetForType<TType>()

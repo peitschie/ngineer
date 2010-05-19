@@ -50,6 +50,15 @@ namespace NGineer.UnitTests.Utils
             Assert.AreEqual(number, instance.Property1);
         }
 
+        [Test]
+        public void LambdaExpression_Basic()
+        {
+            var info = (PropertyInfo)MemberExpressions.GetMemberInfo((ClassParent c) => c.Property1);
+
+            Assert.AreEqual(typeof(ClassParent), info.ReflectedType);
+            Assert.AreEqual(typeof(int), info.PropertyType);
+        }
+
         public class ClassParent
         {
             public int Property1 { get; set; }

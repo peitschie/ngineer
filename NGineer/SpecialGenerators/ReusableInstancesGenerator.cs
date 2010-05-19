@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 
-namespace NGineer.Generators
+namespace NGineer.SpecialGenerators
 {
     public class ReusableInstancesGenerator : IGenerator
     {
@@ -40,26 +40,25 @@ namespace NGineer.Generators
             var key = _numberOfInstances.Keys.FirstOrDefault(k => k.IsAssignableFrom(type));
             if(key != null)
             {
-                var countOfObjs = GetAllInstancesOf(session.ConstructedObjects, type).Count();
+                var countOfObjs = GetAllInstancesOf(session.ConstructedNodes, type).Count();
                 return countOfObjs >= _numberOfInstances[key];
             }
             return false;
         }
 
-        private static IEnumerable<object> GetAllInstancesOf(IEnumerable<object> list, Type type)
+        private static IEnumerable<ObjectBuildRecord> GetAllInstancesOf(IEnumerable<ObjectBuildTreeEntry> list, Type type)
         {
-            return list.Where(o => o != null && type.IsAssignableFrom(o.GetType()));
+            return list.Where(o => o.Object != null && type.IsAssignableFrom(o.Object.GetType())).Select(o => o.Record);
         }
 
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return RandomHelpers.OneFromList(GetAllInstancesOf(session.ConstructedObjects, type), _random);
+            return RandomHelpers.OneFromList(GetAllInstancesOf(session.ConstructedNodes, type), _random);
         }
 
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            return obj;
         }
     }
 }

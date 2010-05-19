@@ -1,6 +1,4 @@
-using System;
-
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
 
     public class BoolGenerator : SimpleGenerator<bool>

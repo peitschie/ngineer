@@ -4,8 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
+using NGineer.SpecialGenerators;
 using NGineer.Utils;
 
 namespace NGineer
@@ -24,68 +25,114 @@ namespace NGineer
 
 	    protected readonly int Seed;
 	    private Range _defaultCollectionSize;
-	    private readonly TypeRegistry<Range> _collectionSizes;
+	    private readonly TypeRegistry<Range> _builderCollectionSizes;
+	    private readonly ITypeRegistry<Range> _allCollectionSizes;
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
 	    private readonly ReusableInstancesGenerator _instancesGenerator;
 		private int? _maximumDepth;
 	    private bool _sealed;
+	    private bool? _throwOnDepthLimitReached;
 
-	    public Builder(int seed)
-		{
-			Seed = seed;
-            _collectionSizes = new TypeRegistry<Range>();
+	    protected Builder(int seed, bool ignored)
+        {
+            Seed = seed;
+            _builderCollectionSizes = new TypeRegistry<Range>();
             _userGenerators = new List<IGenerator>();
             _instancesGenerator = new ReusableInstancesGenerator(seed);
-		    _defaultGenerator = new DefaultConstructorGenerator();
-			WithGenerator(new ListGenerator(seed));
-			WithGenerator(new ArrayGenerator(seed));
-			WithGenerator(new NullableTypeGenerator(seed));
-			WithGenerator(new DateTimeGenerator(seed));
-			WithGenerator(new EnumGenerator(seed));
-			WithGenerator(new BoolGenerator(seed));
-			WithGenerator(new CharGenerator(seed));
-			WithGenerator(new BlittableTypesGenerator(seed));
-			WithGenerator(new StringGenerator(seed));
-			WithGenerator(new UIntGenerator(seed));
+            _defaultGenerator = new DefaultConstructorGenerator();
+            WithGenerator(new ListGenerator(seed));
+            WithGenerator(new ArrayGenerator(seed));
+            WithGenerator(new NullableTypeGenerator(seed));
+            WithGenerator(new DateTimeGenerator(seed));
+            WithGenerator(new EnumGenerator(seed));
+            WithGenerator(new BoolGenerator(seed));
+            WithGenerator(new CharGenerator(seed));
+            WithGenerator(new BlittableTypesGenerator(seed));
+            WithGenerator(new StringGenerator(seed));
+            WithGenerator(new UIntGenerator(seed));
+        }
+
+	    public Builder(int seed) : this(seed, false)
+		{
+            _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _builderCollectionSizes);
 		}
 
         protected Builder(Builder parent)
-            : this(parent.Seed + 1)
+            : this(parent.Seed + 1, false)
         {
             Parent = parent;
-            _collectionSizes = new TypeRegistry<Range>(Parent._collectionSizes);
+            _allCollectionSizes = new InheritedTypeRegistry<Range>(Parent._builderCollectionSizes,
+                                                                   _builderCollectionSizes);
         }
 
-        #region Properties that take into account parent settings as well
+	    #region Properties that take into account parent settings as well
         public int BuildDepth
 		{
 			get 
-			{ 
-				int? depth = _maximumDepth;
-				if(_maximumDepth == null)
-				{
-					depth = (Parent != null) ? Parent.BuildDepth : Defaults.BuildDepth;
-				}
-				return depth.Value;
+			{
+
+                if (_maximumDepth.HasValue)
+                {
+                    return _maximumDepth.Value;
+                }
+                if (Parent != null)
+                {
+                    return Parent.BuildDepth;
+                }
+                return Defaults.BuildDepth;
 			}
 		}
+
+	    protected bool ThrowWhenBuildDepthReached
+	    {
+	        get
+	        {
+                if(_throwOnDepthLimitReached.HasValue)
+                {
+                    return _throwOnDepthLimitReached.Value;
+                }
+                if(Parent != null)
+                {
+                    return Parent.ThrowWhenBuildDepthReached;
+                }
+	            return IsBuildDepthUnset;
+	        }
+	    }
+
+	    protected bool IsBuildDepthUnset
+	    {
+            get { return _maximumDepth == null && (Parent == null || Parent.IsBuildDepthUnset); }
+	    }
 
 	    public Range DefaultCollectionSize
 	    {
             get
             {
-                var range = _defaultCollectionSize;
-                if(range == null)
+                if (_defaultCollectionSize != null)
                 {
-                    range = (Parent != null) ? Parent.DefaultCollectionSize : Defaults.CollectionSize;
+                    return _defaultCollectionSize;
                 }
-                return range;
+                if (Parent != null)
+                {
+                    return Parent.DefaultCollectionSize;
+                }
+                return Defaults.CollectionSize;
             }
+	    }
+
+	    protected ITypeRegistry<Range> CollectionSizes
+	    {
+	        get
+	        {
+	            return _allCollectionSizes;
+	        }
 	    }
         #endregion
 
-	    public IBuilder WithGenerator(IGenerator generator)
+
+        #region WithGenerator implementations
+        public IBuilder WithGenerator(IGenerator generator)
 		{
 	        AssertBuilderIsntSealed();
             // each new generator should be inserted at the front of the queue to allow 
@@ -94,7 +141,23 @@ namespace NGineer
 			return this;
 		}
 
-	    private void AssertBuilderIsntSealed()
+        public IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator)
+        {
+            return WithGenerator(new BuilderGenerator(type, generator));
+        }
+
+        public IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator)
+        {
+            return WithGenerator(new BuilderGenerator<TType>(generator));
+        }        
+        
+        public IBuilder WithGenerator<TType>(Func<TType> generator)
+        {
+            return WithGenerator(new BuilderGenerator<TType>((b, s) => generator()));
+        }
+        #endregion
+
+        private void AssertBuilderIsntSealed()
 	    {
             if (_sealed)
             {
@@ -109,6 +172,12 @@ namespace NGineer
 			return this;
 		}
 
+        public IBuilder ThrowsWhenMaximumDepthReached()
+        {
+            _throwOnDepthLimitReached = true;
+            return this;
+        }
+
 		public IBuilder SetCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
@@ -118,13 +187,13 @@ namespace NGineer
 
         public IBuilder SetCollectionSize(Type type, int minimum, int maximum)
         {
-            _collectionSizes.SetForType(type, new Range(minimum, maximum));
+            _builderCollectionSizes.SetForType(type, new Range(minimum, maximum));
             return this;
         }
 
 	    public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
 	    {
-	        _collectionSizes.SetForType<TType>(new Range(minimum, maximum));
+	        _builderCollectionSizes.SetForType<TType>(new Range(minimum, maximum));
 	        return this;
 	    }
 
@@ -140,7 +209,7 @@ namespace NGineer
 	        return this;
 	    }
 
-	    #region Set values
+	    #region AfterPopulationOf implementations
 
 	    public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
         {
@@ -149,51 +218,84 @@ namespace NGineer
             return this;
         }
 
-        public IBuilder AfterPopulationOf<TType>(Func<TType, TType> setter)
-        {
-            AssertBuilderIsntSealed();
-            Setters.Add(new Setter<TType>(setter));
-            return this;
-        }
-
-	    public IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
+        public IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
 	    {
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
 	    }
 
-	    public IBuilder AfterPopulationOf<TType>(Func<TType, IBuilder, BuildSession, TType> setter)
-	    {
-            AssertBuilderIsntSealed();
-            Setters.Add(new Setter<TType>(setter));
-            return this;
-	    }
-
-        public IBuilder AfterPopulationOf(ISetter setter)
+	    public IBuilder AfterPopulationOf(ISetter setter)
 	    {
 	        AssertBuilderIsntSealed();
             Setters.Add(setter);
             return this;
 	    }
 
-		public IBuilder AfterConstructionOf(IMemberSetter setter)
+        #endregion
+
+        #region AfterConstructionOf implementations
+
+        public IBuilder AfterConstructionOf(IMemberSetter setter)
 		{
 			MemberSetters.Add(setter);
 			return this;
 		}
-		
-	    public IBuilder AfterConstructionOf<TType, TFuncType>(Expression<Func<TType, object>> expression, Func<TFuncType, IBuilder, BuildSession, object> value)
+
+        public IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> value)
         {
-            // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
-            var member = MemberExpressions.GetMemberInfo(expression);
+            ValidateMember(member, value);
             switch (member.MemberType)
             {
                 case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter<TFuncType>((PropertyInfo)member, value));
+                    MemberSetters.Add(new PropertyMemberSetter((PropertyInfo) member, value));
                     break;
                 case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter<TFuncType>((FieldInfo)member, value));
+                    MemberSetters.Add(new FieldMemberSetter((FieldInfo)member, value));
+                    break;
+            }
+            return this;
+        }
+
+        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value)
+        {
+            // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
+            var member = MemberExpressions.GetMemberInfo(expression);
+            ValidateMember(member, value);
+            switch (member.MemberType)
+            {
+                case MemberTypes.Property:
+                    MemberSetters.Add(new PropertyMemberSetter<TType, TReturnType>((PropertyInfo)member, value));
+                    break;
+                case MemberTypes.Field:
+                    MemberSetters.Add(new FieldMemberSetter<TType, TReturnType>((FieldInfo)member, value));
+                    break;
+            }
+            return this;
+        }
+       
+        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value)
+        {
+            return AfterConstructionOf(expression, (o, b, s) => value);
+        }
+
+        private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)
+        {
+            switch (member.MemberType)
+            {
+                case MemberTypes.Property:
+                    var propInfo = (PropertyInfo)member;
+                    if (!propInfo.PropertyType.IsAssignableFrom(setter.Method.ReturnType))
+                    {
+                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, propInfo.PropertyType));
+                    }
+                    break;
+                case MemberTypes.Field:
+                    var fieldInfo = (FieldInfo)member;
+                    if (!fieldInfo.FieldType.IsAssignableFrom(setter.Method.ReturnType))
+                    {
+                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, fieldInfo.FieldType));
+                    }
                     break;
                 case MemberTypes.Constructor:
                 case MemberTypes.Event:
@@ -206,17 +308,6 @@ namespace NGineer
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return this;
-        }
-
-        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, Func<object, IBuilder, BuildSession, object> value)
-        {
-            return AfterConstructionOf<TType, object>(expression, value);
-        }
-        
-        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, object value)
-        {
-            return AfterConstructionOf<TType, TType>(expression, (o, b, s) => value);
         }
 
 	    #endregion
@@ -235,8 +326,9 @@ namespace NGineer
 	    {
 	        return new Builder(this);
 	    }
-		
-	    public TType Build<TType>()
+
+        #region Build implementations
+        public TType Build<TType>()
 		{
             return (TType)Build(typeof(TType));
 		}
@@ -248,61 +340,80 @@ namespace NGineer
 
         public object Build(Type type)
         {
-            return Build(type, new BuildSession(_collectionSizes, DefaultCollectionSize));
+            return Build(type, new BuildSession(this, CollectionSizes, DefaultCollectionSize));
         }
 
 	    public object Build(Type type, BuildSession session)
         {
             Sealed();
-            if (session.BuildDepth > BuildDepth)
-                return null;
+	        var internalSession = ReferenceEquals(this, session.Builder)
+	                                  ? session
+	                                  : new BuildSession(this, CollectionSizes, DefaultCollectionSize, session);
 
-	        session.BuildDepth++;
-	        var generator = GetGeneratorOrDefault(type, session);
-            var obj = generator.Create(type, this, session);
-	        session.ConstructedObjects.Add(obj);
-            obj = DoMemberSetters(type, obj, session);
-            obj = generator.Populate(type, obj, this, session);
-            obj = DoGeneralSetters(type, obj, session);
-	        session.BuildDepth--;
-            return obj;
+            if (internalSession.BuildDepth == BuildDepth)
+            {
+                if (IsBuildDepthUnset || ThrowWhenBuildDepthReached)
+                {
+                    throw new BuilderDepthExceededException(BuildDepth, internalSession);
+                }
+                return null;
+            }
+
+	        var generator = GetGeneratorOrDefault(type, internalSession);
+            var obj = generator.Create(type, this, internalSession);
+            if (obj != null)
+            {
+                internalSession.PushChild(type, obj);
+                obj = internalSession.CurrentObject.Object;
+                if (!internalSession.CurrentObject.IsPopulated)
+                {
+                    DoMemberSetters(type, internalSession);
+                    generator.Populate(type, obj, this, internalSession);
+                    DoPopulators(type, internalSession);
+                }
+                internalSession.PopChild();
+            }
+	        return obj;
         }
 
-        private object DoMemberSetters(Type type, object obj, BuildSession session)
+        #endregion
+
+        private void DoMemberSetters(Type type, BuildSession session)
         {
-            if(Parent != null)
-            {
-                obj = Parent.DoMemberSetters(type, obj, session);
-            }
-            foreach (var property in type.GetProperties())
+            foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.ConstructedMembers.Add(property);
-                    setter.Set(obj, this, session);
+                    session.CurrentObject.Record.RegisterConstructed(property);
+                    setter.Set(session.CurrentObject.Object, this, session);
                 }
             }
-            foreach (var field in type.GetFields())
+            if (Parent != null)
+            {
+                Parent.DoMemberSetters(type, session);
+            }
+            foreach (var field in session.CurrentObject.UnconstructedFields)
             {
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.ConstructedMembers.Add(field);
-                    setter.Set(obj, this, session);
+                    session.CurrentObject.Record.RegisterConstructed(field);
+                    setter.Set(session.CurrentObject.Object, this, session);
                 }
             }
-            return obj;
         }
 
-        private object DoGeneralSetters(Type type, object obj, BuildSession session)
+        private void DoPopulators(Type type, BuildSession session)
         {
             if(Parent != null)
             {
-                obj = Parent.DoGeneralSetters(type, obj, session);
+                Parent.DoPopulators(type, session);
             }
-			var setters = Setters.Where(s => s.IsForType(type)).ToArray();
-            return setters.Aggregate(obj, (current, setter) => setter.Set(current, this, session));
+			foreach(var setter in Setters.Where(s => s.IsForType(type)).ToArray())
+			{
+			    setter.Set(session.CurrentObject.Object, this, session);
+			}
         }
 
 		private IGenerator GetGeneratorOrDefault(Type type, BuildSession session)

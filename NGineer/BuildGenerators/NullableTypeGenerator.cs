@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public class NullableTypeGenerator : IGenerator
     {
@@ -23,13 +20,12 @@ namespace NGineer.Generators
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return null;
-        }
-
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
             var nullableType = type.GetGenericArguments()[0];
             return _random.Next(5) == 0 ? null : builder.Build(nullableType, session);
+        }
+
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
         }
     }
 }

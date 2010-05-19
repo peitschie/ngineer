@@ -1,7 +1,7 @@
 
 using System;
+using NGineer.BuildGenerators;
 using NUnit.Framework;
-using NGineer.Generators;
 
 namespace NGineer.UnitTests.Generators
 {
@@ -13,7 +13,7 @@ namespace NGineer.UnitTests.Generators
 		[Test]
 		public void Constructor_GenerateString()
 		{
-			var generator = new BuilderGenerator<string>(1, () => "teststring");
+			var generator = new BuilderGenerator<string>((b, s) => "teststring");
 			Assert.AreEqual("teststring", generator.Create(typeof(string), null, null));
 		}
 	}

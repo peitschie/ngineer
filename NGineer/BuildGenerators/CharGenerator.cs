@@ -1,4 +1,4 @@
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
 
     public class CharGenerator : SimpleGenerator<char>

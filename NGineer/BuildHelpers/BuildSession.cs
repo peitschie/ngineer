@@ -1,33 +1,66 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NGineer.Generators;
-using NGineer.Utils;
 
 namespace NGineer.BuildHelpers
 {
     public class BuildSession
     {
-        private readonly TypeRegistry<Range> _collectionSizes;
+        private readonly IBuilder _builder;
+        private readonly ITypeRegistry<Range> _collectionSizes;
         private readonly Range _defaultCollectionSize;
+        private readonly ObjectBuildTreeEntry _objectTreeRoot;
+        private readonly IList<ObjectBuildTreeEntry> _constructedNodes;
 
-        public BuildSession(TypeRegistry<Range> collectionSizes, Range defaultCollectionSize)
+        protected BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, Range defaultCollectionSize, bool ignored)
         {
+            _builder = builder;
             _collectionSizes = collectionSizes;
             _defaultCollectionSize = defaultCollectionSize;
         }
 
-        private readonly HashSet<object> _constructedMembers = new HashSet<object>();
-        private readonly List<object> _constructedObjects = new List<object>();
-        
-        public HashSet<object> ConstructedMembers { get { return _constructedMembers; } }
-        public IList<object> ConstructedObjects { get { return _constructedObjects; } }
-
-        public int BuildDepth { get; set; }
-
-        public int NumberOfInstances<TType>()
+        public BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, Range defaultCollectionSize)
+            : this(builder, collectionSizes, defaultCollectionSize, false)
         {
-            return ConstructedObjects.Count(o => o is TType);
+            _constructedNodes = new List<ObjectBuildTreeEntry>();
+            _objectTreeRoot = new ObjectBuildTreeEntry(null, null, -1);
+            CurrentObject = _objectTreeRoot;
+        }
+
+        public BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, Range defaultCollectionSize, BuildSession parent)
+            : this(builder, collectionSizes, defaultCollectionSize, false)
+        {
+            _objectTreeRoot = parent._objectTreeRoot;
+            _constructedNodes = parent._constructedNodes;
+            CurrentObject = parent.CurrentObject;
+        }
+
+        #region Readonly Properties
+        public IBuilder Builder { get { return _builder; } }
+        public ObjectBuildTreeEntry BuiltObjectTreeRoot { get { return _objectTreeRoot; } }
+        public int BuildDepth { get { return CurrentObject.Depth; } }
+        public IList<ObjectBuildTreeEntry> ConstructedNodes { get { return _constructedNodes; } }
+
+        #endregion
+
+        public ObjectBuildTreeEntry CurrentObject { get; private set; }
+
+        public void PushChild(ObjectBuildRecord obj)
+        {
+            CurrentObject = CurrentObject.AddChild(obj);
+            _constructedNodes.Add(CurrentObject);
+        }
+
+        public void PushChild(Type type, object  obj)
+        {
+            PushChild((obj as ObjectBuildRecord) ?? new ObjectBuildRecord(type, obj));
+        }
+
+        public void PopChild()
+        {
+            if (CurrentObject.Parent == null)
+                throw new BuilderException("Unable to pop beyond the root element of the built object tree");
+            CurrentObject.IsPopulated = true;
+            CurrentObject = CurrentObject.Parent;
         }
 
         public Range GetCollectionSize(Type type)

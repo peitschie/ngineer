@@ -3,7 +3,7 @@ using System.Linq;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public class DefaultConstructorGenerator : IGenerator
     {
@@ -18,17 +18,16 @@ namespace NGineer.Generators
             return true;
         }
 
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            foreach (var property in type.GetProperties().Where(p => p.CanWrite && !session.ConstructedMembers.Contains(p)))
+            foreach (var property in type.GetProperties().Where(p => p.CanWrite && !session.CurrentObject.Record.IsConstructed(p)))
             {
                 property.SetValue(obj, builder.Build(property.PropertyType, session), null);
             }
-            foreach (var field in type.GetFields().Where(f => f.IsPublic && !session.ConstructedMembers.Contains(f) && !f.IsLiteral))
+            foreach (var field in type.GetFields().Where(f => f.IsPublic && !f.IsLiteral && !session.CurrentObject.Record.IsConstructed(f)))
             {
                 field.SetValue(obj, builder.Build(field.FieldType, session));
             }
-            return obj;
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)

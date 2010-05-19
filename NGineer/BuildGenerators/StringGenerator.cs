@@ -1,8 +1,7 @@
-
 using System;
 using System.Text;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
 
 	public class StringGenerator : SimpleGenerator<string>

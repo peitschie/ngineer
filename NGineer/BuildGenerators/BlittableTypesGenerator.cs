@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     /// <summary>
     /// See http://msdn.microsoft.com/en-us/library/75dwhxf7.aspx
@@ -93,9 +93,8 @@ namespace NGineer.Generators
             return Converters[type].Invoke(null, new object[] {bytes, 0});
         }
 
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            return obj;
         }
 
         #endregion

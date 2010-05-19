@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Reflection;
 using NGineer.BuildHelpers;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public abstract class SimpleGenerator<TType> : SingleTypeGenerator<TType>
     {
@@ -15,9 +14,8 @@ namespace NGineer.Generators
 
         protected abstract TType Generate();
 
-        public override TType Populate(TType obj, IBuilder builder, BuildSession session)
+        public override void Populate(TType obj, IBuilder builder, BuildSession session)
         {
-            return obj;
         }
 
         public override TType Create(Type type, IBuilder builder, BuildSession session)

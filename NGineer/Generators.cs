@@ -1,6 +1,8 @@
-namespace NGineer.Generators
+using NGineer.BuildGenerators;
+
+namespace NGineer
 {
-    public static class StandardGenerators
+    public static class Generators
     {
         public static IGenerator NullGenerator<TType>() where TType : class
         {

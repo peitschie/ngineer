@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.Generators
+namespace NGineer.BuildGenerators
 {
     public class ListGenerator : IGenerator
     {
@@ -37,7 +36,7 @@ namespace NGineer.Generators
             return list;
         }
 
-        public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
             var listType = obj.GetType().GetGenericArguments()[0];
             var range = session.GetCollectionSize(listType);
@@ -47,7 +46,6 @@ namespace NGineer.Generators
             {
                 list.Add(builder.Build(listType, session));
             }
-            return list;
         }
     }
 }

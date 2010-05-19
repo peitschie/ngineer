@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Moq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
+using NGineer.SpecialGenerators;
 using NUnit.Framework;
 
 namespace NGineer.UnitTests.Generators
@@ -27,36 +28,41 @@ namespace NGineer.UnitTests.Generators
                 };
         }
 
+        private static void AddConstructedNode<TType>(TType obj, BuildSession session)
+        {
+            session.ConstructedNodes.Add(new ObjectBuildTreeEntry(null, new ObjectBuildRecord(typeof(TType), obj), 0));
+        }
+
         [Test]
         public void GeneratesType_AfterMaxNumberOfSessionsReached()
         {
-            var session = new BuildSession(null, null);
+            var session = CreateSession();
             Generator.SetNumberOfInstances<int>(3, 3);
 
-            session.ConstructedObjects.Add(1);
+            AddConstructedNode(1, session);
             Assert.IsFalse(Generator.GeneratesType(typeof(int), null, session));
 
-            session.ConstructedObjects.Add(2);
+            AddConstructedNode(2, session);
             Assert.IsFalse(Generator.GeneratesType(typeof(int), null, session));
 
-            session.ConstructedObjects.Add(3);
+            AddConstructedNode(3, session);
             Assert.IsTrue(Generator.GeneratesType(typeof(int), null, session));
         }
 
         [Test]
         public void Create_ReturnsExisting_AfterMaxNumberOfSessionsReached()
         {
-            var session = new BuildSession(null, null);
+            var session = CreateSession();
             Generator.SetNumberOfInstances<SimpleClass>(3, 3);
 
-            session.ConstructedObjects.Add(new SimpleClass());
-            session.ConstructedObjects.Add(new SimpleClass());
-            session.ConstructedObjects.Add(new SimpleClass());
+            AddConstructedNode(new SimpleClass(), session);
+            AddConstructedNode(new SimpleClass(), session);
+            AddConstructedNode(new SimpleClass(), session);
 
             for (int i = 0; i < 20; i++ )
             {
                 var obj = CreateAndGenerate<SimpleClass>(null, session);
-                var foundObj = session.ConstructedObjects.FirstOrDefault(constructedObject => ReferenceEquals(obj, constructedObject));
+                var foundObj = session.ConstructedNodes.FirstOrDefault(constructedObject => ReferenceEquals(obj.Object, constructedObject.Object));
                 Assert.IsNotNull(foundObj, "Unknown instance returned");
             }
         }
@@ -64,15 +70,27 @@ namespace NGineer.UnitTests.Generators
         [Test]
         public void Create_NullsInBuildSession_NoExceptionsThrown()
         {
-            var session = new BuildSession(null, null);
+            var session = CreateSession();
             Generator.SetNumberOfInstances<SimpleClass>(3, 3);
 
-            session.ConstructedObjects.Add(new SimpleClass());
-            session.ConstructedObjects.Add(null);
-            session.ConstructedObjects.Add(new SimpleClass());
-            session.ConstructedObjects.Add(new SimpleClass());
+            AddConstructedNode(new SimpleClass(), session);
+            AddConstructedNode<SimpleClass>(null, session);
+            AddConstructedNode(new SimpleClass(), session);
+            AddConstructedNode(new SimpleClass(), session);
 
             Assert.DoesNotThrow(() => CreateAndGenerate<SimpleClass>(null, session));
+        }
+
+        private new ObjectBuildRecord CreateAndGenerate<TType>(IBuilder builder, BuildSession session)
+        {
+            var obj = Generator.Create(typeof(TType), builder, session);
+            Generator.Populate(typeof(TType), obj, builder, session);
+            return obj as ObjectBuildRecord;
+        }
+
+        private static BuildSession CreateSession()
+        {
+            return new BuildSession(null, null, null);
         }
 
         public class SimpleClass {}

@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using System.Linq;
 using NGineer.BuildHelpers;
-using NGineer.Generators;
 using NGineer.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -34,11 +34,10 @@ namespace NGineer.UnitTests
         [Test]
         public void AfterPopulationOf_UsingAdvanceSetterForGenerics()
         {
-            var createdList = new List<int>();
             var newClass = new Builder(1)
-                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => createdList))
+                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => ((IList)o).Clear()))
                 .Build<List<int>>();
-            Assert.AreSame(createdList, newClass);
+            Assert.IsEmpty(newClass);
         }
 		
 		[Test]
@@ -73,12 +72,20 @@ namespace NGineer.UnitTests
 		}
 
         [Test]
-        [MaxTime(5000)]
-        public void Build_MaximumRecursionLevel_SetByDefault()
+        public void Build_MaximumRecursionLevel_SetByDefault_ThrowsExceptionWhenReached()
         {
-            new Builder(1).Build<RecursiveClass>();
+            Assert.Throws<BuilderDepthExceededException>(() => new Builder(1).Build<RecursiveClass>());
         }
-		
+
+        [Test]
+        public void Build_MaximumRecursionLevel_ManuallySet_CanThrowExceptionWhenReached()
+        {
+            Assert.Throws<BuilderDepthExceededException>(() => new Builder(1)
+                .SetMaximumDepth(10)
+                .ThrowsWhenMaximumDepthReached()
+                .Build<RecursiveClass>());
+        }
+
 		[Test]
 		public void Build_MaximumRecursionLevel_ChildContainer_SetValueBuilderEnforced()
 		{
@@ -94,22 +101,14 @@ namespace NGineer.UnitTests
 								.AfterPopulationOf<TestClass>((t2, b2, s2) => {
                                     sessions.Add(s2);
 									t2.Property2 = b2.CreateNew().Build<TestClass2>(s2);
-									return t2;
 								})
 								.Build<TestClass>(s1);
-							return t1;	
 						})
 						.Build<TestClassThreeDeep>(s);
-					return t;	
 				})
 				.Build<TestClassFourDeep>();
 
-		    var session = sessions.First();
-		    foreach (var buildSession in sessions)
-		    {
-                Assert.AreSame(session, buildSession);
-		    }
-			Assert.IsNotNull(newClass.PropertyTestClass);
+		    Assert.IsNotNull(newClass.PropertyTestClass);
 			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
 			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
 		}
@@ -117,40 +116,28 @@ namespace NGineer.UnitTests
 		[Test]
 		public void Build_MaximumRecursionLevel_SetValueBuilderEnforced()
 		{
-			List<BuildSession> sessions = new List<BuildSession>();
 			List<int> buildDepth = new List<int>();
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
 				.AfterPopulationOf<TestClassFourDeep>((type, b, s) => {
-					sessions.Add(s);
 					buildDepth.Add(s.BuildDepth);
 					type.PropertyTestClass = b
                         .CreateNew()
 						.AfterPopulationOf<TestClassThreeDeep>((type1, b1, s1) => {
-							sessions.Add(s1);
 							buildDepth.Add(s1.BuildDepth);
 							type1.PropertyTestClass = b1
                                 .CreateNew()
 								.AfterPopulationOf<TestClass>((type2, b2, s2) => {
-									sessions.Add(s2);
 									buildDepth.Add(s2.BuildDepth);
 									type2.Property2 = b2.Build<TestClass2>(s2);
-									return type2;
 								})
 								.Build<TestClass>(s1);
-							return type1;	
 						})
 						.Build<TestClassThreeDeep>(s);
-					return type;	
 				})
 				.Build<TestClassFourDeep>();
 			
-			Assert.AreEqual(new int[]{1,2,3}, buildDepth.ToArray());
-			var first = sessions.First();
-			foreach(var session in sessions)
-			{
-				Assert.AreSame(first, session);	
-			}
+			Assert.AreEqual(new int[]{0,1,2}, buildDepth.ToArray());
 			Assert.IsNotNull(newClass.PropertyTestClass);
 			Assert.IsNotNull(newClass.PropertyTestClass.PropertyTestClass);
 			Assert.IsNull(newClass.PropertyTestClass.PropertyTestClass.Property2);
@@ -176,9 +163,8 @@ namespace NGineer.UnitTests
 				.SetMaximumDepth(2)
 				.AfterPopulationOf<RecursiveClass>((t, b, s) => {
 					t.RecursiveReference = b
-							.AfterPopulationOf<RecursiveClass>(s1 => s1)
+							.AfterPopulationOf<RecursiveClass>(s1 => {})
 							.Build<RecursiveClass>(s);
-					return t;	
 				});
 			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
 		}
@@ -186,48 +172,39 @@ namespace NGineer.UnitTests
         [Test]
         public void Build_SettersAreProperlyCalled_SimpleInt()
         {
-            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Build<int>();
-            Assert.AreEqual(190, newClass);
-        }
-
-        [Test]
-        public void Build_SettersAreProperlyCalled_SimpleClass()
-        {
-            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Build<SimpleClass>();
+            var newClass = new Builder(1).AfterPopulationOf<SimpleClass>(n => n.IntProperty = 190).Build<SimpleClass>();
             Assert.AreEqual(190, newClass.IntProperty);
-            Assert.IsNotNull(newClass.StringProperty);
-            Assert.IsNotNull(newClass.TestClass2Property);
         }
 
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
         {
-            var newClass = new Builder(1).AfterPopulationOf<int>(n => 190).Sealed();
+            var newClass = new Builder(1).AfterPopulationOf<int>(n => { }).Sealed();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
 			Assert.Throws<BuilderException>(() => newClass.SetCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => newClass.AfterPopulationOf<int>(n => 10));
+            Assert.Throws<BuilderException>(() => newClass.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
         }
 
         [Test]
         public void Sealed_BuildSealsBuilder()
         {
-            var builder = new Builder(1).AfterPopulationOf<int>(n => 190);
+            var builder = new Builder(1).AfterPopulationOf<int>(n => { });
             builder.Build<int>();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
             Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => 10));
+            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
         [Test]
         public void Sealed_SealOnChildSealsParent()
         {
-            var builder = new Builder(1).AfterPopulationOf<int>(n => 190);
+            var builder = new Builder(1).AfterPopulationOf<int>(n => { });
             builder.CreateNew().Sealed();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
             Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => 10));
+            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
@@ -235,7 +212,7 @@ namespace NGineer.UnitTests
         public void Build_SetupValueToOverrideBehaviour_SimpleClass()
         {
             var newClass = new Builder(1)
-                .AfterPopulationOf<string>((t, b, s) => b.Build(typeof(string), s))
+                .AfterPopulationOf<SimpleClass>((t, b, s) => t.StringProperty = b.Build<string>())
                 .Build<SimpleClass>();
 
             Assert.IsNotNull(newClass.StringProperty);
@@ -302,7 +279,6 @@ namespace NGineer.UnitTests
 									.SetCollectionSize<int>(20,20)
 									.Build<int[]>(s);
 						}
-						return o;
 					})
                 .Build<int[][]>();
 
@@ -316,13 +292,13 @@ namespace NGineer.UnitTests
         public void Build_SetupValueToOverrideBehaviour_RecursiveClass()
         {
             var newClass = new Builder(1)
-                .AfterPopulationOf<int>(n => 10)
+                .SetMaximumDepth(3)
+                .AfterPopulationOf<RecursiveClass>(n => n.IntProperty = 10)
                 .AfterPopulationOf<RecursiveClass>((t, b, s) =>
                                                   {
                                                       t.RecursiveReference = b.CreateNew()
-                                                          .AfterPopulationOf<int>(c => 20)
+                                                          .AfterPopulationOf<RecursiveClass>(c => c.IntProperty = 20)
                                                           .Build<RecursiveClass>(s);
-                                                      return t;
                                                   })
                 .Sealed()
                 .Build<RecursiveClass>();
@@ -332,11 +308,12 @@ namespace NGineer.UnitTests
             Assert.AreEqual(20, newClass.RecursiveReference.IntProperty);
         }
 
+        #region AfterConstructionOf
         [Test]
-        public void Build_AfterConstructionOf_PropertiesOnlySetOnce()
+        public void AfterConstructionOf_PropertiesOnlySetOnce()
         {
             var newClass = new Builder(1)
-                .AfterConstructionOf<CountsPropertySets>(c => c.RecursiveProperty, (o, b, s) => null)
+                .AfterConstructionOf<CountsPropertySets, CountsPropertySets>(c => c.RecursiveProperty, (o, b, s) => null)
                 .Build<CountsPropertySets>();
 
             Assert.AreEqual(1, newClass.GetSomePropertySets());
@@ -347,70 +324,64 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void Build_AfterConstructionOf_NullableIntProperty()
+        public void AfterConstructionOf_NullableIntProperty()
         {
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt>(c => c.Property1, 9));
+                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 9));
 
             var obj = builder.Build<ClassWithNullableInt>();
             Assert.AreEqual(9, obj.Property1.Value);
         }
 
         [Test]
-        public void Build_AfterConstructionOf_NullableDateTimeProperty()
+        public void AfterConstructionOf_NullableDateTimeProperty()
         {
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableDateTime>(c => c.Property1, dateTime));
+                .AfterConstructionOf<ClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
 
             var obj = builder.Build<ClassWithNullableDateTime>();
             Assert.AreEqual(dateTime, obj.Property1.Value);
         }
 
         [Test]
-        public void Build_AfterConstructionOf_Inherited_NullableDateTimeProperty()
+        public void AfterConstructionOf_Inherited_NullableDateTimeProperty()
         {
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime>(c => c.Property1, dateTime));
+                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
 
             var obj = builder.Build<InheritsFromClassWithNullableDateTime>();
             Assert.AreEqual(dateTime, obj.Property1.Value);
         }
 
         [Test]
-        public void Build_AfterConstructionOf_Inherited_NullableDateTimeProperty_NotUsedForSibling()
+        public void AfterConstructionOf_Inherited_NullableDateTimeProperty_NotUsedForSibling()
         {
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime>(c => c.Property1, dateTime));
+                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
 
             var obj = builder.Build<InheritsFromClassWithNullableDateTime2>();
             Assert.AreNotEqual(dateTime, obj.Property1.Value);
         }
 
+        
+
         [Test]
-        public void Build_AfterConstructionOf_ObjectAddedToStackAfterConstruction()
+        public void AfterConstructionOf_InvalidMethodReturnType()
         {
-            object constructedInstance = null;
-            new Builder(1)
-                .AfterConstructionOf<SimpleClass>(c => c.StringProperty, 
-                (o, b, s) =>
-                {
-                    constructedInstance = s.ConstructedObjects.FirstOrDefault(c => c is SimpleClass);
-                    return null;
-                })
-                .Build<SimpleClass>();
-
-            Assert.IsNotNull(constructedInstance);
+            var builder = new Builder(1);
+            Assert.Throws<InvalidCastException>(() => builder.AfterConstructionOf(MemberExpressions.GetMemberInfo<SimpleClass>(c => c.StringProperty), (o, b, s) => 1));
         }
+        #endregion
 
         [Test]
-        public void InstancesControl_SetMaximumInstances_ObjectsProperlyReused()
+        public void SetNumberOfInstances_ObjectsProperlyReused()
         {
             var builder = new Builder(1)
                 .SetNumberOfInstances<SimpleClass>(3, 3)
@@ -432,18 +403,18 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void InstancesControl_ObjectsNotRetouched_WhenReused()
+        public void SetNumberOfInstances_ObjectsNotRetouched_WhenReused()
         {
             var count = 0;
             var builder = new Builder(1)
-                .AfterPopulationOf<CountsPropertySets>(c => c.SomeProperty = count++)
-                .SetCollectionSize(2,2)
-                .SetNumberOfInstances<CountsPropertySets>(1, 1)
+                .AfterPopulationOf<SimpleClass>(c => count++)
+                .SetCollectionSize(5,5)
+                .SetNumberOfInstances<SimpleClass>(1, 1)
                 .Sealed();
-            var instances = builder.Build<CountsPropertySets[]>();
+            var instances = builder.Build<SimpleClass[]>();
 
             Assert.AreSame(instances[0], instances[1]);
-            Assert.AreEqual(1, instances[0].SomeProperty);
+            Assert.AreEqual(1, count);
         }
 	
 		[Test]
@@ -503,18 +474,14 @@ namespace NGineer.UnitTests
         }
 
         [Test]
-        public void Hierarchy_ChildCallsParentFirst_ConstructionOf()
+        public void Hierarchy_AfterConstructionOf_ChildValueIsFinal()
         {
-            var parentCalled = -1;
             var childCalled = -1;
             var callOrder = 0;
-            var builder = new Builder(1).AfterConstructionOf<SimpleClass>(c => c.IntProperty, 
-                (o, b, s) => {
-                    parentCalled = callOrder++;
-                    return 10;
-            });
+            var builder = new Builder(1)
+                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10);
             var newClass = builder.CreateNew()
-                .AfterConstructionOf<SimpleClass>(c => c.IntProperty,
+                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty,
                 (o, b, s) =>
                 {
                     childCalled = callOrder++;
@@ -522,9 +489,7 @@ namespace NGineer.UnitTests
                 })
                 .Build<SimpleClass>();
 
-            Assert.AreNotEqual(-1, parentCalled, "Parent wasn't called");
             Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
-            Assert.IsTrue(childCalled > parentCalled, "Child called before parent");
             Assert.AreEqual(11, newClass.IntProperty);
         }
 
