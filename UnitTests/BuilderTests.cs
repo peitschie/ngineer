@@ -5,6 +5,7 @@ using NGineer.BuildHelpers;
 using NGineer.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Reflection;
 
 
 namespace NGineer.UnitTests
@@ -356,6 +357,22 @@ namespace NGineer.UnitTests
 
             var obj = builder.Build<InheritsFromClassWithNullableDateTime>();
             Assert.AreEqual(dateTime, obj.Property1.Value);
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetInSession()
+        {
+			List<MemberInfo> propertyOrder = new List<MemberInfo>();
+            new Builder(1)
+                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 
+			         (o, b, s) => {
+							propertyOrder.Add(s.CurrentMember);
+							return 10;
+						})
+				.Build<ClassWithNullableInt>();
+            Assert.AreEqual(1, propertyOrder.Count);
+			Assert.AreEqual(MemberTypes.Property, propertyOrder[0].MemberType);
+			Assert.AreEqual("Property1", propertyOrder[0].Name);
         }
 
         [Test]

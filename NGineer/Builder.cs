@@ -382,6 +382,7 @@ namespace NGineer
         {
             foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
+				session.CurrentMember = property;
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
@@ -389,12 +390,14 @@ namespace NGineer
                     setter.Set(session.CurrentObject.Object, this, session);
                 }
             }
+			session.CurrentMember = null;
             if (Parent != null)
             {
                 Parent.DoMemberSetters(type, session);
             }
             foreach (var field in session.CurrentObject.UnconstructedFields)
             {
+				session.CurrentMember = field;
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
@@ -402,6 +405,7 @@ namespace NGineer
                     setter.Set(session.CurrentObject.Object, this, session);
                 }
             }
+			session.CurrentMember = null;
         }
 
         private void DoPopulators(Type type, BuildSession session)

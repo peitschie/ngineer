@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace NGineer.BuildHelpers
@@ -44,6 +45,8 @@ namespace NGineer.BuildHelpers
 
         public ObjectBuildTreeEntry CurrentObject { get; private set; }
 
+		public MemberInfo CurrentMember { get; set; }
+				
         public void PushChild(ObjectBuildRecord obj)
         {
             CurrentObject = CurrentObject.AddChild(obj);
