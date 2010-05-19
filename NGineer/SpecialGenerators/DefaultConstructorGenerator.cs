@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.BuildGenerators
+namespace NGineer.SpecialGenerators
 {
     public class DefaultConstructorGenerator : IGenerator
     {
@@ -20,14 +21,18 @@ namespace NGineer.BuildGenerators
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
+            var previousMember = session.CurrentMember;
             foreach (var property in type.GetProperties().Where(p => p.CanWrite && !session.CurrentObject.Record.IsConstructed(p)))
             {
+                session.CurrentMember = property;
                 property.SetValue(obj, builder.Build(property.PropertyType, session), null);
             }
             foreach (var field in type.GetFields().Where(f => f.IsPublic && !f.IsLiteral && !session.CurrentObject.Record.IsConstructed(f)))
             {
+                session.CurrentMember = field;
                 field.SetValue(obj, builder.Build(field.FieldType, session));
             }
+            session.CurrentMember = previousMember;
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)

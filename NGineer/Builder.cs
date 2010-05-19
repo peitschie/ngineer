@@ -54,7 +54,7 @@ namespace NGineer
             WithGenerator(new BoolGenerator(seed));
             WithGenerator(new CharGenerator(seed));
             WithGenerator(new BlittableTypesGenerator(seed));
-            WithGenerator(new StringGenerator(seed));
+            WithGenerator(new SimpleMemberNameStringGenerator());
             WithGenerator(new UIntGenerator(seed));
 		}
 
@@ -380,6 +380,7 @@ namespace NGineer
 
         private void DoMemberSetters(Type type, BuildSession session)
         {
+            var previousMember = session.CurrentMember;
             foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
 				session.CurrentMember = property;
@@ -405,7 +406,7 @@ namespace NGineer
                     setter.Set(session.CurrentObject.Object, this, session);
                 }
             }
-			session.CurrentMember = null;
+			session.CurrentMember = previousMember;
         }
 
         private void DoPopulators(Type type, BuildSession session)

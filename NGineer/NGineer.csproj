@@ -63,6 +63,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildGenerators\SimpleMemberNameStringGenerator.cs" />
     <Compile Include="BuildHelpers\BuilderDepthExceededException.cs" />
     <Compile Include="BuildHelpers\BuilderException.cs" />
     <Compile Include="BuildHelpers\BuildSession.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="BuildGenerators\CharGenerator.cs" />
     <Compile Include="BuildGenerators\NullableTypeGenerator.cs" />
     <Compile Include="BuildGenerators\DateTimeGenerator.cs" />
-    <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
+    <Compile Include="SpecialGenerators\DefaultConstructorGenerator.cs" />
     <Compile Include="BuildGenerators\EnumGenerator.cs" />
     <Compile Include="BuildGenerators\NullObjectGenerator.cs" />
     <Compile Include="BuildSequences\ConsecutiveSequenceController.cs" />
@@ -103,14 +104,13 @@
     <Compile Include="IBuilder.cs" />
     <Compile Include="BuildGenerators\BlittableTypesGenerator.cs" />
     <Compile Include="BuildGenerators\IGenerator.cs" />
-    <Compile Include="BuildGenerators\StringGenerator.cs" />
+    <Compile Include="BuildGenerators\GarbageStringGenerator.cs" />
     <Compile Include="BuildGenerators\UIntGenerator.cs" />
     <Compile Include="BuildGenerators\BoolGenerator.cs" />
     <Compile Include="BuildGenerators\BuilderGenerator.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\MemberExpressions.cs" />
-    <Compile Include="BuildGenerators\MemberNamingGenerator.cs" />
-    <Compile Include="Utils\InexactPropertyEquals.cs" />
+    <Compile Include="Utils\MemberInfoExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -2,7 +2,7 @@
 using NGineer.BuildGenerators;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
     public class CharGeneratorTests : GeneratorTestFixture<CharGenerator>

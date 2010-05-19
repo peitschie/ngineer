@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using System;
 using System.Linq;
-using Moq;
-using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 using NGineer.SpecialGenerators;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
     public class ReusableInstancesGeneratorTests : GeneratorTestFixture<ReusableInstancesGenerator>

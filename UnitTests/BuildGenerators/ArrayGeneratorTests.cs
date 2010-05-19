@@ -6,7 +6,7 @@ using NGineer.BuildHelpers;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
     public class ArrayGeneratorTests : GeneratorTestFixture<ArrayGenerator>

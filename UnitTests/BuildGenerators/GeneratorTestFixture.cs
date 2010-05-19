@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using Moq;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
@@ -8,7 +6,7 @@ using NGineer.Utils;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
 	public abstract class GeneratorTestFixture<TGenerator>
         where TGenerator : IGenerator

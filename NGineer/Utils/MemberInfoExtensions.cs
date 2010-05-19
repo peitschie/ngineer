@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace NGineer.Utils
 {
-	public static class InexactPropertyEquals
+	public static class MemberInfoExtensions
 	{
 		public static bool LikelyEqual(this MemberInfo self, MemberInfo other)
 		{
@@ -27,5 +27,14 @@ namespace NGineer.Utils
 			return other != null
 				&& self.FieldType == other.FieldType;
 		}
+
+        public static Type ReturnType(this MemberInfo self)
+        {
+            if (self.MemberType == MemberTypes.Field)
+                return ((FieldInfo) self).FieldType;
+            if (self.MemberType == MemberTypes.Property)
+                return ((PropertyInfo)self).PropertyType;
+            throw new ArgumentException("Unsupported member type {0}".With(self.MemberType));
+        }
 	}
 }
