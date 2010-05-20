@@ -71,7 +71,6 @@ namespace NGineer
 		{
 			get 
 			{
-
                 if (_maximumDepth.HasValue)
                 {
                     return _maximumDepth.Value;
@@ -387,7 +386,7 @@ namespace NGineer
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
-                    setter.Set(session.CurrentObject.Object, this, session);
+                    setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
                 if (setters.Length > 0)
                 {
@@ -405,7 +404,7 @@ namespace NGineer
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
-                    setter.Set(session.CurrentObject.Object, this, session);
+                    setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
                 if (setters.Length > 0)
                 {
@@ -423,7 +422,7 @@ namespace NGineer
             }
 			foreach(var setter in Setters.Where(s => s.IsForType(type)).ToArray())
 			{
-			    setter.Set(session.CurrentObject.Object, this, session);
+			    setter.Set(session.CurrentObject.Object, session.Builder, session);
 			}
         }
 
@@ -434,7 +433,8 @@ namespace NGineer
 		
         private IGenerator GetGenerator(Type type, BuildSession session)
         {
-            var thisGenerator = _instancesGenerator.GeneratesType(type, this, session) ? _instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, this, session));
+            var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? 
+				_instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, session.Builder, session));
             if(thisGenerator == null && Parent != null)
             {
                 thisGenerator = Parent.GetGenerator(type, session);
