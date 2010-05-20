@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 
-namespace NGineer.UnitTests
+namespace NGineer.UnitTests.BuilderTests
 {
 	[TestFixture]
 	public class BuilderTests
@@ -31,15 +31,6 @@ namespace NGineer.UnitTests
 			var newClass2 = new Builder(1).Build<int>();
 			Assert.AreEqual(newClass, newClass2);
 		}
-
-        [Test]
-        public void AfterPopulationOf_UsingAdvanceSetterForGenerics()
-        {
-            var newClass = new Builder(1)
-                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => ((IList)o).Clear()))
-                .Build<List<int>>();
-            Assert.IsEmpty(newClass);
-        }
 		
 		[Test]
 		public void Builder_SeedReproducesTest_StringGenerator()
@@ -145,19 +136,6 @@ namespace NGineer.UnitTests
 		}
 		
 		[Test]
-		public void Build_Setters_ChildSettersRunLast()
-		{
-			var newClass = new Builder(1)
-				.SetMaximumDepth(2)
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 10)
-				.CreateNew()
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 30)
-				.Build<SimpleClass>();
-			
-			Assert.AreEqual(30, newClass.IntProperty);
-		}
-		
-		[Test]
 		public void Build_SetValues_CantModifyWithinCall()
 		{
 			var newClass = new Builder(1)
@@ -169,13 +147,6 @@ namespace NGineer.UnitTests
 				});
 			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
 		}
-
-        [Test]
-        public void Build_SettersAreProperlyCalled_SimpleInt()
-        {
-            var newClass = new Builder(1).AfterPopulationOf<SimpleClass>(n => n.IntProperty = 190).Build<SimpleClass>();
-            Assert.AreEqual(190, newClass.IntProperty);
-        }
 
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
@@ -209,16 +180,6 @@ namespace NGineer.UnitTests
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
-        [Test]
-        public void Build_SetupValueToOverrideBehaviour_SimpleClass()
-        {
-            var newClass = new Builder(1)
-                .AfterPopulationOf<SimpleClass>((t, b, s) => t.StringProperty = b.Build<string>())
-                .Build<SimpleClass>();
-
-            Assert.IsNotNull(newClass.StringProperty);
-        }
-		
 		[Test]
         public void CollectionSize_DefaultSettable()
         {
@@ -309,104 +270,6 @@ namespace NGineer.UnitTests
             Assert.AreEqual(20, newClass.RecursiveReference.IntProperty);
         }
 
-        #region AfterConstructionOf
-        [Test]
-        public void AfterConstructionOf_PropertiesOnlySetOnce()
-        {
-            var newClass = new Builder(1)
-                .AfterConstructionOf<CountsPropertySets, CountsPropertySets>(c => c.RecursiveProperty, (o, b, s) => null)
-                .Build<CountsPropertySets>();
-
-            Assert.AreEqual(1, newClass.GetSomePropertySets());
-            Assert.AreEqual(1, newClass.GetRecursivePropertySets());
-
-            Assert.IsNotNull(newClass.SomeProperty);
-            Assert.IsNull(newClass.RecursiveProperty);
-        }
-
-        [Test]
-        public void AfterConstructionOf_NullableIntProperty()
-        {
-            IBuilder builder = null;
-            Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 9));
-
-            var obj = builder.Build<ClassWithNullableInt>();
-            Assert.AreEqual(9, obj.Property1.Value);
-        }
-
-        [Test]
-        public void AfterConstructionOf_NullableDateTimeProperty()
-        {
-            var dateTime = DateTime.Now;
-            IBuilder builder = null;
-            Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
-
-            var obj = builder.Build<ClassWithNullableDateTime>();
-            Assert.AreEqual(dateTime, obj.Property1.Value);
-        }
-
-        [Test]
-        public void AfterConstructionOf_Inherited_NullableDateTimeProperty()
-        {
-            var dateTime = DateTime.Now;
-            IBuilder builder = null;
-            Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
-
-            var obj = builder.Build<InheritsFromClassWithNullableDateTime>();
-            Assert.AreEqual(dateTime, obj.Property1.Value);
-        }
-		
-		[Test]
-        public void AfterConstructionOf_PropertySetInSession()
-        {
-			List<MemberInfo> propertyOrder = new List<MemberInfo>();
-            new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 
-			         (o, b, s) => {
-							propertyOrder.Add(s.CurrentMember);
-							return 10;
-						})
-				.Build<ClassWithNullableInt>();
-            Assert.AreEqual(1, propertyOrder.Count);
-			Assert.AreEqual(MemberTypes.Property, propertyOrder[0].MemberType);
-			Assert.AreEqual("Property1", propertyOrder[0].Name);
-        }
-
-        [Test]
-        public void AfterConstructionOf_MultipeSettersForProperty()
-        {
-            var obj = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 2)
-                .Build<ClassWithNullableInt>();
-            Assert.AreEqual(2, obj.Property1);
-        }
-
-        [Test]
-        public void AfterConstructionOf_Inherited_NullableDateTimeProperty_NotUsedForSibling()
-        {
-            var dateTime = DateTime.Now;
-            IBuilder builder = null;
-            Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
-
-            var obj = builder.Build<InheritsFromClassWithNullableDateTime2>();
-            Assert.AreNotEqual(dateTime, obj.Property1.Value);
-        }
-
-        
-
-        [Test]
-        public void AfterConstructionOf_InvalidMethodReturnType()
-        {
-            var builder = new Builder(1);
-            Assert.Throws<InvalidCastException>(() => builder.AfterConstructionOf(MemberExpressions.GetMemberInfo<SimpleClass>(c => c.StringProperty), (o, b, s) => 1));
-        }
-        #endregion
-
         [Test]
         public void SetNumberOfInstances_ObjectsProperlyReused()
         {
@@ -474,142 +337,5 @@ namespace NGineer.UnitTests
 
             Assert.AreNotEqual(builder.Build<int>(), builder2.Build<int>());
         }
-
-        [Test]
-        public void Hierarchy_ChildCallsParent_PopulatorOf()
-        {
-            var parentCalled = -1;
-            var childCalled = -1;
-            var callOrder = 0;
-            var builder = new Builder(1).AfterPopulationOf<SimpleClass>((o, b, s) =>
-                {
-                    parentCalled = callOrder++;
-                    o.IntProperty = 10;
-                });
-            var newClass = builder.CreateNew()
-                .AfterPopulationOf<SimpleClass>((o, b, s) =>
-                {
-                    childCalled = callOrder++;
-                    o.IntProperty = 11;
-                })
-                .Build<SimpleClass>();
-
-            Assert.AreNotEqual(-1, parentCalled, "Parent wasn't called");
-            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
-            Assert.IsTrue(childCalled > parentCalled, "Child called before parent");
-            Assert.AreEqual(11, newClass.IntProperty);
-        }
-
-        [Test]
-        public void Hierarchy_AfterConstructionOf_ChildValueIsFinal()
-        {
-            var childCalled = -1;
-            var callOrder = 0;
-            var builder = new Builder(1)
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10);
-            var newClass = builder.CreateNew()
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty,
-                (o, b, s) =>
-                {
-                    childCalled = callOrder++;
-                    return 11;
-                })
-                .Build<SimpleClass>();
-
-            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
-            Assert.AreEqual(11, newClass.IntProperty);
-        }
-
-        #region test classes
-        public class CountsPropertySets
-        {
-            private int _somePropertySets;
-            public int GetSomePropertySets()
-            {
-                return _somePropertySets;
-            }
-
-            private int _someProperty;
-            public int SomeProperty
-            {
-                get { return _someProperty; }
-                set
-                {
-                    _someProperty = value;
-                    _somePropertySets++;
-                }
-            }
-
-            private int _recursivePropertySets;
-            public int GetRecursivePropertySets()
-            {
-                return _recursivePropertySets;
-            }
-
-            private CountsPropertySets _recursiveProperty;
-            public CountsPropertySets RecursiveProperty
-            {
-                get { return _recursiveProperty; }
-                set
-                {
-                    _recursiveProperty = value;
-                    _recursivePropertySets++;
-                }
-            }
-        }
-
-
-        public class RecursiveClass
-        {
-            public int IntProperty { get; set; }
-            public RecursiveClass RecursiveReference { get; set; }
-        }
-
-        public class SimpleClass
-        {
-            public int IntProperty { get; set; }
-            public string StringProperty { get; set; }
-            public TestClass2 TestClass2Property { get; set; }
-        }
-
-        public class TestClass2
-        {
-        }
-
-        public class ClassWithNullableInt
-        {
-            public int? Property1 { get; set; }
-        }
-
-        public class ClassWithNullableDateTime
-        {
-            public DateTime? Property1 { get; set; }
-        }
-
-        public class InheritsFromClassWithNullableDateTime : ClassWithNullableDateTime
-        {
-        }
-
-        public class InheritsFromClassWithNullableDateTime2 : ClassWithNullableDateTime
-        {
-        }
-
-        public class TestClass
-        {
-            public int Property1 { get; set; }
-
-            public TestClass2 Property2 { get; set; }
-        }
-		
-		public class TestClassThreeDeep
-		{
-			public TestClass PropertyTestClass { get; set; }
-		}
-		
-		public class TestClassFourDeep
-		{
-			public TestClassThreeDeep PropertyTestClass { get; set; }
-        }
-        #endregion
     }
 }

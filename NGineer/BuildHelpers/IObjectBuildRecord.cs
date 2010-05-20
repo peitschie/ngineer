@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace NGineer.BuildHelpers
@@ -10,7 +10,6 @@ namespace NGineer.BuildHelpers
         PropertyInfo[] UnconstructedProperties { get; }
         FieldInfo[] UnconstructedFields { get; }
         bool IsConstructed(MemberInfo property);
-        void RegisterConstructed(PropertyInfo property);
-        void RegisterConstructed(FieldInfo field);
+        void RegisterConstructed(MemberInfo property);
     }
 }

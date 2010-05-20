@@ -71,7 +71,6 @@ namespace NGineer
 		{
 			get 
 			{
-
                 if (_maximumDepth.HasValue)
                 {
                     return _maximumDepth.Value;
@@ -363,7 +362,7 @@ namespace NGineer
             var obj = generator.Create(type, this, internalSession);
             if (obj != null)
             {
-                internalSession.PushChild(type, obj);
+                internalSession.PushObject(type, obj);
                 obj = internalSession.CurrentObject.Object;
                 if (!internalSession.CurrentObject.IsPopulated)
                 {
@@ -371,7 +370,7 @@ namespace NGineer
                     generator.Populate(type, obj, this, internalSession);
                     DoPopulators(type, internalSession);
                 }
-                internalSession.PopChild();
+                internalSession.PopObject();
             }
 	        return obj;
         }
@@ -380,39 +379,30 @@ namespace NGineer
 
         private void DoMemberSetters(Type type, BuildSession session)
         {
-            var previousMember = session.CurrentMember;
             foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
-				session.CurrentMember = property;
+				session.PushMember(property);
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
-                    setter.Set(session.CurrentObject.Object, this, session);
+                    setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
-                if (setters.Length > 0)
-                {
-                    session.CurrentObject.Record.RegisterConstructed(property);
-                }
+				session.PopMember(setters.Length > 0);
             }
-			session.CurrentMember = null;
             if (Parent != null)
             {
                 Parent.DoMemberSetters(type, session);
             }
             foreach (var field in session.CurrentObject.UnconstructedFields)
             {
-				session.CurrentMember = field;
+				session.PushMember(field);
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
-                    setter.Set(session.CurrentObject.Object, this, session);
+                    setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
-                if (setters.Length > 0)
-                {
-                    session.CurrentObject.Record.RegisterConstructed(field);
-                }
+                session.PopMember(setters.Length > 0);
             }
-			session.CurrentMember = previousMember;
         }
 
         private void DoPopulators(Type type, BuildSession session)
@@ -423,7 +413,7 @@ namespace NGineer
             }
 			foreach(var setter in Setters.Where(s => s.IsForType(type)).ToArray())
 			{
-			    setter.Set(session.CurrentObject.Object, this, session);
+			    setter.Set(session.CurrentObject.Object, session.Builder, session);
 			}
         }
 
@@ -434,7 +424,8 @@ namespace NGineer
 		
         private IGenerator GetGenerator(Type type, BuildSession session)
         {
-            var thisGenerator = _instancesGenerator.GeneratesType(type, this, session) ? _instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, this, session));
+            var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? 
+				_instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, session.Builder, session));
             if(thisGenerator == null && Parent != null)
             {
                 thisGenerator = Parent.GetGenerator(type, session);
