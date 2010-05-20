@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -29,7 +29,6 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -63,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BuilderTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
     <Compile Include="BuildHelpers\BuildSessionTests.cs" />
     <Compile Include="BuildHelpers\ObjectBuildRecordTests.cs" />
@@ -82,6 +80,9 @@
     <Compile Include="BuildGenerators\GeneratorTestFixture.cs" />
     <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
+    <Compile Include="BuilderTests\BuilderTests.cs" />
+    <Compile Include="BuilderTests\AfterConstructionOf.cs" />
+    <Compile Include="BuilderTests\TestClasses.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -112,4 +113,7 @@
       <Properties InternalTargetFrameworkVersion="3.5" />
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="BuilderTests\" />
+  </ItemGroup>
 </Project>
