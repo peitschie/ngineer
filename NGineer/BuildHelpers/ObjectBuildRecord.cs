@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -63,14 +63,29 @@ namespace NGineer.BuildHelpers
             }
         }
 
-        public void RegisterConstructed(PropertyInfo property)
+		public void RegisterConstructed(MemberInfo member)
+        {
+			switch(member.MemberType)
+			{
+				case MemberTypes.Field:
+					RegisterConstructed(member as FieldInfo);
+					break;
+				case MemberTypes.Property:
+					RegisterConstructed(member as PropertyInfo);
+					break;
+				default:
+					throw new BuilderException("Unsupported member type {0}".With(member.MemberType));
+			}
+        }
+		
+        private void RegisterConstructed(PropertyInfo property)
         {
             var existing = _unconstructedProperties.First(p => p.Name == property.Name);
             _constructedMembers.Add(property.Name);
             _unconstructedProperties.Remove(existing);
         }
 
-        public void RegisterConstructed(FieldInfo field)
+        private void RegisterConstructed(FieldInfo field)
         {
             var existing = _unconstructedFields.First(p => p.Name == field.Name);
             _constructedMembers.Add(field.Name);

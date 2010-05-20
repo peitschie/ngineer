@@ -76,13 +76,13 @@ namespace NGineer.UnitTests.BuildSequences
 
         private void PushChild<TType>(TType obj, int expectedDepth)
         {
-            _session.PushChild(typeof(TType), obj);
+            _session.PushObject(typeof(TType), obj);
             Assert.AreEqual(expectedDepth, NextInSequence());
         }
 
         private void PopChild()
         {
-            _session.PopChild();
+            _session.PopObject();
         }
 
         private int NextInSequence()

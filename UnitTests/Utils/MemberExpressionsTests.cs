@@ -8,6 +8,24 @@ namespace NGineer.UnitTests.Utils
     [TestFixture]
     public class MemberExpressionsTests
     {
+		[Test]
+        public void ClassParent_SimpleProperty1()
+        {
+            var info = (PropertyInfo)MemberExpressions.GetMemberInfo<ClassParent>(c => c.Property1);
+			Assert.IsNotNull(info);
+            Assert.AreEqual(typeof(ClassParent), info.ReflectedType);
+            Assert.AreEqual("Property1", info.Name);
+        }
+
+		[Test]
+        public void ClassParent_SimpleField1()
+        {
+            var info = (FieldInfo)MemberExpressions.GetMemberInfo<ClassParent>(c => c.Field1);
+			Assert.IsNotNull(info);
+            Assert.AreEqual(typeof(ClassParent), info.ReflectedType);
+            Assert.AreEqual("Field1", info.Name);
+        }
+		
         [Test]
         public void InheritedMember_ReturnsInheritingClassType()
         {
@@ -62,6 +80,7 @@ namespace NGineer.UnitTests.Utils
         public class ClassParent
         {
             public int Property1 { get; set; }
+			public int Field1;
         }
 
         public class ClassChild1 : ClassParent { }

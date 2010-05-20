@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
+using NGineer.Utils;
 
 namespace NGineer.BuildHelpers
 {
@@ -76,14 +77,9 @@ namespace NGineer.BuildHelpers
             return _record.IsConstructed(property);
         }
 
-        public void RegisterConstructed(PropertyInfo property)
+        public void RegisterConstructed(MemberInfo member)
         {
-            _record.RegisterConstructed(property);
-        }
-
-        public void RegisterConstructed(FieldInfo field)
-        {
-            _record.RegisterConstructed(field);
+			_record.RegisterConstructed(member);
         }
     }
 }

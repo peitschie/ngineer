@@ -11,7 +11,7 @@ using System.Reflection;
 namespace NGineer.UnitTests.BuilderTests
 {
 	[TestFixture]
-	public class AfterConstructionOf
+	public class AfterConstructionOfTests
 	{
         [Test]
         public void AfterConstructionOf_PropertiesOnlySetOnce()
@@ -132,12 +132,16 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var obj = new Builder(1)
                 .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10)
+				.AfterConstructionOf<SimpleClass, int>(c => c.IntField, (o, b, s) => 11)
 				.CreateNew()
                 .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (o, b, s) => "childValue")
+				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (o, b, s) => "childValueField")
                 .Build<SimpleClass>();
 
             Assert.AreEqual(10, obj.IntProperty);
 			Assert.AreEqual("childValue", obj.StringProperty);
+			Assert.AreEqual(11, obj.IntField);
+			Assert.AreEqual("childValueField", obj.StringField);
         }
 		
         [Test]

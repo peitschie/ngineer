@@ -31,15 +31,6 @@ namespace NGineer.UnitTests.BuilderTests
 			var newClass2 = new Builder(1).Build<int>();
 			Assert.AreEqual(newClass, newClass2);
 		}
-
-        [Test]
-        public void AfterPopulationOf_UsingAdvanceSetterForGenerics()
-        {
-            var newClass = new Builder(1)
-                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => ((IList)o).Clear()))
-                .Build<List<int>>();
-            Assert.IsEmpty(newClass);
-        }
 		
 		[Test]
 		public void Builder_SeedReproducesTest_StringGenerator()
@@ -145,19 +136,6 @@ namespace NGineer.UnitTests.BuilderTests
 		}
 		
 		[Test]
-		public void Build_Setters_ChildSettersRunLast()
-		{
-			var newClass = new Builder(1)
-				.SetMaximumDepth(2)
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 10)
-				.CreateNew()
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 30)
-				.Build<SimpleClass>();
-			
-			Assert.AreEqual(30, newClass.IntProperty);
-		}
-		
-		[Test]
 		public void Build_SetValues_CantModifyWithinCall()
 		{
 			var newClass = new Builder(1)
@@ -169,13 +147,6 @@ namespace NGineer.UnitTests.BuilderTests
 				});
 			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
 		}
-
-        [Test]
-        public void Build_SettersAreProperlyCalled_SimpleInt()
-        {
-            var newClass = new Builder(1).AfterPopulationOf<SimpleClass>(n => n.IntProperty = 190).Build<SimpleClass>();
-            Assert.AreEqual(190, newClass.IntProperty);
-        }
 
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
@@ -209,16 +180,6 @@ namespace NGineer.UnitTests.BuilderTests
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
-        [Test]
-        public void Build_SetupValueToOverrideBehaviour_SimpleClass()
-        {
-            var newClass = new Builder(1)
-                .AfterPopulationOf<SimpleClass>((t, b, s) => t.StringProperty = b.Build<string>())
-                .Build<SimpleClass>();
-
-            Assert.IsNotNull(newClass.StringProperty);
-        }
-		
 		[Test]
         public void CollectionSize_DefaultSettable()
         {
@@ -375,31 +336,6 @@ namespace NGineer.UnitTests.BuilderTests
             var builder2 = builder.CreateNew();
 
             Assert.AreNotEqual(builder.Build<int>(), builder2.Build<int>());
-        }
-
-        [Test]
-        public void Hierarchy_ChildCallsParent_PopulatorOf()
-        {
-            var parentCalled = -1;
-            var childCalled = -1;
-            var callOrder = 0;
-            var builder = new Builder(1).AfterPopulationOf<SimpleClass>((o, b, s) =>
-                {
-                    parentCalled = callOrder++;
-                    o.IntProperty = 10;
-                });
-            var newClass = builder.CreateNew()
-                .AfterPopulationOf<SimpleClass>((o, b, s) =>
-                {
-                    childCalled = callOrder++;
-                    o.IntProperty = 11;
-                })
-                .Build<SimpleClass>();
-
-            Assert.AreNotEqual(-1, parentCalled, "Parent wasn't called");
-            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
-            Assert.IsTrue(childCalled > parentCalled, "Child called before parent");
-            Assert.AreEqual(11, newClass.IntProperty);
         }
     }
 }

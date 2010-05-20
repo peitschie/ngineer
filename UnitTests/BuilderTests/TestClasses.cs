@@ -51,6 +51,10 @@ namespace NGineer.UnitTests.BuilderTests
         public int IntProperty { get; set; }
         public string StringProperty { get; set; }
         public TestClass2 TestClass2Property { get; set; }
+		
+		public int IntField;
+        public string StringField;
+        public TestClass2 TestClass2Field;
     }
 
     public class TestClass2

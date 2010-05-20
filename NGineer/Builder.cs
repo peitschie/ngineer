@@ -362,7 +362,7 @@ namespace NGineer
             var obj = generator.Create(type, this, internalSession);
             if (obj != null)
             {
-                internalSession.PushChild(type, obj);
+                internalSession.PushObject(type, obj);
                 obj = internalSession.CurrentObject.Object;
                 if (!internalSession.CurrentObject.IsPopulated)
                 {
@@ -370,7 +370,7 @@ namespace NGineer
                     generator.Populate(type, obj, this, internalSession);
                     DoPopulators(type, internalSession);
                 }
-                internalSession.PopChild();
+                internalSession.PopObject();
             }
 	        return obj;
         }
@@ -379,39 +379,30 @@ namespace NGineer
 
         private void DoMemberSetters(Type type, BuildSession session)
         {
-            var previousMember = session.CurrentMember;
             foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
-				session.CurrentMember = property;
+				session.PushMember(property);
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
                     setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
-                if (setters.Length > 0)
-                {
-                    session.CurrentObject.Record.RegisterConstructed(property);
-                }
+				session.PopMember(setters.Length > 0);
             }
-			session.CurrentMember = null;
             if (Parent != null)
             {
                 Parent.DoMemberSetters(type, session);
             }
             foreach (var field in session.CurrentObject.UnconstructedFields)
             {
-				session.CurrentMember = field;
+				session.PushMember(field);
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
                     setter.Set(session.CurrentObject.Object, session.Builder, session);
                 }
-                if (setters.Length > 0)
-                {
-                    session.CurrentObject.Record.RegisterConstructed(field);
-                }
+                session.PopMember(setters.Length > 0);
             }
-			session.CurrentMember = previousMember;
         }
 
         private void DoPopulators(Type type, BuildSession session)

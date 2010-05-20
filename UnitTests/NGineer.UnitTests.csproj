@@ -81,8 +81,9 @@
     <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
     <Compile Include="BuilderTests\BuilderTests.cs" />
-    <Compile Include="BuilderTests\AfterConstructionOf.cs" />
     <Compile Include="BuilderTests\TestClasses.cs" />
+    <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
+    <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

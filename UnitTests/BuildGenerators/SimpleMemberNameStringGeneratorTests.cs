@@ -27,8 +27,8 @@ namespace NGineer.UnitTests.BuildGenerators
             var session = new BuildSession(null, null, null);
             var obj = new SimpleType();
 
-            session.PushChild(typeof(SimpleType), obj);
-            session.CurrentMember = MemberExpressions.GetMemberInfo<SimpleType>(c => c.NamedMember);
+            session.PushObject(typeof(SimpleType), obj);
+            session.PushMember(MemberExpressions.GetMemberInfo<SimpleType>(c => c.NamedMember));
 
             Assert.AreEqual("NamedMember0", Generator.Create(typeof (string), null, session));
             Assert.AreEqual("NamedMember1", Generator.Create(typeof (string), null, session));
@@ -45,7 +45,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
             var defaultConstructorGen = new DefaultConstructorGenerator();
             var simpleType = (SimpleType)defaultConstructorGen.Create(typeof (SimpleType), builder.Object, session);
-            session.PushChild(typeof(SimpleType), simpleType);
+            session.PushObject(typeof(SimpleType), simpleType);
             defaultConstructorGen.Populate(typeof(SimpleType), simpleType, builder.Object, session);
             
             Assert.IsNotNull(simpleType);
