@@ -151,5 +151,38 @@ namespace NGineer.UnitTests.BuilderTests
 
 			Assert.AreEqual("childValue", obj.TestClass2Property.StringProperty);
         }
+		
+		[Test]
+        public void Hierarchy_AfterConstructionOf_BuildingInParentSession_CreateNew()
+        {
+            var obj = new Builder(1)
+                .AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => {
+					return b
+						.CreateNew()
+						.AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o1, b1, s1) => "new value")
+						.Build<TestClass2>(s); })
+				.CreateNew()
+                .AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o, b, s) => "childValue")
+                .Build<SimpleClass>();
+
+			Assert.AreEqual("new value", obj.TestClass2Property.StringProperty);
+        }
+		
+		[Test]
+        public void Hierarchy_AfterConstructionOf_BuildingInParentSession_CreateNew_CanOverride()
+        {
+            var obj = new Builder(1)
+                .AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => {
+					return b
+						.CreateNew()
+						.AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o1, b1, s1) => "new value")
+						.Build<TestClass2>(s); })
+				.CreateNew()
+				.AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>())
+                .AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o, b, s) => "childValue")
+                .Build<SimpleClass>();
+
+			Assert.AreEqual("childValue", obj.TestClass2Property.StringProperty);
+        }
 	}
 }
