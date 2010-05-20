@@ -376,6 +376,16 @@ namespace NGineer.UnitTests
         }
 
         [Test]
+        public void AfterConstructionOf_MultipeSettersForProperty()
+        {
+            var obj = new Builder(1)
+                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 1)
+                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 2)
+                .Build<ClassWithNullableInt>();
+            Assert.AreEqual(2, obj.Property1);
+        }
+
+        [Test]
         public void AfterConstructionOf_Inherited_NullableDateTimeProperty_NotUsedForSibling()
         {
             var dateTime = DateTime.Now;

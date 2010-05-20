@@ -387,8 +387,11 @@ namespace NGineer
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.CurrentObject.Record.RegisterConstructed(property);
                     setter.Set(session.CurrentObject.Object, this, session);
+                }
+                if (setters.Length > 0)
+                {
+                    session.CurrentObject.Record.RegisterConstructed(property);
                 }
             }
 			session.CurrentMember = null;
@@ -402,8 +405,11 @@ namespace NGineer
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.CurrentObject.Record.RegisterConstructed(field);
                     setter.Set(session.CurrentObject.Object, this, session);
+                }
+                if (setters.Length > 0)
+                {
+                    session.CurrentObject.Record.RegisterConstructed(field);
                 }
             }
 			session.CurrentMember = previousMember;
