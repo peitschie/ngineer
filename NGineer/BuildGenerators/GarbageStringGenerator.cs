@@ -4,9 +4,9 @@ using System.Text;
 namespace NGineer.BuildGenerators
 {
 
-	public class StringGenerator : SimpleGenerator<string>
+	public class GarbageStringGenerator : SimpleGenerator<string>
 	{
-		public StringGenerator(int seed) : base(seed)
+		public GarbageStringGenerator(int seed) : base(seed)
 		{}
 
 	    protected override string Generate()

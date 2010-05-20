@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using System;
 using Moq;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
     public class NullableTypeGeneratorTests : GeneratorTestFixture<NullableTypeGenerator>

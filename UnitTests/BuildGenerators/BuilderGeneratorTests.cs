@@ -1,9 +1,7 @@
-
-using System;
 using NGineer.BuildGenerators;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
 
 	[TestFixture]

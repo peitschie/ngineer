@@ -54,7 +54,7 @@ namespace NGineer
             WithGenerator(new BoolGenerator(seed));
             WithGenerator(new CharGenerator(seed));
             WithGenerator(new BlittableTypesGenerator(seed));
-            WithGenerator(new StringGenerator(seed));
+            WithGenerator(new SimpleMemberNameStringGenerator());
             WithGenerator(new UIntGenerator(seed));
 		}
 
@@ -380,14 +380,18 @@ namespace NGineer
 
         private void DoMemberSetters(Type type, BuildSession session)
         {
+            var previousMember = session.CurrentMember;
             foreach (var property in session.CurrentObject.UnconstructedProperties)
             {
 				session.CurrentMember = property;
                 var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.CurrentObject.Record.RegisterConstructed(property);
                     setter.Set(session.CurrentObject.Object, this, session);
+                }
+                if (setters.Length > 0)
+                {
+                    session.CurrentObject.Record.RegisterConstructed(property);
                 }
             }
 			session.CurrentMember = null;
@@ -401,11 +405,14 @@ namespace NGineer
                 var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
                 foreach (var setter in setters)
                 {
-                    session.CurrentObject.Record.RegisterConstructed(field);
                     setter.Set(session.CurrentObject.Object, this, session);
                 }
+                if (setters.Length > 0)
+                {
+                    session.CurrentObject.Record.RegisterConstructed(field);
+                }
             }
-			session.CurrentMember = null;
+			session.CurrentMember = previousMember;
         }
 
         private void DoPopulators(Type type, BuildSession session)

@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using System;
-using System.Runtime.InteropServices;
-using Moq;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.Generators
+namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
     public class BlittableTypesGeneratorTests : GeneratorTestFixture<BlittableTypesGenerator>
