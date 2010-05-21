@@ -56,14 +56,9 @@ namespace NGineer.BuildHelpers
             get { return _record != null ? _record.Object : null; }
         }
 
-        public PropertyInfo[] UnconstructedProperties
+        public MemberInfo[] UnconstructedMembers
         {
-            get { return _record.UnconstructedProperties; }
-        }
-
-        public FieldInfo[] UnconstructedFields
-        {
-            get { return _record.UnconstructedFields; }
+            get { return _record.UnconstructedMembers; }
         }
 
         public bool IsPopulated

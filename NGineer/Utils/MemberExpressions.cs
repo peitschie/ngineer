@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Linq.Expressions;
 using System;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace NGineer.Utils
                 // Need to ensure this returns the property setter for the requested type, not
                 // the type that defines the member.  I was unable to find a clean way of
                 // changing the property accessor to by on the requested type.
-				return memberExpression.Expression.Type.GetProperty(memberExpression.Member.Name);
+                return memberExpression.Expression.Type.GetMember(memberExpression.Member.Name).FirstOrDefault();
             }
             if(expression is UnaryExpression)
             {

@@ -16,7 +16,7 @@ namespace NGineer.BuildGenerators
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return type.IsAssignableFrom(_type);
+            return _type.Equals(type);
         }
 
         public virtual object Create(Type type, IBuilder builder, BuildSession session)
@@ -31,17 +31,9 @@ namespace NGineer.BuildGenerators
 
     public class BuilderGenerator<TType> : BuilderGenerator
 	{
-		private readonly Func<IBuilder, BuildSession, TType> _constructor;
-
         public BuilderGenerator(Func<IBuilder, BuildSession, TType> constructor)
-            : base(typeof(TType), null)
+            : base(typeof(TType), (b, s) => constructor(b, s))
 		{
-			_constructor = constructor;
 		}
-
-        public new object Create(Type type, IBuilder builder, BuildSession session)
-        {
-            return _constructor(builder, session);
-        }
 	}
 }
