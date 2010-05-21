@@ -110,21 +110,32 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void Hierarchy_AfterConstructionOf_ChildValueIsFinal()
         {
-            var childCalled = -1;
+            var childPropertySetterCalled = -1;
+            var childFieldSetterCalled = -1;
             var callOrder = 0;
             var builder = new Builder(1)
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10);
-            var newClass = builder.CreateNew()
+                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10)
+                .AfterConstructionOf<SimpleClass, int>(c => c.IntField, (o, b, s) => 10)
+                .CreateNew()
                 .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty,
                 (o, b, s) =>
                 {
-                    childCalled = callOrder++;
+                    childPropertySetterCalled = callOrder++;
                     return 11;
                 })
-                .Build<SimpleClass>();
+                .AfterConstructionOf<SimpleClass, int>(c => c.IntField,
+                (o, b, s) =>
+                {
+                    childFieldSetterCalled = callOrder++;
+                    return 11;
+                })
+                .Sealed();
+            var newClass = builder.Build<SimpleClass>();
 
-            Assert.AreNotEqual(-1, childCalled, "Child wasn't called");
+            Assert.AreNotEqual(-1, childPropertySetterCalled, "Child property setter wasn't called");
+            Assert.AreNotEqual(-1, childFieldSetterCalled, "Child field setter wasn't called");
             Assert.AreEqual(11, newClass.IntProperty);
+            Assert.AreEqual(11, newClass.IntField);
         }
 		
         [Test]

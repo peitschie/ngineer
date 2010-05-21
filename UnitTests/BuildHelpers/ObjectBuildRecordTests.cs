@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.BuildHelpers
         {
             _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), new SimpleClass());
 
-            var propertyNames = _buildRecord.UnconstructedProperties.Select(p => p.Name).OrderBy(n => n).ToArray();
+            var propertyNames = _buildRecord.UnconstructedMembers.Select(p => p.Name).OrderBy(n => n).ToArray();
             Assert.AreEqual(new []{"Property1", "Property2"}, propertyNames);
         }
 
@@ -23,7 +23,7 @@ namespace NGineer.UnitTests.BuildHelpers
         {
             Assert.DoesNotThrow(() => _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), null));
 
-            var propertyNames = _buildRecord.UnconstructedProperties.Select(p => p.Name).OrderBy(n => n).ToArray();
+            var propertyNames = _buildRecord.UnconstructedMembers.Select(p => p.Name).OrderBy(n => n).ToArray();
             Assert.AreEqual(new []{"Property1"}, propertyNames);
         }
 

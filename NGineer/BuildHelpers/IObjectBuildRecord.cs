@@ -7,8 +7,7 @@ namespace NGineer.BuildHelpers
     {
         Type Type { get; }
         object Object { get; }
-        PropertyInfo[] UnconstructedProperties { get; }
-        FieldInfo[] UnconstructedFields { get; }
+        MemberInfo[] UnconstructedMembers { get; }
         bool IsConstructed(MemberInfo property);
         void RegisterConstructed(MemberInfo property);
     }

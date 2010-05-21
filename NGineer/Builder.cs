@@ -379,10 +379,10 @@ namespace NGineer
 
         private void DoMemberSetters(Type type, BuildSession session)
         {
-            foreach (var property in session.CurrentObject.UnconstructedProperties)
+            foreach (var member in session.CurrentObject.UnconstructedMembers)
             {
-				session.PushMember(property);
-                var setters = MemberSetters.Where(s => s.IsForMember(property)).ToArray();
+				session.PushMember(member);
+                var setters = MemberSetters.Where(s => s.IsForMember(member)).ToArray();
                 foreach (var setter in setters)
                 {
                     setter.Set(session.CurrentObject.Object, session.Builder, session);
@@ -392,16 +392,6 @@ namespace NGineer
             if (Parent != null)
             {
                 Parent.DoMemberSetters(type, session);
-            }
-            foreach (var field in session.CurrentObject.UnconstructedFields)
-            {
-				session.PushMember(field);
-                var setters = MemberSetters.Where(s => s.IsForMember(field)).ToArray();
-                foreach (var setter in setters)
-                {
-                    setter.Set(session.CurrentObject.Object, session.Builder, session);
-                }
-                session.PopMember(setters.Length > 0);
             }
         }
 
