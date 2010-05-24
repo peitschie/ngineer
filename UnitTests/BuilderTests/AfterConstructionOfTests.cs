@@ -13,6 +13,65 @@ namespace NGineer.UnitTests.BuilderTests
 	[TestFixture]
 	public class AfterConstructionOfTests
 	{
+		[Test]
+        public void AfterConstructionOf_PropertySetter_NullMemberSetter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterConstructionOf((IMemberSetter)null));
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetter_NullSetter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, 
+			    	(Func<SimpleClass, IBuilder, BuildSession, string>)null));
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetter_NullMemberInfo()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterConstructionOf((MemberInfo)null, (o, b, s) => "string"));
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetter_MemberInfo_NullSetter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterConstructionOf(MemberExpressions.GetMemberInfo<SimpleClass>(c => c.StringProperty), (Func<object, IBuilder, BuildSession, object>)null));
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetter_NullLambdaSetterValue()
+        {
+            var builder = new Builder(1)
+                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (o, b, s) => null)
+				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (o, b, s) => null)
+				;
+            SimpleClass newClass = null;
+			Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
+
+            Assert.IsNotNull(newClass);
+			Assert.IsNull(newClass.StringProperty);
+			Assert.IsNull(newClass.StringField);
+        }
+		
+		[Test]
+        public void AfterConstructionOf_PropertySetter_NullValue()
+        {
+            var builder = new Builder(1)
+                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (string)null)
+				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (string)null)
+				;
+            SimpleClass newClass = null;
+			Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
+
+            Assert.IsNotNull(newClass);
+			Assert.IsNull(newClass.StringProperty);
+			Assert.IsNull(newClass.StringField);
+        }
+		
         [Test]
         public void AfterConstructionOf_PropertiesOnlySetOnce()
         {

@@ -237,37 +237,46 @@ namespace NGineer
 
         public IBuilder AfterConstructionOf(IMemberSetter setter)
 		{
+			if(setter == null)
+				throw new ArgumentNullException("setter");
 			MemberSetters.Add(setter);
 			return this;
 		}
 
-        public IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> value)
+        public IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> setter)
         {
-            ValidateMember(member, value);
+			if(member == null)
+				throw new ArgumentNullException("member");
+			if(setter == null)
+				throw new ArgumentNullException("setter");
+            ValidateMember(member, setter);
             switch (member.MemberType)
             {
                 case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter((PropertyInfo) member, value));
+                    MemberSetters.Add(new PropertyMemberSetter((PropertyInfo) member, setter));
                     break;
                 case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter((FieldInfo)member, value));
+                    MemberSetters.Add(new FieldMemberSetter((FieldInfo)member, setter));
                     break;
             }
             return this;
         }
 
-        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value)
+        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> setter)
         {
-            // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/
+			if(expression == null)
+				throw new ArgumentNullException("expression");
+			if(setter == null)
+				throw new ArgumentNullException("setter");
             var member = MemberExpressions.GetMemberInfo(expression);
-            ValidateMember(member, value);
+            ValidateMember(member, setter);
             switch (member.MemberType)
             {
                 case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter<TType, TReturnType>((PropertyInfo)member, value));
+                    MemberSetters.Add(new PropertyMemberSetter<TType, TReturnType>((PropertyInfo)member, setter));
                     break;
                 case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter<TType, TReturnType>((FieldInfo)member, value));
+                    MemberSetters.Add(new FieldMemberSetter<TType, TReturnType>((FieldInfo)member, setter));
                     break;
             }
             return this;
@@ -284,14 +293,14 @@ namespace NGineer
             {
                 case MemberTypes.Property:
                     var propInfo = (PropertyInfo)member;
-                    if (!propInfo.PropertyType.IsAssignableFrom(setter.Method.ReturnType))
+                    if (!propInfo.PropertyType.IsAssignableFrom(typeof(TReturnType)))
                     {
                         throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, propInfo.PropertyType));
                     }
                     break;
                 case MemberTypes.Field:
                     var fieldInfo = (FieldInfo)member;
-                    if (!fieldInfo.FieldType.IsAssignableFrom(setter.Method.ReturnType))
+                    if (!fieldInfo.FieldType.IsAssignableFrom(typeof(TReturnType)))
                     {
                         throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, fieldInfo.FieldType));
                     }
