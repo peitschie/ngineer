@@ -7,6 +7,15 @@ namespace NGineer.Utils
 {
 	public static class MemberExpressions
 	{
+		/// <summary>
+		/// // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/ 
+		/// </summary>
+		/// <param name="expression">
+		/// A <see cref="Expression"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="MemberInfo"/>
+		/// </returns>
 		public static MemberInfo GetMemberInfo(Expression expression)
         {
             if(expression is MemberExpression)
