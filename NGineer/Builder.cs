@@ -55,7 +55,6 @@ namespace NGineer
             WithGenerator(new CharGenerator(seed));
             WithGenerator(new BlittableTypesGenerator(seed));
             WithGenerator(new SimpleMemberNameStringGenerator());
-            WithGenerator(new UIntGenerator(seed));
 		}
 
         protected Builder(Builder parent)
