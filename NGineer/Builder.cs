@@ -295,14 +295,14 @@ namespace NGineer
                     var propInfo = (PropertyInfo)member;
                     if (!propInfo.PropertyType.IsAssignableFrom(typeof(TReturnType)))
                     {
-                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, propInfo.PropertyType));
+                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), propInfo.PropertyType));
                     }
                     break;
                 case MemberTypes.Field:
                     var fieldInfo = (FieldInfo)member;
                     if (!fieldInfo.FieldType.IsAssignableFrom(typeof(TReturnType)))
                     {
-                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(setter.Method.ReturnType, fieldInfo.FieldType));
+                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), fieldInfo.FieldType));
                     }
                     break;
                 case MemberTypes.Constructor:
