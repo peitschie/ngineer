@@ -13,6 +13,26 @@ namespace NGineer.UnitTests.BuilderTests
 	[TestFixture]
 	public class AfterPopulationOfTests
 	{
+		[Test]
+        public void AfterPopulationOf_Action_NoBuilder()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterPopulationOf<SimpleClass>((Action<SimpleClass>)null));
+        }
+		
+		[Test]
+        public void AfterPopulationOf_Action_WithBuilder()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterPopulationOf<SimpleClass>((Action<SimpleClass,IBuilder,BuildSession>)null));
+        }
+		
+		[Test]
+        public void AfterPopulationOf_ISetter()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Builder(1)
+                .AfterPopulationOf((ISetter)null));
+        }
 		
         [Test]
         public void AfterPopulationOf_UsingAdvanceSetterForGenerics()

@@ -212,6 +212,8 @@ namespace NGineer
 
 	    public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
         {
+			if(setter == null)
+				throw new ArgumentNullException("setter");
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
@@ -219,6 +221,8 @@ namespace NGineer
 
         public IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
 	    {
+			if(setter == null)
+				throw new ArgumentNullException("setter");
             AssertBuilderIsntSealed();
             Setters.Add(new Setter<TType>(setter));
             return this;
@@ -226,6 +230,8 @@ namespace NGineer
 
 	    public IBuilder AfterPopulationOf(ISetter setter)
 	    {
+			if(setter == null)
+				throw new ArgumentNullException("setter");
 	        AssertBuilderIsntSealed();
             Setters.Add(setter);
             return this;
