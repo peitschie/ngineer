@@ -9,10 +9,4 @@ namespace NGineer.BuildGenerators
         object Create(Type type, IBuilder builder, BuildSession session);
 	    void Populate(Type type, object obj, IBuilder builder, BuildSession session);
 	}
-	
-	public interface IGenerator<TType> : IGenerator
-	{
-        new TType Create(Type type, IBuilder builder, BuildSession session);
-        void Populate(TType obj, IBuilder builder, BuildSession session);
-	}
 }

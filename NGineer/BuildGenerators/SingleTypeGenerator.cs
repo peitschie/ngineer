@@ -3,7 +3,7 @@ using NGineer.BuildHelpers;
 
 namespace NGineer.BuildGenerators
 {
-    public abstract class SingleTypeGenerator<TType> : IGenerator<TType>
+    public abstract class SingleTypeGenerator<TType> : IGenerator
     {
         public abstract TType Create(Type type, IBuilder builder, BuildSession session);
 
