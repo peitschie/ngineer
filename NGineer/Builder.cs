@@ -255,15 +255,7 @@ namespace NGineer
 			if(setter == null)
 				throw new ArgumentNullException("setter");
             ValidateMember(member, setter);
-            switch (member.MemberType)
-            {
-                case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter((PropertyInfo) member, setter));
-                    break;
-                case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter((FieldInfo)member, setter));
-                    break;
-            }
+			MemberSetters.Add(new MemberSetter(member, setter));
             return this;
         }
 
@@ -275,15 +267,7 @@ namespace NGineer
 				throw new ArgumentNullException("setter");
             var member = MemberExpressions.GetMemberInfo(expression);
             ValidateMember(member, setter);
-            switch (member.MemberType)
-            {
-                case MemberTypes.Property:
-                    MemberSetters.Add(new PropertyMemberSetter<TType, TReturnType>((PropertyInfo)member, setter));
-                    break;
-                case MemberTypes.Field:
-                    MemberSetters.Add(new FieldMemberSetter<TType, TReturnType>((FieldInfo)member, setter));
-                    break;
-            }
+			MemberSetters.Add(new MemberSetter<TType, TReturnType>(member, setter));
             return this;
         }
        
@@ -396,7 +380,7 @@ namespace NGineer
             foreach (var member in session.CurrentObject.UnconstructedMembers)
             {
 				session.PushMember(member);
-                var setters = MemberSetters.Where(s => s.IsForMember(member)).ToArray();
+                var setters = MemberSetters.Where(s => s.IsForMember(member, session.Builder, session)).ToArray();
                 foreach (var setter in setters)
                 {
                     setter.Set(session.CurrentObject.Object, session.Builder, session);

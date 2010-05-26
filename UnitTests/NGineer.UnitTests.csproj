@@ -65,7 +65,6 @@
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
     <Compile Include="BuildHelpers\BuildSessionTests.cs" />
     <Compile Include="BuildHelpers\ObjectBuildRecordTests.cs" />
-    <Compile Include="BuildHelpers\PropertyMemberSetterTests.cs" />
     <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
     <Compile Include="BuildGenerators\BoolGeneratorTests.cs" />
@@ -84,7 +83,8 @@
     <Compile Include="BuilderTests\TestClasses.cs" />
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
     <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
-    <Compile Include="BuildGenerators\UniqueEntryGeneratorTests.cs" />
+    <Compile Include="BuildHelpers\MemberSetterTests.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

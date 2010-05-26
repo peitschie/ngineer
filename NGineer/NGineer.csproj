@@ -66,14 +66,12 @@
     <Compile Include="BuildHelpers\BuilderDepthExceededException.cs" />
     <Compile Include="BuildHelpers\BuilderException.cs" />
     <Compile Include="BuildHelpers\BuildSession.cs" />
-    <Compile Include="BuildHelpers\FieldMemberSetter.cs" />
     <Compile Include="BuildHelpers\IMemberSetter.cs" />
     <Compile Include="BuildHelpers\IObjectBuildRecord.cs" />
     <Compile Include="BuildHelpers\ITypeRegistry.cs" />
     <Compile Include="BuildHelpers\MemberSetter.cs" />
     <Compile Include="BuildHelpers\ObjectBuildRecord.cs" />
     <Compile Include="BuildHelpers\ObjectBuildTreeEntry.cs" />
-    <Compile Include="BuildHelpers\PropertyMemberSetter.cs" />
     <Compile Include="BuildHelpers\RandomHelpers.cs" />
     <Compile Include="BuildHelpers\Range.cs" />
     <Compile Include="BuildHelpers\TypeRegistry.cs" />

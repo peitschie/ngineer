@@ -1,13 +1,39 @@
-﻿namespace NGineer.BuildHelpers
+using System.Reflection;
+using NGineer.Utils;
+using System;
+
+namespace NGineer.BuildHelpers
 {
-    public abstract class MemberSetter<TType> : IMemberSetter<TType> where TType : class
+    public class MemberSetter<TObjType, TReturnType> : IMemberSetter
     {
-        public bool IsForMember(object member)
+		protected readonly MemberInfo Member;
+        protected readonly Func<TObjType, IBuilder, BuildSession, TReturnType> Setter;
+
+        public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter)
         {
-            return IsForMember(member as TType);
+            Member = member;
+            Setter = setter;
         }
 
-        public abstract bool IsForMember(TType member);
-        public abstract void Set(object obj, IBuilder builder, BuildSession session);
+        public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
+        {
+            return member != null 
+                && Member.ReflectedType.IsAssignableFrom(member.ReflectedType)
+                && Equals(Member.DeclaringType, member.DeclaringType)
+                && Equals(Member.Name, member.Name)
+				&& Equals(Member.ReturnType(), member.ReturnType());
+        }
+
+        public void Set(object obj, IBuilder builder, BuildSession session)
+		{
+			Member.SetValue(obj, Setter((TObjType)obj, builder, session));
+		}
     }
+	
+	public class MemberSetter : MemberSetter<object, object>
+	{
+		public MemberSetter(MemberInfo member, Func<object, IBuilder, BuildSession, object> setter)
+			: base(member, setter)
+        {}
+	}
 }
