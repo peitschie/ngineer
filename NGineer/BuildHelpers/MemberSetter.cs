@@ -11,6 +11,10 @@ namespace NGineer.BuildHelpers
 
         public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter)
         {
+			if(member == null)
+				throw new ArgumentNullException("member");
+			if(setter == null)
+				throw new ArgumentNullException("setter");
             Member = member;
             Setter = setter;
         }

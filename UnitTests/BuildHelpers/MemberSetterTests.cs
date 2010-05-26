@@ -27,7 +27,7 @@ namespace NGineer.UnitTests.BuildHelpers
         {
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
             var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
-            var inheritedMember = new MemberSetter(inheritedProperty, null);
+            var inheritedMember = new MemberSetter(inheritedProperty, (o, b, s) => null);
             Assert.IsFalse(inheritedMember.IsForMember(parentProperty, null, null));
         }
 
@@ -35,7 +35,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void InheritedProperty_NotForSibling()
         {
             var child1Property = typeof(ClassChild1).GetProperty("Property1");
-            var child1PropertyMember = new MemberSetter(child1Property, null);
+            var child1PropertyMember = new MemberSetter(child1Property, (o, b, s) => null);
 
             var child2Property = typeof(ClassChild2).GetProperty("Property1");
             Assert.IsFalse(child1PropertyMember.IsForMember(child2Property, null, null));
@@ -82,7 +82,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void Null_IsForMember()
         {
             var property = typeof(ClassWithNullableDateTime).GetProperty("Property1");
-            var memberSetter = new MemberSetter(property, null);
+            var memberSetter = new MemberSetter(property, (o, b, s) => null);
             Assert.DoesNotThrow(() => memberSetter.IsForMember(null, null, null));
         }
 
@@ -109,13 +109,14 @@ namespace NGineer.UnitTests.BuildHelpers
         public class ClassChild2 : ClassParent { }
     }
 
+	[TestFixture]
     public class MemberSetterTestsGenerics
     {
         [Test]
         public void InheritedProperty_NotForSibling()
         {
             var child1Property = typeof(GenericClassChild1).GetProperty("Property1");
-            var child1PropertyMember = new MemberSetter(child1Property, null);
+            var child1PropertyMember = new MemberSetter(child1Property, (o, b, s) => null);
 
             var child2Property = typeof(GenericClassChild2).GetProperty("Property1");
             Assert.IsFalse(child1PropertyMember.IsForMember(child2Property, null, null));
@@ -125,7 +126,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void InheritedProperty_ParentIsForChildren()
         {
             var parentProperty = typeof(GenericClassParent<int>).GetProperty("Property1");
-            var parentPropertyMember = new MemberSetter(parentProperty, null);
+            var parentPropertyMember = new MemberSetter(parentProperty, (o, b, s) => null);
             var child1Property = typeof(GenericClassChild1).GetProperty("Property1");
             var child2Property = typeof(GenericClassChild2).GetProperty("Property1");
 
@@ -137,7 +138,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void Equality_SameObject_PropertyComparison()
         {
             var property1Property = typeof(GenericClassChild1).GetProperty("Property1");
-            var property1Member = new MemberSetter(property1Property, null);
+            var property1Member = new MemberSetter(property1Property, (o, b, s) => null);
             var property2Property = typeof(GenericClassChild1).GetProperty("Property1");
             Assert.IsTrue(property1Member.IsForMember(property2Property, null, null));
         }
