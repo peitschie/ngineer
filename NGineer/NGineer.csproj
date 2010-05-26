@@ -109,6 +109,7 @@
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\MemberExpressions.cs" />
     <Compile Include="Utils\MemberInfoExtensions.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
