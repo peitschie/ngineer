@@ -278,25 +278,10 @@ namespace NGineer
 
         private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)
         {
-            switch (member.MemberType)
-            {
-                case MemberTypes.Property:
-                    var propInfo = (PropertyInfo)member;
-                    if (!propInfo.PropertyType.IsAssignableFrom(typeof(TReturnType)))
-                    {
-                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), propInfo.PropertyType));
-                    }
-                    break;
-                case MemberTypes.Field:
-                    var fieldInfo = (FieldInfo)member;
-                    if (!fieldInfo.FieldType.IsAssignableFrom(typeof(TReturnType)))
-                    {
-                        throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), fieldInfo.FieldType));
-                    }
-                    break;
-                default:
-                    throw new InvalidDataException("MemberType {0} not supported".With(member.MemberType));
-            }
+			if(!member.ReturnType().IsAssignableFrom(typeof(TReturnType)))
+			{
+				throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
+			}
         }
 
 	    #endregion
