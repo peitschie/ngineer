@@ -294,16 +294,8 @@ namespace NGineer
                         throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), fieldInfo.FieldType));
                     }
                     break;
-                case MemberTypes.Constructor:
-                case MemberTypes.Event:
-                case MemberTypes.Method:
-                case MemberTypes.TypeInfo:
-                case MemberTypes.Custom:
-                case MemberTypes.NestedType:
-                case MemberTypes.All:
-                    throw new InvalidDataException("MemberType {0} not supported".With(member.MemberType));
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidDataException("MemberType {0} not supported".With(member.MemberType));
             }
         }
 
