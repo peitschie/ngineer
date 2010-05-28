@@ -19,7 +19,7 @@ namespace NGineer.UnitTests.BuildGenerators
 		
 		protected override UniqueCollectionGenerator<string> Construct ()
 		{
-			return new UniqueCollectionGenerator<string>(10, _entries);
+			return new UniqueCollectionGenerator<string>(_entries);
 		}
 
 		protected override Type[] SupportedTypes ()
@@ -48,7 +48,7 @@ namespace NGineer.UnitTests.BuildGenerators
 		public void Populate_PopulatesWithCorrectNumberOfEntries()
 		{
 			var entries = new List<string>();
-			Generator.Populate(null, entries, null, null);
+			Generator.Populate(null, entries, null, BuildSession());
 			Assert.AreEqual(_entries.Length, entries.Count);
 			foreach(var item in _entries)
 			{
@@ -63,10 +63,11 @@ namespace NGineer.UnitTests.BuildGenerators
 			bool different = false;
 			string lastOrder = null;
 			var entries = new List<string>();
+			var session = BuildSession();
 			for(int i = 0; i < 10; i++)
 			{
 				entries.Clear();
-				Generator.Populate(null, entries, null, null);
+				Generator.Populate(null, entries, null, session);
 				Assert.AreEqual(_entries.Length, entries.Count);
 				var current = string.Join(":", entries.ToArray());
 				if(lastOrder != null)
@@ -85,8 +86,7 @@ namespace NGineer.UnitTests.BuildGenerators
 	{
 		protected override UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum> Construct ()
 		{
-			return new UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>(10, 
-			                  c => c.EnumProperty);
+			return new UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty);
 		}
 
 		protected override Type[] SupportedTypes ()
@@ -119,7 +119,7 @@ namespace NGineer.UnitTests.BuildGenerators
 			builderMock.Setup(c => c.Build<ClassWithEnumAndProperties>(It.IsAny<BuildSession>()))
 				.Returns(() => new ClassWithEnumAndProperties(){EnumProperty = SimpleEnum.First});
 			
-			var list = CreateAndGenerate<IList<ClassWithEnumAndProperties>>(builderMock.Object, null);
+			var list = CreateAndGenerate<IList<ClassWithEnumAndProperties>>(builderMock.Object, BuildSession());
 			
 			var expected = EnumUtils.GetValues<SimpleEnum>();
 			Assert.AreEqual(Enum.GetValues(typeof(SimpleEnum)).Length, list.Count);

@@ -1,17 +1,11 @@
 using System;
 using NGineer.BuildHelpers;
+using NGineer.Utils;
 
 namespace NGineer.BuildGenerators
 {
     public class ArrayGenerator : IGenerator
     {
-        private readonly Random _random;
-
-        public ArrayGenerator(int seed)
-        {
-            _random = new Random(seed);
-        }
-		
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return type.IsArray;
@@ -21,7 +15,7 @@ namespace NGineer.BuildGenerators
         {
             var arrayType = type.GetElementType();
             var range = session.GetCollectionSize(arrayType);
-            return Array.CreateInstance(arrayType, range.Minimum + _random.Next(range.Maximum - range.Minimum));
+            return Array.CreateInstance(arrayType, session.Random.NextInRange(range));
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

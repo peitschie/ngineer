@@ -6,13 +6,6 @@ namespace NGineer.BuildGenerators
 {
     public class EnumGenerator : IGenerator
     {
-        private readonly Random _random;
-
-        public EnumGenerator(int seed)
-        {
-            _random = new Random(seed);
-        }
-
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return type.IsEnum;
@@ -20,28 +13,18 @@ namespace NGineer.BuildGenerators
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return GetRandomEnum(type);
+            return GetRandomEnum(type, session.Random);
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
         }
 
-        private object GetRandomEnum(Type type)
+        private object GetRandomEnum(Type type, Random random)
         {
             var array = Enum.GetValues(type);
-            var index = _random.Next(array.Length);
+            var index = random.Next(array.Length);
             return array.GetValue(index);
-        }
-
-        public object Create(PropertyInfo property, IBuilder builder, BuildSession session)
-        {
-            return GetRandomEnum(property.PropertyType);
-        }
-
-        public object Create(FieldInfo field, IBuilder builder, BuildSession session)
-        {
-            return GetRandomEnum(field.FieldType);
         }
     }
 }

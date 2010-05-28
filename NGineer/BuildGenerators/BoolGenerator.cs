@@ -1,15 +1,12 @@
+using System;
 namespace NGineer.BuildGenerators
 {
 
     public class BoolGenerator : SimpleGenerator<bool>
 	{
-        public BoolGenerator(int seed) : base(seed)
-        {
-        }
-
-        protected override bool Generate()
+        protected override bool Generate(Random random)
 		{
-			return Random.Next(2) == 1;
+			return random.Next(2) == 1;
 		}
 	}
 }

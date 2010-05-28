@@ -36,9 +36,10 @@ namespace NGineer.UnitTests.BuildGenerators
             bool someNull = false;
             bool someNotNull = false;
 
+			var session = BuildSession();
             for(int i = 0; i < 20 && !(someNotNull && someNull); i++)
             {
-                var result = CreateAndGenerate<int?>(builder.Object, null);
+                var result = CreateAndGenerate<int?>(builder.Object, session);
                 if (result == null)
                     someNull = true;
                 else

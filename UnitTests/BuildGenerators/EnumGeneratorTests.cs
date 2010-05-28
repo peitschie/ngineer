@@ -27,11 +27,11 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void GenerateSimpleEnum()
         {
-            Generator = new EnumGenerator(2);
-            var enumValue = Generator.Create(typeof(TestEnum), null, null);
+            Generator = new EnumGenerator();
+            var enumValue = Generator.Create(typeof(TestEnum), null, BuildSession());
             Assert.IsNotNull(enumValue);
             // I just happen to know that a seed of 2 will produce this result...
-            Assert.AreEqual(TestEnum.Value3, enumValue);
+            Assert.AreEqual(TestEnum.Value2, enumValue);
         }
 
         public enum TestEnum

@@ -8,13 +8,6 @@ namespace NGineer.BuildGenerators
 {
     public class ListGenerator : IGenerator
     {
-        private readonly Random _random;
-
-        public ListGenerator(int seed)
-        {
-            _random = new Random(seed);
-        }
-		
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
             return typeof (IList<>).IsGenericAssignableFrom(type) 
@@ -41,7 +34,7 @@ namespace NGineer.BuildGenerators
             var listType = obj.GetType().GetGenericArguments()[0];
             var range = session.GetCollectionSize(listType);
             var list = (IList) obj;
-            var listSize = range.Minimum + _random.Next(range.Maximum - range.Minimum);
+            var listSize = session.Random.NextInRange(range);
             for (int i = 0; i < listSize; i++)
             {
                 list.Add(builder.Build(listType, session));

@@ -55,14 +55,14 @@ namespace NGineer
 		{
 			_allMaxInstances = new InheritedTypeRegistry<int?>(null, _maxInstances);
             _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _collectionSizes);
-			WithGenerator(new ListGenerator(seed));
-            WithGenerator(new ArrayGenerator(seed));
-            WithGenerator(new NullableTypeGenerator(seed));
-            WithGenerator(new DateTimeGenerator(seed));
-            WithGenerator(new EnumGenerator(seed));
-            WithGenerator(new BoolGenerator(seed));
-            WithGenerator(new CharGenerator(seed));
-            WithGenerator(new BlittableTypesGenerator(seed));
+			WithGenerator(new ListGenerator());
+            WithGenerator(new ArrayGenerator());
+            WithGenerator(new NullableTypeGenerator());
+            WithGenerator(new DateTimeGenerator());
+            WithGenerator(new EnumGenerator());
+            WithGenerator(new BoolGenerator());
+            WithGenerator(new CharGenerator());
+            WithGenerator(new BlittableTypesGenerator());
             WithGenerator(new SimpleMemberNameStringGenerator());
 		}
 

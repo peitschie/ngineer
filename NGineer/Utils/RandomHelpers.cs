@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NGineer.BuildHelpers;
 
 namespace NGineer.Utils
 {
@@ -39,5 +40,10 @@ namespace NGineer.Utils
 		{
 			return random.Next(max - min) + min;
 		}
-    }
+		
+		public static int NextInRange(this Random random, Range range)
+		{
+			return NextInRange(random, range.Minimum, range.Maximum);
+		}
+	}
 }

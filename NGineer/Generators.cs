@@ -13,19 +13,19 @@ namespace NGineer
             return new NullObjectGenerator<TType>();
         }
 		
-		public static IGenerator UniqueCollection<TType>(int seed)
+		public static IGenerator UniqueCollection<TType>()
 		{
-			return new UniqueCollectionGenerator<TType>(seed, EnumUtils.GetValues<TType>());
+			return new UniqueCollectionGenerator<TType>(EnumUtils.GetValues<TType>());
 		}
 		
-		public static IGenerator UniqueCollection<TType>(int seed, IEnumerable<TType> entries)
+		public static IGenerator UniqueCollection<TType>(IEnumerable<TType> entries)
 		{
-			return new UniqueCollectionGenerator<TType>(seed, entries);
+			return new UniqueCollectionGenerator<TType>(entries);
 		}
 		
-		public static IGenerator UniqueCollection<TClassType, TType>(int seed, Expression<Func<TClassType, TType>> entries)
+		public static IGenerator UniqueCollection<TClassType, TType>(Expression<Func<TClassType, TType>> entries)
 		{
-			return new UniqueCollectionGenerator<TClassType, TType>(seed, entries);
+			return new UniqueCollectionGenerator<TClassType, TType>(entries);
 		}
     }
 }

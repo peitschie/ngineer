@@ -1,15 +1,12 @@
+using System;
 namespace NGineer.BuildGenerators
 {
 
     public class CharGenerator : SimpleGenerator<char>
 	{
-        public CharGenerator(int seed) : base(seed)
-        {
-        }
-
-        protected override char Generate()
+        protected override char Generate(Random random)
 		{
-			return (char)Random.Next();
+			return (char)random.Next();
 		}
 	}
 }

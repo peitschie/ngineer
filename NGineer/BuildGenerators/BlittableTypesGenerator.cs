@@ -71,13 +71,6 @@ namespace NGineer.BuildGenerators
         }
         #endregion
 
-        private readonly Random _random;
-
-        public BlittableTypesGenerator(int seed)
-        {
-            _random = new Random(seed);
-        }
-
         #region IGenerator Members
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
@@ -89,7 +82,7 @@ namespace NGineer.BuildGenerators
         {
             int size = Marshal.SizeOf(type);
             var bytes = new byte[size];
-            _random.NextBytes(bytes);
+            session.Random.NextBytes(bytes);
             return Converters[type].Invoke(null, new object[] {bytes, 0});
         }
 

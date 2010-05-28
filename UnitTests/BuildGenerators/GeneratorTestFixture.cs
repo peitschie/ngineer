@@ -42,14 +42,11 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             var builder = new Mock<IBuilder>();
             builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
-            var defaultRange = new Range(1, 10);
-            var collectionTypes = new TypeRegistry<Range>();
-            var session = new BuildSession(null, collectionTypes, null, defaultRange, (Random)null);
             foreach (var supportedType in SupportedTypes())
             {
                 try
                 {
-                    Generator.Create(supportedType, builder.Object, session);
+                    Generator.Create(supportedType, builder.Object, BuildSession());
                 }
                 catch(BuilderCalledException)
                 {}
@@ -66,7 +63,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         protected virtual bool GeneratesType(Type type)
         {
-            return Generator.GeneratesType(type, null, null);
+            return Generator.GeneratesType(type, null, BuildSession());
         }
 
         protected TType CreateAndGenerate<TType>(IBuilder builder, BuildSession session)
@@ -82,6 +79,14 @@ namespace NGineer.UnitTests.BuildGenerators
             return obj;
         }
 
+		protected virtual BuildSession BuildSession()
+		{
+			var defaultRange = new Range(1, 10);
+            var collectionTypes = new TypeRegistry<Range>();
+			var maxInstances = new TypeRegistry<int?>();
+			return new BuildSession(null, collectionTypes, maxInstances, defaultRange, new Random(10));
+		}
+		
         protected virtual TGenerator Construct()
         {
             var seededConstructor = typeof (TGenerator).GetConstructor(new[] {typeof (int)});
