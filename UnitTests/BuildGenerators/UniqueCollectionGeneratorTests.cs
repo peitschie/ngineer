@@ -1,15 +1,19 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using NGineer.BuildGenerators;
 using System.Collections;
 using System.Collections.Generic;
 using NGineer.UnitTests.BuildGenerators;
 using NGineer.BuildHelpers;
+using Moq;
+using NGineer.Utils;
+using NGineer.UnitTests.BuilderTests;
 
 namespace NGineer.UnitTests.BuildGenerators
 {
 	[TestFixture]
-	public class UniqueCollectionGeneratorTests : GeneratorTestFixture<UniqueCollectionGenerator<string>>
+	public class UniqueCollectionGeneratorStringTests : GeneratorTestFixture<UniqueCollectionGenerator<string>>
 	{
 		private readonly string[] _entries = new string[]{"ab1","kj7","lkj98","298jf"};
 		
@@ -72,6 +76,60 @@ namespace NGineer.UnitTests.BuildGenerators
 				lastOrder = current;
 			}
 			Assert.IsTrue(different, "Sequence was always identical");
+		}
+	}
+	
+	[TestFixture]
+	public class UniqueCollectionGeneratorClassWithEnumAndPropertiesTests 
+		: GeneratorTestFixture<UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>>
+	{
+		protected override UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum> Construct ()
+		{
+			return new UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>(10, 
+			                  c => c.EnumProperty);
+		}
+
+		protected override Type[] SupportedTypes ()
+		{
+			return new []{
+				typeof(ICollection<ClassWithEnumAndProperties>),
+				typeof(IList<ClassWithEnumAndProperties>),
+				typeof(IEnumerable<ClassWithEnumAndProperties>),
+				typeof(List<ClassWithEnumAndProperties>),
+			};
+		}
+		
+		protected override Type[] UnsupportedTypes ()
+		{
+			return new[] {
+				typeof(ICollection<int>),
+				typeof(List<int>),
+				typeof(string),
+				typeof(IList),
+				typeof(string[]),
+				typeof(object)
+			};
+		}
+
+	
+		[Test]
+		public void GenerateAndPopulate_CustomClassType()
+		{
+			var builderMock = new Mock<IBuilder>();
+			builderMock.Setup(c => c.Build<ClassWithEnumAndProperties>(It.IsAny<BuildSession>()))
+				.Returns(() => new ClassWithEnumAndProperties(){EnumProperty = SimpleEnum.First});
+			
+			var list = CreateAndGenerate<IList<ClassWithEnumAndProperties>>(builderMock.Object, null);
+			
+			var expected = EnumUtils.GetValues<SimpleEnum>();
+			Assert.AreEqual(Enum.GetValues(typeof(SimpleEnum)).Length, list.Count);
+			foreach(var current in expected)
+			{
+				var entry = list.FirstOrDefault(c => c.EnumProperty == current);
+				Assert.IsNotNull(entry, "No entry found for {0}".With(current));
+				list.Remove(entry);
+			}
+			Assert.AreEqual(0, list.Count);
 		}
 	}
 }

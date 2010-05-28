@@ -85,6 +85,7 @@
     <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
     <Compile Include="BuildHelpers\MemberSetterTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorTests.cs" />
+    <Compile Include="BuilderTests\WithGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

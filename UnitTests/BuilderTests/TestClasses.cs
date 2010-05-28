@@ -96,4 +96,17 @@ namespace NGineer.UnitTests.BuilderTests
 	{
 		public TestClassThreeDeep PropertyTestClass { get; set; }
     }
+	
+	public enum SimpleEnum
+	{
+		First,
+		Second,
+		Third
+	}
+	
+	public class ClassWithEnumAndProperties
+	{
+		public SimpleEnum EnumProperty { get; set;}
+		public string StringProperty { get; set; }
+	}
 }

@@ -108,6 +108,7 @@
     <Compile Include="Utils\MemberExpressions.cs" />
     <Compile Include="Utils\MemberInfoExtensions.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGenerator.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -76,6 +76,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         protected TType CreateAndGenerate<TType>(IGenerator generator, IBuilder builder, BuildSession session)
         {
+			Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), "Does not generate type {0}".With(typeof(TType)));
             var obj = (TType)generator.Create(typeof(TType), builder, session);
             generator.Populate(typeof(TType), obj, builder, session);
             return obj;
