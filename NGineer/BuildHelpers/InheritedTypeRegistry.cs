@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 
 namespace NGineer.BuildHelpers
 {
     public class InheritedTypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
-        where TStoreType : class
     {
         private readonly ITypeRegistry<TStoreType> _parent;
         private readonly ITypeRegistry<TStoreType> _current;
@@ -14,9 +13,22 @@ namespace NGineer.BuildHelpers
             _current = current;
         }
 
+		public bool HasType(Type type)
+		{
+			return _current.HasType(type) || (_parent != null && _parent.HasType(type));	
+		}
+		
         public TStoreType GetForType(Type type)
         {
-            return _current.GetForType(type) ?? (_parent != null ? _parent.GetForType(type) : default(TStoreType));
+			if(_current.HasType(type))
+			{
+				return _current.GetForType(type);
+			}
+			if(_parent != null && _parent.HasType(type))
+			{
+				return _parent.GetForType(type);
+			}
+			return default(TStoreType);
         }
     }
 }

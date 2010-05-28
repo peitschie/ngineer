@@ -13,6 +13,16 @@ namespace NGineer.BuildHelpers
             var entry = GetEntryForType(type);
             return entry != null ? entry.Value : default(TStoreType);
         }
+		
+		public bool HasType(Type type)
+		{
+			return _entries.Count(t => t.IsForType(type)) > 0;
+		}
+		
+		public bool HasType<TType>()
+		{
+			return HasType(typeof(TType));
+		}
 
         private TypeRegistryEntry GetEntryForType(Type type)
         {
