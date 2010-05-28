@@ -1,6 +1,7 @@
 using NGineer.BuildHelpers;
 using NGineer.BuildSequences;
 using NUnit.Framework;
+using System;
 
 namespace NGineer.UnitTests.BuildSequences
 {
@@ -14,7 +15,7 @@ namespace NGineer.UnitTests.BuildSequences
         public void SetUp()
         {
             _sequenceController = Sequences.SiblingConsecutiveInt<object>();
-            _session = new BuildSession(null, null, null);
+            _session = new BuildSession(null, null, null, null, (Random)null);
         }
 
         [Test]

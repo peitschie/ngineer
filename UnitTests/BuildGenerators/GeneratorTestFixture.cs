@@ -44,7 +44,7 @@ namespace NGineer.UnitTests.BuildGenerators
             builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
             var defaultRange = new Range(1, 10);
             var collectionTypes = new TypeRegistry<Range>();
-            var session = new BuildSession(null, collectionTypes, defaultRange);
+            var session = new BuildSession(null, collectionTypes, null, defaultRange, (Random)null);
             foreach (var supportedType in SupportedTypes())
             {
                 try
@@ -64,7 +64,7 @@ namespace NGineer.UnitTests.BuildGenerators
         {
         }
 
-        protected bool GeneratesType(Type type)
+        protected virtual bool GeneratesType(Type type)
         {
             return Generator.GeneratesType(type, null, null);
         }

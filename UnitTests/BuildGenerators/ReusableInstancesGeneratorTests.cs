@@ -9,6 +9,22 @@ namespace NGineer.UnitTests.BuildGenerators
     [TestFixture]
     public class ReusableInstancesGeneratorTests : GeneratorTestFixture<ReusableInstancesGenerator>
     {
+		private TypeRegistry<int?> _maxInstances;
+		
+		[SetUp]
+		public void ReusableInstancesGeneratorTestsSetUp()
+		{
+			_maxInstances = new TypeRegistry<Nullable<int>>();
+		}
+		
+		protected override bool GeneratesType (Type type)
+		{
+			if(_maxInstances == null)
+				ReusableInstancesGeneratorTestsSetUp();
+			return Generator.GeneratesType(type, null, CreateSession());
+		}
+
+		
         protected override Type[] SupportedTypes()
         {
             return new Type[0];
@@ -34,7 +50,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void GeneratesType_AfterMaxNumberOfSessionsReached()
         {
             var session = CreateSession();
-            Generator.SetNumberOfInstances<int>(3, 3);
+            _maxInstances.SetForType<int>(3);
 
             AddConstructedNode(1, session);
             Assert.IsFalse(Generator.GeneratesType(typeof(int), null, session));
@@ -50,7 +66,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_ReturnsExisting_AfterMaxNumberOfSessionsReached()
         {
             var session = CreateSession();
-            Generator.SetNumberOfInstances<SimpleClass>(3, 3);
+            _maxInstances.SetForType<SimpleClass>(3);
 
             AddConstructedNode(new SimpleClass(), session);
             AddConstructedNode(new SimpleClass(), session);
@@ -68,7 +84,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_NullsInBuildSession_NoExceptionsThrown()
         {
             var session = CreateSession();
-            Generator.SetNumberOfInstances<SimpleClass>(3, 3);
+            _maxInstances.SetForType<SimpleClass>(3);
 
             AddConstructedNode(new SimpleClass(), session);
             AddConstructedNode<SimpleClass>(null, session);
@@ -85,9 +101,9 @@ namespace NGineer.UnitTests.BuildGenerators
             return obj as ObjectBuildRecord;
         }
 
-        private static BuildSession CreateSession()
+        private BuildSession CreateSession()
         {
-            return new BuildSession(null, null, null);
+            return new BuildSession(null, null, _maxInstances, null, new Random(10));
         }
 
         public class SimpleClass {}

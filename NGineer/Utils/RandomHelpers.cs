@@ -34,5 +34,10 @@ namespace NGineer.Utils
 				entries.RemoveAt(nextIndex);
 			}	
 		}
+		
+		public static int NextInRange(this Random random, int min, int max)
+		{
+			return random.Next(max - min) + min;
+		}
     }
 }

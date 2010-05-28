@@ -24,28 +24,37 @@ namespace NGineer
         protected readonly IList<IMemberSetter> MemberSetters = new List<IMemberSetter>();
 
 	    protected readonly int Seed;
-	    private Range _defaultCollectionSize;
-	    private readonly TypeRegistry<Range> _builderCollectionSizes;
-	    private readonly ITypeRegistry<Range> _allCollectionSizes;
+		private readonly Random _random;
+	    private readonly TypeRegistry<Range> _collectionSizes;
+		private readonly TypeRegistry<int?> _maxInstances;
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
 	    private readonly ReusableInstancesGenerator _instancesGenerator;
+		
+		private Range _defaultCollectionSize;
 		private int? _maximumDepth;
 	    private bool _sealed;
 	    private bool? _throwOnDepthLimitReached;
+		
+		// Inherited properties
+		private readonly ITypeRegistry<Range> _allCollectionSizes;
+		private readonly ITypeRegistry<int?> _allMaxInstances;
 
 	    protected Builder(int seed, bool ignored)
         {
             Seed = seed;
-            _builderCollectionSizes = new TypeRegistry<Range>();
+			_random = new Random(seed);
+			_maxInstances = new TypeRegistry<int?>();
+            _collectionSizes = new TypeRegistry<Range>();
             _userGenerators = new List<IGenerator>();
-            _instancesGenerator = new ReusableInstancesGenerator(seed);
+            _instancesGenerator = new ReusableInstancesGenerator();
             _defaultGenerator = new DefaultConstructorGenerator();
         }
 
 	    public Builder(int seed) : this(seed, false)
 		{
-            _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _builderCollectionSizes);
+			_allMaxInstances = new InheritedTypeRegistry<int?>(null, _maxInstances);
+            _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _collectionSizes);
 			WithGenerator(new ListGenerator(seed));
             WithGenerator(new ArrayGenerator(seed));
             WithGenerator(new NullableTypeGenerator(seed));
@@ -61,8 +70,10 @@ namespace NGineer
             : this(parent.Seed + 1, false)
         {
             Parent = parent;
-            _allCollectionSizes = new InheritedTypeRegistry<Range>(Parent._builderCollectionSizes,
-                                                                   _builderCollectionSizes);
+			_allMaxInstances = new InheritedTypeRegistry<int?>(Parent._maxInstances, 
+			                                                   _maxInstances);
+            _allCollectionSizes = new InheritedTypeRegistry<Range>(Parent._collectionSizes,
+                                                                   _collectionSizes);
         }
 
 	    #region Properties that take into account parent settings as well
@@ -126,6 +137,14 @@ namespace NGineer
 	            return _allCollectionSizes;
 	        }
 	    }
+		
+		protected ITypeRegistry<int?> MaxInstances
+		{
+			get
+			{
+				return _allMaxInstances;
+			}
+		}
         #endregion
 
 
@@ -185,25 +204,25 @@ namespace NGineer
 
         public IBuilder SetCollectionSize(Type type, int minimum, int maximum)
         {
-            _builderCollectionSizes.SetForType(type, new Range(minimum, maximum));
+            _collectionSizes.SetForType(type, new Range(minimum, maximum));
             return this;
         }
 
 	    public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
 	    {
-	        _builderCollectionSizes.SetForType<TType>(new Range(minimum, maximum));
+	        _collectionSizes.SetForType<TType>(new Range(minimum, maximum));
 	        return this;
 	    }
 
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
-             _instancesGenerator.SetNumberOfInstances(type, minimum, maximum);
+            _maxInstances.SetForType(type, _random.NextInRange(minimum, maximum));
             return this;
         }
 
 	    public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
 	    {
-	        _instancesGenerator.SetNumberOfInstances<TType>(minimum, maximum);
+			_maxInstances.SetForType<TType>(_random.NextInRange(minimum, maximum));
 	        return this;
 	    }
 
@@ -314,7 +333,10 @@ namespace NGineer
 
         public object Build(Type type)
         {
-            return Build(type, new BuildSession(this, CollectionSizes, DefaultCollectionSize));
+            return Build(type, new BuildSession(this, CollectionSizes, 
+			                                    MaxInstances,
+			                                    DefaultCollectionSize,
+			                                    _random));
         }
 
 	    public object Build(Type type, BuildSession session)
@@ -322,7 +344,8 @@ namespace NGineer
             Sealed();
 	        var internalSession = ReferenceEquals(this, session.Builder)
 	                                  ? session
-	                                  : new BuildSession(this, CollectionSizes, DefaultCollectionSize, session);
+	                                  : new BuildSession(this, CollectionSizes, MaxInstances, 
+					                   							DefaultCollectionSize, session);
 
             if (internalSession.BuildDepth == BuildDepth)
             {

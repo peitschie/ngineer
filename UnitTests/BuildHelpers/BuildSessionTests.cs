@@ -2,6 +2,7 @@ using Moq;
 using NGineer.BuildHelpers;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
+using System;
 
 namespace NGineer.UnitTests.BuildHelpers
 {
@@ -23,7 +24,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void GetCollectionSize_ReturnsDefaultIfNoneDefined()
         {
             var defRange = new Range(10, 1000);
-            _session = new BuildSession(null, _registry, defRange);
+            _session = new BuildSession(null, _registry, null, defRange, (Random)null);
             Assert.AreSame(defRange, _session.GetCollectionSize(typeof(string)));
         }
 
@@ -33,7 +34,7 @@ namespace NGineer.UnitTests.BuildHelpers
             var stringRange = new Range(-10, 1); 
             var defRange = new Range(10, 1000);
             _registry.SetForType<string>(stringRange);
-            _session = new BuildSession(null, _registry, defRange);
+            _session = new BuildSession(null, _registry, null, defRange, (Random)null);
             
             Assert.AreSame(stringRange, _session.GetCollectionSize(typeof(string)));
         }
@@ -141,7 +142,7 @@ namespace NGineer.UnitTests.BuildHelpers
 
         private BuildSession ConstructSession()
         {
-            return new BuildSession(null, _registry, _defaultRange);
+            return new BuildSession(null, _registry, null, _defaultRange, (Random)null);
         }
     }
 }
