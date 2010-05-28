@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
+using NGineer.Utils;
 
 namespace NGineer.SpecialGenerators
 {

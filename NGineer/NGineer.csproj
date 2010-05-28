@@ -72,7 +72,6 @@
     <Compile Include="BuildHelpers\MemberSetter.cs" />
     <Compile Include="BuildHelpers\ObjectBuildRecord.cs" />
     <Compile Include="BuildHelpers\ObjectBuildTreeEntry.cs" />
-    <Compile Include="BuildHelpers\RandomHelpers.cs" />
     <Compile Include="BuildHelpers\Range.cs" />
     <Compile Include="BuildHelpers\TypeRegistry.cs" />
     <Compile Include="BuildGenerators\ArrayGenerator.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="Utils\MemberInfoExtensions.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGenerator.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\RandomHelpers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
