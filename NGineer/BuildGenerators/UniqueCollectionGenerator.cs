@@ -7,7 +7,7 @@ using System.Collections;
 using System.Reflection;
 using System.Linq.Expressions;
 
-namespace NGineer
+namespace NGineer.BuildGenerators
 {
 	public class UniqueCollectionGenerator<TType> : IGenerator
 	{
