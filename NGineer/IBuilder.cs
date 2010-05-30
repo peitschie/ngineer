@@ -97,6 +97,7 @@ namespace NGineer
         IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> value);
         IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
         IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
+        IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, IGenerator generator);
 
         /// <summary>
         /// Registers a post-population member that is called after the object has been constructed and populated

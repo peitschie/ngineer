@@ -278,7 +278,8 @@ namespace NGineer
             return this;
         }
 
-        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> setter)
+        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression,
+                                                                Func<TType, IBuilder, BuildSession, TReturnType> setter)
         {
 			if(expression == null)
 				throw new ArgumentNullException("expression");
@@ -293,6 +294,19 @@ namespace NGineer
         public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value)
         {
             return AfterConstructionOf(expression, (o, b, s) => value);
+        }
+
+        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression,
+                                                                IGenerator generator)
+        {
+            if(expression == null)
+                throw new ArgumentNullException("expression");
+            if(generator == null)
+                throw new ArgumentNullException("generator");
+            var member = MemberExpressions.GetMemberInfo(expression);
+            // No validation can be done here as the generator only returns a generic object type
+            MemberSetters.Add(new GeneratorMemberSetter(member, generator));
+            return this;
         }
 
         private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)

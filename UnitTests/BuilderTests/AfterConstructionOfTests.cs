@@ -258,5 +258,19 @@ namespace NGineer.UnitTests.BuilderTests
 
 			Assert.AreEqual("childValue", obj.TestClass2Property.StringProperty);
         }
+
+        [Test]
+        public void UniqueCollection_SyntaxExample_UsingAfterConstructionOf()
+        {
+            var builder = new Builder(1)
+                .SetCollectionSize(10,10)
+                .AfterConstructionOf<ListOfClassWithEnumAndProperties>(
+                    c => c.Entries,
+                    Generators.UniqueCollection<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty));
+
+            var list = builder.Build<ListOfClassWithEnumAndProperties>();
+
+            Assert.AreEqual(EnumUtils.GetValues<SimpleEnum>().Count(), list.Entries.Count);
+        }
 	}
 }

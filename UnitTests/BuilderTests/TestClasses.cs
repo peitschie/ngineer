@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NGineer.UnitTests.BuilderTests
 {
@@ -109,4 +110,9 @@ namespace NGineer.UnitTests.BuilderTests
 		public SimpleEnum EnumProperty { get; set;}
 		public string StringProperty { get; set; }
 	}
+
+    public class ListOfClassWithEnumAndProperties
+    {
+         public IList<ClassWithEnumAndProperties> Entries { get; set; }
+    }
 }

@@ -7,28 +7,36 @@ namespace NGineer.BuildHelpers
     public class MemberSetter<TObjType, TReturnType> : IMemberSetter
     {
 		protected readonly MemberInfo Member;
+        protected readonly Type MemberReturnType;
+
         protected readonly Func<TObjType, IBuilder, BuildSession, TReturnType> Setter;
 
-        public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter)
+        protected MemberSetter(MemberInfo member)
         {
-			if(member == null)
-				throw new ArgumentNullException("member");
+            if(member == null)
+                throw new ArgumentNullException("member");
+            Member = member;
+            MemberReturnType = member.ReturnType();
+        }
+
+        public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter)
+            : this(member)
+        {
 			if(setter == null)
 				throw new ArgumentNullException("setter");
-            Member = member;
             Setter = setter;
         }
 
-        public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
+        public virtual bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
         {
             return member != null 
                 && Member.ReflectedType.IsAssignableFrom(member.ReflectedType)
                 && Equals(Member.DeclaringType, member.DeclaringType)
                 && Equals(Member.Name, member.Name)
-				&& Equals(Member.ReturnType(), member.ReturnType());
+				&& Equals(MemberReturnType, member.ReturnType());
         }
 
-        public void Set(object obj, IBuilder builder, BuildSession session)
+        public virtual void Set(object obj, IBuilder builder, BuildSession session)
 		{
 			Member.SetValue(obj, Setter((TObjType)obj, builder, session));
 		}

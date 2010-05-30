@@ -109,6 +109,7 @@
     <Compile Include="BuildGenerators\UniqueCollectionGenerator.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\RandomHelpers.cs" />
+    <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

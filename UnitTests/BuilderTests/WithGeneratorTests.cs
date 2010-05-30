@@ -11,13 +11,15 @@ namespace NGineer.UnitTests.BuilderTests
 	public class WithGeneratorTests
 	{
 		[Test]
-		public void UniqueCollection_SyntaxExample()
+		public void UniqueCollection_SyntaxExample_UsingGenerator()
 		{
 			var builder = new Builder(1)
 				.SetCollectionSize(10,10)
 				.WithGenerator(Generators.UniqueCollection<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty));
-			var list = builder.Build<List<ClassWithEnumAndProperties>>();
-			Assert.AreEqual(EnumUtils.GetValues<SimpleEnum>().Count(), list.Count);
+
+            var list = builder.Build<List<ClassWithEnumAndProperties>>();
+
+            Assert.AreEqual(EnumUtils.GetValues<SimpleEnum>().Count(), list.Count);
 		}
 	}
 }
