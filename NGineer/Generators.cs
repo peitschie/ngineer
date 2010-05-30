@@ -3,6 +3,7 @@ using NGineer.Utils;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System;
+using System.Reflection;
 
 namespace NGineer
 {
@@ -12,20 +13,27 @@ namespace NGineer
         {
             return new NullObjectGenerator<TType>();
         }
-		
-		public static IGenerator UniqueCollection<TType>()
-		{
-			return new UniqueCollectionGenerator<TType>(EnumUtils.GetValues<TType>());
-		}
-		
-		public static IGenerator UniqueCollection<TType>(IEnumerable<TType> entries)
-		{
-			return new UniqueCollectionGenerator<TType>(entries);
-		}
-		
-		public static IGenerator UniqueCollection<TClassType, TType>(Expression<Func<TClassType, TType>> entries)
-		{
-			return new UniqueCollectionGenerator<TClassType, TType>(entries);
-		}
+
+        public static class UniqueCollection
+        {
+            public static IGenerator ForEnumerable<TType>(IEnumerable<TType> entries)
+            {
+                return new UniqueCollectionGeneratorEnumerable<TType>(entries);
+            }
+    
+            public static IGenerator ForMember<TClassType>(Expression<Func<TClassType, object>> expression)
+            {
+                var memberInfo = MemberExpressions.GetMemberInfo(expression);
+                var generatorType = typeof(UniqueCollectionGeneratorMember<,>)
+                    .MakeGenericType(typeof(TClassType), memberInfo.ReturnType());
+                var instance = generatorType.GetConstructor(new []{typeof(MemberInfo)});
+                return (IGenerator)instance.Invoke(new object[]{memberInfo});
+            }
+
+            public static IGenerator ForMember<TClassType, TType>(Expression<Func<TClassType, TType>> expression)
+            {
+                return new UniqueCollectionGeneratorMember<TClassType, TType>(expression);
+            }
+        }
     }
 }

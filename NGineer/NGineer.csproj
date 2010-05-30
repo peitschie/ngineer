@@ -106,10 +106,11 @@
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\MemberExpressions.cs" />
     <Compile Include="Utils\MemberInfoExtensions.cs" />
-    <Compile Include="BuildGenerators\UniqueCollectionGenerator.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\RandomHelpers.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
     <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -6,6 +6,7 @@ using NGineer.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
+using NGineer.BuildGenerators;
 
 
 namespace NGineer.UnitTests.BuilderTests
@@ -266,7 +267,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetCollectionSize(10,10)
                 .AfterConstructionOf<ListOfClassWithEnumAndProperties>(
                     c => c.Entries,
-                    Generators.UniqueCollection<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty));
+                    Generators.UniqueCollection.ForMember<ClassWithEnumAndProperties>(c => c.EnumProperty));
 
             var list = builder.Build<ListOfClassWithEnumAndProperties>();
 

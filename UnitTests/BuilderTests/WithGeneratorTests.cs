@@ -15,7 +15,7 @@ namespace NGineer.UnitTests.BuilderTests
 		{
 			var builder = new Builder(1)
 				.SetCollectionSize(10,10)
-				.WithGenerator(Generators.UniqueCollection<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty));
+				.WithGenerator(Generators.UniqueCollection.ForMember<ClassWithEnumAndProperties>(c => c.EnumProperty));
 
             var list = builder.Build<List<ClassWithEnumAndProperties>>();
 

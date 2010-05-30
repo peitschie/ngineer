@@ -13,13 +13,14 @@ using NGineer.UnitTests.BuilderTests;
 namespace NGineer.UnitTests.BuildGenerators
 {
 	[TestFixture]
-	public class UniqueCollectionGeneratorStringTests : GeneratorTestFixture<UniqueCollectionGenerator<string>>
+	public class UniqueCollectionGeneratorEnumerableTests
+        : GeneratorTestFixture<UniqueCollectionGeneratorEnumerable<string>>
 	{
 		private readonly string[] _entries = new string[]{"ab1","kj7","lkj98","298jf"};
 		
-		protected override UniqueCollectionGenerator<string> Construct ()
+		protected override UniqueCollectionGeneratorEnumerable<string> Construct ()
 		{
-			return new UniqueCollectionGenerator<string>(_entries);
+			return new UniqueCollectionGeneratorEnumerable<string>(_entries);
 		}
 
 		protected override Type[] SupportedTypes ()
@@ -81,12 +82,12 @@ namespace NGineer.UnitTests.BuildGenerators
 	}
 	
 	[TestFixture]
-	public class UniqueCollectionGeneratorClassWithEnumAndPropertiesTests 
-		: GeneratorTestFixture<UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>>
+	public class UniqueCollectionGeneratorMemberTests
+		: GeneratorTestFixture<UniqueCollectionGeneratorMember<ClassWithEnumAndProperties, SimpleEnum>>
 	{
-		protected override UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum> Construct ()
+		protected override UniqueCollectionGeneratorMember<ClassWithEnumAndProperties, SimpleEnum> Construct ()
 		{
-			return new UniqueCollectionGenerator<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty);
+			return new UniqueCollectionGeneratorMember<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty);
 		}
 
 		protected override Type[] SupportedTypes ()
