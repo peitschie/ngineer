@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.SpecialGenerators;
 using NGineer.Utils;
 
 namespace NGineer

@@ -78,14 +78,12 @@
     <Compile Include="BuildGenerators\CharGenerator.cs" />
     <Compile Include="BuildGenerators\NullableTypeGenerator.cs" />
     <Compile Include="BuildGenerators\DateTimeGenerator.cs" />
-    <Compile Include="SpecialGenerators\DefaultConstructorGenerator.cs" />
     <Compile Include="BuildGenerators\EnumGenerator.cs" />
     <Compile Include="BuildGenerators\NullObjectGenerator.cs" />
     <Compile Include="BuildSequences\ConsecutiveSequenceController.cs" />
     <Compile Include="BuildSequences\IntSequenceGenerator.cs" />
     <Compile Include="BuildSequences\ISequenceGenerator.cs" />
     <Compile Include="BuildSequences\SequenceGenerators.cs" />
-    <Compile Include="SpecialGenerators\ReusableInstancesGenerator.cs" />
     <Compile Include="BuildGenerators\SimpleGenerator.cs" />
     <Compile Include="BuildGenerators\SingleTypeGenerator.cs" />
     <Compile Include="BuildGenerators\ListGenerator.cs" />
@@ -111,6 +109,8 @@
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
     <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
+    <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
+    <Compile Include="BuildGenerators\ReusableInstancesGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

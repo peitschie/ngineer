@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using NGineer.BuildHelpers;
-using NGineer.SpecialGenerators;
 using NUnit.Framework;
+using NGineer.BuildGenerators;
 
 namespace NGineer.UnitTests.BuildGenerators
 {

@@ -4,7 +4,7 @@ using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
 
-namespace NGineer.SpecialGenerators
+namespace NGineer.BuildGenerators
 {
     public class DefaultConstructorGenerator : IGenerator
     {

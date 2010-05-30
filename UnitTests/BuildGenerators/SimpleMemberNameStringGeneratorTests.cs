@@ -2,7 +2,6 @@ using System;
 using Moq;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
-using NGineer.SpecialGenerators;
 using NGineer.Utils;
 using NUnit.Framework;
 
