@@ -84,9 +84,10 @@
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
     <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
     <Compile Include="BuildHelpers\MemberSetterTests.cs" />
-    <Compile Include="BuildGenerators\UniqueCollectionGeneratorTests.cs" />
     <Compile Include="BuilderTests\WithGeneratorTests.cs" />
     <Compile Include="BuilderTests\SetNumberOfInstancesTests.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
