@@ -89,6 +89,7 @@
     <Compile Include="BuilderTests\SetNumberOfInstancesTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
+    <Compile Include="Examples\RegisterNewGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -115,4 +116,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Examples\" />
+  </ItemGroup>
 </Project>

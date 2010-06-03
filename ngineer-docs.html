@@ -594,7 +594,7 @@ var books = new Builder(1)
 !! Basic build session flow
 [img[docs/builder-build-flow.png]]</pre>
 </div>
-<div title="Design justification" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" modified="201005121403" changecount="6">
+<div title="Design justification" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" modified="201006030956" changecount="7">
 <pre>There are no two ways about it...  generating test objects is painful.  Things start out simple, and before you know it, you have either
 * Generating realms of static data shared between tests
 * Creating numerous functions to create static, shared data instead
@@ -606,7 +606,7 @@ Some more writings about these dangers can be found in the following links:
 * &lt;need links to useful sites about proper test data design&gt;
 One such approach for diminishing the maintenance overhead of test data, and improving clarity of test code is through a method called an &quot;object constructor&quot;.  Though NGineer.NET is not the first one ever created (NBuilder is another respected solution that has been around for a few years now).  However, through judicious use of reflection, a simple and intuitive &quot;fluent&quot; api and some good clean recursion fun, NGineer.NET is a re-designed and (hopefully) smarter object factory.</pre>
 </div>
-<div title="Diving In" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121257" modified="201005121407" changecount="30">
+<div title="Diving In" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121257" modified="201006030957" changecount="32">
 <pre>So, NGineer claims to make life simpler, but does it &quot;really work&quot;?  See some examples below and decide for yourself.
 &lt;code c#&gt;
 var builder = new Builder(1);
@@ -635,6 +635,10 @@ var simpleClass = new Builder(1)
 // on the builder
 &lt;/code&gt;
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
+* [[Examples]]</pre>
+</div>
+<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" changecount="1">
+<pre>* [[Diving In]]
 * [[Create complex hierarchy]]
 * [[Register a new generator to for specific types]]</pre>
 </div>
@@ -687,11 +691,14 @@ loadRemoteFile = function(url,callback,params)
 //}}}
 </pre>
 </div>
-<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201005131300" changecount="8">
+<div title="MainMenu" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121159" modified="201006030956" changecount="9">
 <pre>[[Introduction]]
 [[Diving In]]
+[[Examples]]
+
 [[Design detail]]
 [[Design justification]]
+
 [[Roadmap]]</pre>
 </div>
 <div title="NGineer Documentation" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121148" changecount="1">
@@ -777,58 +784,48 @@ merge(config.optionsDesc,{
 */
 //}}}</pre>
 </div>
-<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" changecount="1">
+<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201006031009" changecount="2">
 <pre>&lt;code c#&gt;
 public class CustomClass
-{ 
-   public CustomClass(int specialNumber)
-   {
-      SpecialNumber = specialNumber;   
-   }
-   
-   public int SpecialNumber { get; private set; }
+{
+    public CustomClass (int specialNumber, string name)
+    {
+        SpecialNumber = specialNumber;
+        Name = name;
+    }
+
+    public int SpecialNumber { get; private set; }
+    public string Name { get; private set; }
 }
 
 public class CustomClassGenerator : IGenerator
 {
-   private readonly Random _random;
-   
-   // Repeatibility is desired.  Save an random failure, use a seed
-   public CustomClassGenerator(int seed)
-   {
-      _random = new Random(seed);
-   }
+    // Can specifically control which types this generator will attempt to create.
+    // This can re-use any information from the builder or the session, allowing
+    // advanced conditions to be set-up
+    public bool GeneratesType (Type type, IBuilder builder, BuildSession session)
+    {
+        return typeof(CustomClass).Equals (type);
+    }
 
-   // Can specifically control which types this generator will attempt to create.
-   // This can re-use any information from the builder or the session, allowing
-   // advanced conditions to be set-up
-   public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
-   {
-      return typeof(CustomClass).Equals(type);
-   }
-   
-   // Perform any custom creation actions required before returning a
-   // newly constructed object
+    // Perform any custom creation actions required before returning a
+    // newly constructed object
+    public object Create (Type type, IBuilder builder, BuildSession session)
+    {
+        return new CustomClass (session.Random.Next (), &quot;Demo Generator&quot;);
+    }
 
-   public object Create(Type type, IBuilder builder, BuildSession session)
-   {
-      return new CustomClass(_random.Next());
-   }
-   
-   // Perform initializing of non-constructor related properties
-   // on the object after external setters ahve been called
-
-   public object Populate(Type type, object obj, IBuilder builder, BuildSession session)
-   {
-      return obj;
-   }
+    // Perform initializing of non-constructor related properties
+    // on the object after external setters have been called
+    public void Populate (Type type, object obj, IBuilder builder, BuildSession session)
+    {
+    }
 }
 
-var customClass = new Builder(1)
-   // Register a new generator to handle creating the class with no default constructor
-   .WithGenerator(new CustomClassGenerator())
-   .Build&lt;CustomClass&gt;(); 
-
+// Register a new generator to handle creating the class with no default constructor
+var customClass = new Builder (1)
+    .WithGenerator (new CustomClassGenerator ())
+    .Build&lt;CustomClass&gt; ();
 &lt;/code&gt;</pre>
 </div>
 <div title="Roadmap" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005131300" modified="201005192351" changecount="6">
