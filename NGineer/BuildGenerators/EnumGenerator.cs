@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using NGineer.BuildHelpers;
+using NGineer.Utils;
 
 namespace NGineer.BuildGenerators
 {
@@ -22,7 +23,7 @@ namespace NGineer.BuildGenerators
 
         private object GetRandomEnum(Type type, Random random)
         {
-            var array = Enum.GetValues(type);
+            var array = EnumUtils.GetValues(type);
             var index = random.Next(array.Length);
             return array.GetValue(index);
         }

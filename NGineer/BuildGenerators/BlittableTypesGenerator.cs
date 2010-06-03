@@ -62,7 +62,8 @@ namespace NGineer.BuildGenerators
             var nonBitMethod = typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy);
             if(nonBitMethod == null)
             {
-                throw new MissingMethodException(typeof(BlittableTypesGenerator).Name, "NonBitConverterMethod");
+                // Changed to use the inner exception parameter due to Silverlight Compatibility
+                throw new MissingMethodException(typeof(BlittableTypesGenerator).Name, new Exception("NonBitConverterMethod"));
             }
             foreach (var type in NonBitConverterTypes)
             {
