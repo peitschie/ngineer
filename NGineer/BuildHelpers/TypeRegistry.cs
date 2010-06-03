@@ -6,7 +6,7 @@ namespace NGineer.BuildHelpers
 {
     public class TypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
     {
-        private readonly HashSet<TypeRegistryEntry> _entries = new HashSet<TypeRegistryEntry>();
+        private readonly List<TypeRegistryEntry> _entries = new List<TypeRegistryEntry>();
 
         public TStoreType GetForType(Type type)
         {

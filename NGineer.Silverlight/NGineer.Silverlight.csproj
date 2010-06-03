@@ -1,224 +1,1 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{439C1E33-E31B-449A-B49B-155573AA94DC}</ProjectGuid>
-    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NGineer.Silverlight</RootNamespace>
-    <AssemblyName>NGineer.Silverlight</AssemblyName>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <ValidateXaml>true</ValidateXaml>
-    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-  </PropertyGroup>
-  <!-- This property group is only here to support building this project using the 
-       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
-       to set the TargetFrameworkVersion to v3.5 -->
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="System.Windows" />
-    <Reference Include="system" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\NGineer\AssemblyInfo.cs">
-      <Link>AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Builder.cs">
-      <Link>Builder.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\ArrayGenerator.cs">
-      <Link>BuildGenerators\ArrayGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\BlittableTypesGenerator.cs">
-      <Link>BuildGenerators\BlittableTypesGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\BoolGenerator.cs">
-      <Link>BuildGenerators\BoolGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\BuilderGenerator.cs">
-      <Link>BuildGenerators\BuilderGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\CharGenerator.cs">
-      <Link>BuildGenerators\CharGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\DateTimeGenerator.cs">
-      <Link>BuildGenerators\DateTimeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\DefaultConstructorGenerator.cs">
-      <Link>BuildGenerators\DefaultConstructorGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\EnumGenerator.cs">
-      <Link>BuildGenerators\EnumGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\GarbageStringGenerator.cs">
-      <Link>BuildGenerators\GarbageStringGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\IGenerator.cs">
-      <Link>BuildGenerators\IGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\ListGenerator.cs">
-      <Link>BuildGenerators\ListGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\NullableTypeGenerator.cs">
-      <Link>BuildGenerators\NullableTypeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\NullObjectGenerator.cs">
-      <Link>BuildGenerators\NullObjectGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\ReusableInstancesGenerator.cs">
-      <Link>BuildGenerators\ReusableInstancesGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\SimpleGenerator.cs">
-      <Link>BuildGenerators\SimpleGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\SimpleMemberNameStringGenerator.cs">
-      <Link>BuildGenerators\SimpleMemberNameStringGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\SingleTypeGenerator.cs">
-      <Link>BuildGenerators\SingleTypeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorEnumerable.cs">
-      <Link>BuildGenerators\UniqueCollectionGeneratorEnumerable.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorMember.cs">
-      <Link>BuildGenerators\UniqueCollectionGeneratorMember.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderDepthExceededException.cs">
-      <Link>BuildHelpers\BuilderDepthExceededException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderException.cs">
-      <Link>BuildHelpers\BuilderException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuildSession.cs">
-      <Link>BuildHelpers\BuildSession.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\GeneratorMemberSetter.cs">
-      <Link>BuildHelpers\GeneratorMemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\IMemberSetter.cs">
-      <Link>BuildHelpers\IMemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\InheritedTypeRegistry.cs">
-      <Link>BuildHelpers\InheritedTypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\IObjectBuildRecord.cs">
-      <Link>BuildHelpers\IObjectBuildRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ISetter.cs">
-      <Link>BuildHelpers\ISetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ITypeRegistry.cs">
-      <Link>BuildHelpers\ITypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\MemberSetter.cs">
-      <Link>BuildHelpers\MemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildRecord.cs">
-      <Link>BuildHelpers\ObjectBuildRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildTreeEntry.cs">
-      <Link>BuildHelpers\ObjectBuildTreeEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\Range.cs">
-      <Link>BuildHelpers\Range.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\Setter.cs">
-      <Link>BuildHelpers\Setter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\TypeRegistry.cs">
-      <Link>BuildHelpers\TypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildSequences\ConsecutiveSequenceController.cs">
-      <Link>BuildSequences\ConsecutiveSequenceController.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildSequences\IntSequenceGenerator.cs">
-      <Link>BuildSequences\IntSequenceGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildSequences\ISequenceGenerator.cs">
-      <Link>BuildSequences\ISequenceGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildSequences\SequenceGenerators.cs">
-      <Link>BuildSequences\SequenceGenerators.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Generators.cs">
-      <Link>Generators.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\IBuilder.cs">
-      <Link>IBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Sequences.cs">
-      <Link>Sequences.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\EnumUtils.cs">
-      <Link>Utils\EnumUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\GenericAssignableFrom.cs">
-      <Link>Utils\GenericAssignableFrom.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\MemberExpressions.cs">
-      <Link>Utils\MemberExpressions.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\MemberInfoExtensions.cs">
-      <Link>Utils\MemberInfoExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\RandomHelpers.cs">
-      <Link>Utils\RandomHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Utils\StringExtensions.cs">
-      <Link>Utils\StringExtensions.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
-        <SilverlightProjectProperties />
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-</Project>
+<?xml version="1.0" encoding="utf-8"?><Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <PropertyGroup>    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>    <ProductVersion>10.0.0</ProductVersion>    <SchemaVersion>2.0</SchemaVersion>    <ProjectGuid>{6B38C285-2BA7-4962-95A3-CF154A9002E3}</ProjectGuid>    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>    <OutputType>Library</OutputType>    <RootNamespace>NGineer.Silverlight</RootNamespace>    <SilverlightApplication>false</SilverlightApplication>    <ValidateXaml>false</ValidateXaml>    <ThrowErrorsInValidation>false</ThrowErrorsInValidation>    <AssemblyName>NGineer.Silverlight</AssemblyName>    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>  </PropertyGroup>  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">    <DebugSymbols>true</DebugSymbols>    <DebugType>full</DebugType>    <Optimize>false</Optimize>    <OutputPath>..\Output\Silverlight</OutputPath>    <DefineConstants>DEBUG</DefineConstants>    <ErrorReport>prompt</ErrorReport>    <WarningLevel>4</WarningLevel>  </PropertyGroup>  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">    <DebugType>none</DebugType>    <Optimize>false</Optimize>    <OutputPath>..\Output\Silverlight</OutputPath>    <ErrorReport>prompt</ErrorReport>    <WarningLevel>4</WarningLevel>  </PropertyGroup>  <ItemGroup>    <Reference Include="System.Windows" />    <Reference Include="mscorlib" />    <Reference Include="System" />    <Reference Include="System.Core" />    <Reference Include="System.Xml" />    <Reference Include="System.Net" />    <Reference Include="System.Windows.Browser" />  </ItemGroup>  <ItemGroup>    <Compile Include="..\NGineer\Sequences.cs" />    <Compile Include="..\NGineer\AssemblyInfo.cs" />    <Compile Include="..\NGineer\Builder.cs" />    <Compile Include="..\NGineer\Generators.cs" />    <Compile Include="..\NGineer\IBuilder.cs" />    <Compile Include="..\NGineer\Main.cs" />    <Compile Include="..\NGineer\BuildGenerators\ArrayGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\BlittableTypesGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\BoolGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\BuilderGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\CharGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\DateTimeGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\DefaultConstructorGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\EnumGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\GarbageStringGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\IGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\ListGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\NullableTypeGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\NullObjectGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\ReusableInstancesGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\SimpleGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\SimpleMemberNameStringGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\SingleTypeGenerator.cs" />    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorMember.cs" />    <Compile Include="..\NGineer\BuildHelpers\BuilderDepthExceededException.cs" />    <Compile Include="..\NGineer\BuildHelpers\BuilderException.cs" />    <Compile Include="..\NGineer\BuildHelpers\BuildSession.cs" />    <Compile Include="..\NGineer\BuildHelpers\GeneratorMemberSetter.cs" />    <Compile Include="..\NGineer\BuildHelpers\IMemberSetter.cs" />    <Compile Include="..\NGineer\BuildHelpers\InheritedTypeRegistry.cs" />    <Compile Include="..\NGineer\BuildHelpers\IObjectBuildRecord.cs" />    <Compile Include="..\NGineer\BuildHelpers\ISetter.cs" />    <Compile Include="..\NGineer\BuildHelpers\ITypeRegistry.cs" />    <Compile Include="..\NGineer\BuildHelpers\MemberSetter.cs" />    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildRecord.cs" />    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildTreeEntry.cs" />    <Compile Include="..\NGineer\BuildHelpers\Range.cs" />    <Compile Include="..\NGineer\BuildHelpers\Setter.cs" />    <Compile Include="..\NGineer\BuildHelpers\TypeRegistry.cs" />    <Compile Include="..\NGineer\BuildSequences\ConsecutiveSequenceController.cs" />    <Compile Include="..\NGineer\BuildSequences\IntSequenceGenerator.cs" />    <Compile Include="..\NGineer\BuildSequences\ISequenceGenerator.cs" />    <Compile Include="..\NGineer\BuildSequences\SequenceGenerators.cs" />    <Compile Include="..\NGineer\Utils\EnumUtils.cs" />    <Compile Include="..\NGineer\Utils\GenericAssignableFrom.cs" />    <Compile Include="..\NGineer\Utils\MemberExpressions.cs" />    <Compile Include="..\NGineer\Utils\MemberInfoExtensions.cs" />    <Compile Include="..\NGineer\Utils\RandomHelpers.cs" />    <Compile Include="..\NGineer\Utils\StringExtensions.cs" />  </ItemGroup>  <ItemGroup>    <Folder Include="BuildGenerators\" />    <Folder Include="BuildHelpers\" />    <Folder Include="BuildSequences\" />    <Folder Include="Utils\" />  </ItemGroup>  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v2.0\Microsoft.Silverlight.CSharp.targets" />  <ProjectExtensions>    <MonoDevelop>      <Properties InternalTargetFrameworkVersion="SL2.0" xmlns="" />    </MonoDevelop>  </ProjectExtensions></Project>
