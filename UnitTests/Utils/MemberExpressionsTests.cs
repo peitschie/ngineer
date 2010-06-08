@@ -77,6 +77,34 @@ namespace NGineer.UnitTests.Utils
             Assert.AreEqual(typeof(int), info.PropertyType);
         }
 
+        [Test]
+        public void GetMemberInfo_DeepMemberChain()
+        {
+            var memberInfo = MemberExpressions.GetMemberInfo<DeepClass>(c => c.String.Length);
+            Assert.IsNotNull(memberInfo);
+            Assert.AreEqual(MemberExpressions.GetMemberInfo<string>(c => c.Length), memberInfo);
+        }
+
+        [Test]
+        public void GetMemberChain_DeepMemberChain()
+        {
+            var memberInfo = MemberExpressions.GetExpressionChain<DeepClass>(c => c.String.Length);
+            var expected = new[]
+                {
+                    MemberExpressions.GetMemberInfo<DeepClass>(c => c.String),
+                    MemberExpressions.GetMemberInfo<string>(c => c.Length)
+                };
+            Assert.IsNotNull(memberInfo);
+            Assert.AreEqual(expected, memberInfo);
+        }
+
+        // ReSharper disable ClassNeverInstantiated.Local
+        private class DeepClass
+        {
+            public string String { get; set; }
+        }
+        // ReSharper restore ClassNeverInstantiated.Local
+
         public class ClassParent
         {
             public int Property1 { get; set; }
