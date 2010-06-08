@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System;
@@ -45,6 +46,45 @@ namespace NGineer.Utils
 		public static MemberInfo GetMemberInfo<TType>(Expression<Func<TType, object>> expression)
         {
 			return GetMemberInfo(expression.Body);
+        }
+
+        public static MemberInfo[] GetExpressionChain<TType>(Expression<Func<TType, object>> expression)
+        {
+            return GetExpressionChain(expression.Body);
+        }
+
+        public static MemberInfo[] GetExpressionChain(Expression expression)
+        {
+            var memberChain = new List<MemberInfo>();
+            GetExpressionChain(expression, memberChain);
+            return memberChain.ToArray();
+        }
+
+        private static void GetExpressionChain(Expression expression, List<MemberInfo> memberChain)
+        {
+            if (expression is MemberExpression)
+            {
+                var memberExpression = (MemberExpression)expression;
+                if (memberExpression.Expression != null && memberExpression.Expression is MemberExpression)
+                {
+                    GetExpressionChain(memberExpression.Expression, memberChain);
+                }
+                memberChain.Add(GetMemberInfo(memberExpression));
+            }
+            else if (expression is UnaryExpression && expression.NodeType == ExpressionType.Convert)
+            {
+                var unaryExpression = (UnaryExpression)expression;
+                GetExpressionChain(unaryExpression.Operand, memberChain);
+            }
+            else if (expression is LambdaExpression)
+            {
+                var lambdaExpression = (LambdaExpression)expression;
+                GetExpressionChain(lambdaExpression.Body, memberChain);
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot interpret member from {0}".With(expression.NodeType));
+            }
         }
 	}
 }
