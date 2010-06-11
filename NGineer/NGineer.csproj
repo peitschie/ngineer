@@ -37,7 +37,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\</OutputPath>
+    <OutputPath>..\..\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,7 +48,7 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\</OutputPath>
+    <OutputPath>..\..\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
@@ -66,7 +66,11 @@
     <Compile Include="BuildGenerators\SimpleMemberNameStringGenerator.cs" />
     <Compile Include="BuildHelpers\BuilderDepthExceededException.cs" />
     <Compile Include="BuildHelpers\BuilderException.cs" />
+    <Compile Include="BuildHelpers\BuilderInstanceTracker.cs" />
+    <Compile Include="BuildHelpers\BuilderMaximumInstancesReached.cs" />
+    <Compile Include="BuildHelpers\BuilderStatEntry.cs" />
     <Compile Include="BuildHelpers\BuildSession.cs" />
+    <Compile Include="BuildHelpers\IgnoreMemberSetter.cs" />
     <Compile Include="BuildHelpers\IMemberSetter.cs" />
     <Compile Include="BuildHelpers\IObjectBuildRecord.cs" />
     <Compile Include="BuildHelpers\ITypeRegistry.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="BuildHelpers\Setter.cs" />
     <Compile Include="Generators.cs" />
     <Compile Include="BuildHelpers\InheritedTypeRegistry.cs" />
+    <Compile Include="BuildGenerators\ReuseInstancesGenerator.cs" />
     <Compile Include="Sequences.cs" />
     <Compile Include="Utils\GenericAssignableFrom.cs" />
     <Compile Include="AssemblyInfo.cs" />
@@ -111,7 +116,7 @@
     <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
     <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
-    <Compile Include="BuildGenerators\ReusableInstancesGenerator.cs" />
+    <Compile Include="BuildGenerators\DefaultReusableInstancesGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -4,9 +4,9 @@ namespace NGineer
 {
     public static class Sequences
     {
-        public static ConsecutiveSequenceController<TType, int> SiblingConsecutiveInt<TType>()
+        public static ConsecutiveSequenceController<object, int> SiblingConsecutiveInt()
         {
-            return new ConsecutiveSequenceController<TType, int>((o, b, s) => s.CurrentObject.Parent, SequenceGenerators.IntSequenceGenerator);
+            return new ConsecutiveSequenceController<object, int>((o, b, s) => s.CurrentObject.Parent, SequenceGenerators.IntSequenceGenerator);
         }
 
         public static ConsecutiveSequenceController<TType, int> SiblingConsecutiveInt<TType>(ParentTypeFetcher<TType> parentFetcher)

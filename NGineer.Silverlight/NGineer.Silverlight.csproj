@@ -82,6 +82,9 @@
     <Compile Include="..\NGineer\BuildGenerators\DefaultConstructorGenerator.cs">
       <Link>BuildGenerators\DefaultConstructorGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\BuildGenerators\DefaultReusableInstancesGenerator.cs">
+      <Link>BuildGenerators\DefaultReusableInstancesGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\NGineer\BuildGenerators\EnumGenerator.cs">
       <Link>BuildGenerators\EnumGenerator.cs</Link>
     </Compile>
@@ -100,8 +103,8 @@
     <Compile Include="..\NGineer\BuildGenerators\NullObjectGenerator.cs">
       <Link>BuildGenerators\NullObjectGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\ReusableInstancesGenerator.cs">
-      <Link>BuildGenerators\ReusableInstancesGenerator.cs</Link>
+    <Compile Include="..\NGineer\BuildGenerators\ReuseInstancesGenerator.cs">
+      <Link>BuildGenerators\ReuseInstancesGenerator.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildGenerators\SimpleGenerator.cs">
       <Link>BuildGenerators\SimpleGenerator.cs</Link>
@@ -124,11 +127,23 @@
     <Compile Include="..\NGineer\BuildHelpers\BuilderException.cs">
       <Link>BuildHelpers\BuilderException.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\BuildHelpers\BuilderInstanceTracker.cs">
+      <Link>BuildHelpers\BuilderInstanceTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\BuildHelpers\BuilderMaximumInstancesReached.cs">
+      <Link>BuildHelpers\BuilderMaximumInstancesReached.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\BuildHelpers\BuilderStatEntry.cs">
+      <Link>BuildHelpers\BuilderStatEntry.cs</Link>
+    </Compile>
     <Compile Include="..\NGineer\BuildHelpers\BuildSession.cs">
       <Link>BuildHelpers\BuildSession.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildHelpers\GeneratorMemberSetter.cs">
       <Link>BuildHelpers\GeneratorMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\BuildHelpers\IgnoreMemberSetter.cs">
+      <Link>BuildHelpers\IgnoreMemberSetter.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildHelpers\IMemberSetter.cs">
       <Link>BuildHelpers\IMemberSetter.cs</Link>

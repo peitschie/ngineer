@@ -48,32 +48,34 @@ namespace NGineer.BuildHelpers
 
         public Type Type
         {
-            get { return _record.Type; }
+            get { return _record == null ? null : _record.Type; }
         }
 
         public object Object
         {
-            get { return _record != null ? _record.Object : null; }
+            get { return _record == null ? null : _record.Object; }
         }
 
         public MemberInfo[] UnconstructedMembers
         {
-            get { return _record.UnconstructedMembers; }
+            get { return _record == null ? new MemberInfo[0] : _record.UnconstructedMembers; }
         }
 
         public bool IsPopulated
         {
-            get { return _record.IsPopulated; }
+            get { return _record != null && _record.IsPopulated; }
             set { _record.IsPopulated = value; }
         }
 
         public bool IsConstructed(MemberInfo property)
         {
-            return _record.IsConstructed(property);
+            return _record != null && _record.IsConstructed(property);
         }
 
         public void RegisterConstructed(MemberInfo member)
         {
+            if(_record == null)
+                throw new BuilderException("Attempting to construct member to non-existent build record");
 			_record.RegisterConstructed(member);
         }
     }

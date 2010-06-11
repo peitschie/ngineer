@@ -7,7 +7,7 @@ using NGineer.BuildGenerators;
 namespace NGineer.UnitTests.BuildGenerators
 {
     [TestFixture]
-    public class ReusableInstancesGeneratorTests : GeneratorTestFixture<ReusableInstancesGenerator>
+    public class ReusableInstancesGeneratorTests : GeneratorTestFixture<DefaultReusableInstancesGenerator>
     {
 		private TypeRegistry<int?> _maxInstances;
 		

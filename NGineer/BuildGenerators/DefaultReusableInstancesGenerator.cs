@@ -7,7 +7,7 @@ using NGineer.Utils;
 
 namespace NGineer.BuildGenerators
 {
-    public class ReusableInstancesGenerator : IGenerator
+    public class DefaultReusableInstancesGenerator : IGenerator
     {
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {

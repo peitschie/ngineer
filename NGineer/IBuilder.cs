@@ -56,6 +56,8 @@ namespace NGineer
         /// </returns>
         IBuilder SetMaximumDepth(int? depth);
 
+        IBuilder SetMaximumObjects(int? maximum);
+
         /// <summary>
         /// By default, if the specified maximum build depth is reached, the builder will simply return null for anything
         /// deeper.  This method can be used to force the builder to throw an exception if the maximum build depth is reached.
@@ -98,6 +100,8 @@ namespace NGineer
         IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
         IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
         IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, IGenerator generator);
+
+        IBuilder Ignore<TType>(Expression<Func<TType, object>> expression);
 
         /// <summary>
         /// Registers a post-population member that is called after the object has been constructed and populated
