@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +10,7 @@ namespace NGineer.BuildHelpers
     {
         private readonly Type _type;
         private readonly object _obj;
-        private readonly HashSet<string> _constructedMembers = new HashSet<string>();
+        private readonly List<string> _constructedMembers = new List<string>();
         private readonly List<MemberInfo> _unconstructedMembers;
 
         private bool _isPopulated;

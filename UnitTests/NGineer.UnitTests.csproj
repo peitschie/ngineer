@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +16,6 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +92,7 @@
     <Compile Include="BuilderTests\SetNumberOfInstancesTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
+    <Compile Include="Examples\RegisterNewGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -117,10 +118,8 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties InternalTargetFrameworkVersion="3.5" />
-    </MonoDevelop>
-  </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Examples\" />
+  </ItemGroup>
 </Project>
