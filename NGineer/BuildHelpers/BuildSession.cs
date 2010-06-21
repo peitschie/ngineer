@@ -67,7 +67,9 @@ namespace NGineer.BuildHelpers
         public ObjectBuildTreeEntry CurrentObject { get; private set; }
 
 		public MemberInfo CurrentMember { get; private set; }
-				
+
+        public int ConstructedCount { get; private set; }
+
         public void PushObject(ObjectBuildRecord obj)
         {
             CurrentObject = CurrentObject.AddChild(obj);
@@ -76,6 +78,8 @@ namespace NGineer.BuildHelpers
 
         public void PushObject(Type type, object  obj)
         {
+            if (!(obj is ObjectBuildRecord) && BuilderInstanceTracker.IncludeInCount(type))
+                ConstructedCount++;
             PushObject((obj as ObjectBuildRecord) ?? new ObjectBuildRecord(type, obj));
         }
 

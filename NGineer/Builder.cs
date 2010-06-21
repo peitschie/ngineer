@@ -12,10 +12,11 @@ namespace NGineer
 {
 	public class Builder : IBuilder
 	{
-        protected static class Defaults
+        public static class Defaults
         {
             public const int BuildDepth = 5;
             public static readonly Range CollectionSize = new Range(10, 20);
+            public static int MaximumObjects = 5000;
         }
 		
         protected readonly Builder Parent;
@@ -28,10 +29,11 @@ namespace NGineer
 		private readonly TypeRegistry<int?> _maxInstances;
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
-	    private readonly ReusableInstancesGenerator _instancesGenerator;
+	    private readonly DefaultReusableInstancesGenerator _instancesGenerator;
 		
 		private Range _defaultCollectionSize;
 		private int? _maximumDepth;
+        private int? _maximumObjects;
 	    private bool _sealed;
 	    private bool? _throwOnDepthLimitReached;
 		
@@ -46,7 +48,7 @@ namespace NGineer
 			_maxInstances = new TypeRegistry<int?>();
             _collectionSizes = new TypeRegistry<Range>();
             _userGenerators = new List<IGenerator>();
-            _instancesGenerator = new ReusableInstancesGenerator();
+            _instancesGenerator = new DefaultReusableInstancesGenerator();
             _defaultGenerator = new DefaultConstructorGenerator();
         }
 
@@ -113,6 +115,23 @@ namespace NGineer
             get { return _maximumDepth == null && (Parent == null || Parent.IsBuildDepthUnset); }
 	    }
 
+
+        public int MaximumObjects
+        {
+            get
+            {
+                if (_maximumObjects.HasValue)
+                {
+                    return _maximumObjects.Value;
+                }
+                if (Parent != null)
+                {
+                    return Parent.MaximumObjects;
+                }
+                return Defaults.MaximumObjects;
+            }
+        }
+
 	    public Range DefaultCollectionSize
 	    {
             get
@@ -145,7 +164,6 @@ namespace NGineer
 			}
 		}
         #endregion
-
 
         #region WithGenerator implementations
         public IBuilder WithGenerator(IGenerator generator)
@@ -188,7 +206,14 @@ namespace NGineer
 			return this;
 		}
 
-        public IBuilder ThrowsWhenMaximumDepthReached()
+	    public IBuilder SetMaximumObjects(int? objects)
+	    {
+            AssertBuilderIsntSealed();
+	        _maximumObjects = objects;
+	        return this;
+	    }
+
+	    public IBuilder ThrowsWhenMaximumDepthReached()
         {
             _throwOnDepthLimitReached = true;
             return this;
@@ -317,7 +342,13 @@ namespace NGineer
         }
 
 	    #endregion
-		
+
+        public IBuilder Ignore<TType>(Expression<Func<TType, object>> expression)
+        {
+            AfterConstructionOf(new IgnoreMemberSetter(MemberExpressions.GetMemberInfo(expression)));
+            return this;
+        }
+
 	    public IBuilder Sealed()
 	    {
 	        _sealed = true;
@@ -368,6 +399,10 @@ namespace NGineer
                 }
                 return null;
             }
+            if (internalSession.ConstructedCount > MaximumObjects)
+            {
+                throw new BuilderMaximumInstancesReached(MaximumObjects, internalSession);
+            }
 
 	        var generator = GetGeneratorOrDefault(type, internalSession);
             var obj = generator.Create(type, this, internalSession);
@@ -386,7 +421,7 @@ namespace NGineer
 	        return obj;
         }
 
-        #endregion
+	    #endregion
 
         private void DoMemberSetters(Type type, BuildSession session)
         {

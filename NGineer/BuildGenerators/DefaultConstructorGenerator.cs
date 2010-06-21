@@ -8,6 +8,15 @@ namespace NGineer.BuildGenerators
 {
     public class DefaultConstructorGenerator : IGenerator
     {
+        private readonly Type _type;
+
+        public DefaultConstructorGenerator() { }
+
+        public DefaultConstructorGenerator(Type type)
+        {
+            _type = type;
+        }
+
         private static object InvokeDefaultConstructor(Type type)
         {
             var constructor = type.GetConstructor(new Type[0]);
@@ -16,7 +25,7 @@ namespace NGineer.BuildGenerators
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return true;
+            return _type == null || Equals(_type, type);
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

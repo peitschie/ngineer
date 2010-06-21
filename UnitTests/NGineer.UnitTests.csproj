@@ -63,9 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BuilderTests\SetMaximumDepthTests.cs" />
+    <Compile Include="BuilderTests\SetMaximumObjectsTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
     <Compile Include="BuildHelpers\BuildSessionTests.cs" />
     <Compile Include="BuildHelpers\ObjectBuildRecordTests.cs" />
+    <Compile Include="BuildHelpers\ObjectBuildTreeEntryTests.cs" />
     <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
     <Compile Include="BuildGenerators\BoolGeneratorTests.cs" />
