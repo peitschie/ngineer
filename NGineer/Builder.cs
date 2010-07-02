@@ -52,6 +52,9 @@ namespace NGineer
             _defaultGenerator = new DefaultConstructorGenerator();
         }
 
+        public Builder() : this(0, false)
+        {}
+
 	    public Builder(int seed) : this(seed, false)
 		{
 			_allMaxInstances = new InheritedTypeRegistry<int?>(null, _maxInstances);
