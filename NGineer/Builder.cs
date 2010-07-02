@@ -352,6 +352,11 @@ namespace NGineer
             return this;
         }
 
+        public ITypedBuilder<TType> For<TType>()
+        {
+            return new TypedBuilder<TType>(this);
+        }
+
 	    public IBuilder Sealed()
 	    {
 	        _sealed = true;

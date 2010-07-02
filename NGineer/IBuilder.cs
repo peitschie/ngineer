@@ -165,6 +165,8 @@ namespace NGineer
 		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
         IBuilder SetNumberOfInstances(Type type, int minimum, int maximum);
 
+        ITypedBuilder<TType> For<TType>();
+
         IBuilder CreateNew();
 
         /// <summary>

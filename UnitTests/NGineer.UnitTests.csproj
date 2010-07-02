@@ -93,6 +93,7 @@
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
     <Compile Include="Examples\RegisterNewGenerator.cs" />
+    <Compile Include="TypedBuilder\SetTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -121,5 +122,6 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Examples\" />
+    <Folder Include="TypedBuilder\" />
   </ItemGroup>
 </Project>

@@ -210,6 +210,8 @@
     <Compile Include="..\NGineer\Utils\StringExtensions.cs">
       <Link>Utils\StringExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\ITypedBuilder.cs" />
+    <Compile Include="..\NGineer\TypedBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BuildGenerators\" />
