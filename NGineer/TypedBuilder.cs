@@ -61,13 +61,6 @@ namespace NGineer
             return this;
         }
         
-        
-        public ITypedBuilder<TTarget> SetNumberOfInstances (int minimum, int maximum)
-        {
-            _parent.SetNumberOfInstances<TTarget>(maximum, minimum);
-            return this;
-        }
-        
         #endregion
 
         #region IBuilder implementation
@@ -77,22 +70,9 @@ namespace NGineer
         }
 
 
-        public TType Build<TType> ()
-
-        {
-            return _parent.Build<TType>();
-        }
-        
-        
         public object Build (Type type, BuildSession session)
         {
             return _parent.Build(type, session);
-        }
-
-
-        public TType Build<TType> (BuildSession session)
-        {
-            return _parent.Build<TType>(session);
         }
 
 
@@ -118,59 +98,12 @@ namespace NGineer
         {
             return _parent.WithGenerator(generator);
         }
-        
-        
-        public IBuilder WithGenerator (Type type, Func<IBuilder, BuildSession, object> generator)
-        {
-            return _parent.WithGenerator(type, generator);
-        }
-        
-        
-        public IBuilder WithGenerator<TType> (Func<IBuilder, BuildSession, TType> generator)
-        
-        {
-            return _parent.WithGenerator<TType>(generator);
-        }
-        
-        
-        public IBuilder WithGenerator<TType> (Func<TType> generator)
-        
-        {
-            return _parent.WithGenerator<TType>(generator);
-        }
-        
+
         
         public IBuilder AfterConstructionOf (IMemberSetter setter)
         {
             return _parent.AfterConstructionOf(setter);
         }
-        
-        
-        public IBuilder AfterConstructionOf (MemberInfo member, Func<object, IBuilder, BuildSession, object> value)
-        {
-            return _parent.AfterConstructionOf(member, value);
-        }
-        
-        
-        public IBuilder AfterConstructionOf<TType, TReturnType> (Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value)
-        
-        
-        {
-            return _parent.AfterConstructionOf(expression, value);
-        }
-        
-        
-        public IBuilder AfterConstructionOf<TType, TReturnType> (Expression<Func<TType, TReturnType>> expression, TReturnType value)
-        {
-            return _parent.AfterConstructionOf(expression, value);
-        }
-
-
-        public IBuilder AfterConstructionOf<TType> (Expression<Func<TType, object>> expression, IGenerator generator)
-        {
-            return _parent.AfterConstructionOf(expression, generator);
-        }
-        
         
         public IBuilder Ignore<TType> (Expression<Func<TType, object>> expression)
         {
@@ -184,18 +117,6 @@ namespace NGineer
         }
 
 
-        public IBuilder AfterPopulationOf<TType> (Action<TType> setter)
-        {
-            return _parent.AfterPopulationOf(setter);
-        }
-        
-        
-        public IBuilder AfterPopulationOf<TType> (Action<TType, IBuilder, BuildSession> setter)
-        {
-            return _parent.AfterPopulationOf(setter);
-        }
-        
-        
         public IBuilder SetCollectionSize (int minimum, int maximum)
         {
             return _parent.SetCollectionSize(minimum, maximum);
@@ -207,18 +128,6 @@ namespace NGineer
             return _parent.SetCollectionSize(type, minimum, maximum);
         }
 
-
-        public IBuilder SetCollectionSize<TType> (int minimum, int maximum)
-        {
-            return _parent.SetCollectionSize<TType>(minimum, maximum);
-        }
-
-
-        IBuilder IBuilder.SetNumberOfInstances<TType> (int minimum, int maximum)
-        {
-            return _parent.SetNumberOfInstances<TType>(minimum, maximum);
-        }
-        
 
         public IBuilder SetNumberOfInstances (Type type, int minimum, int maximum)
         {

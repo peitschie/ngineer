@@ -212,6 +212,7 @@
     </Compile>
     <Compile Include="..\NGineer\ITypedBuilder.cs" />
     <Compile Include="..\NGineer\TypedBuilder.cs" />
+    <Compile Include="..\NGineer\IBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BuildGenerators\" />

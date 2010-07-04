@@ -40,19 +40,5 @@ namespace NGineer
         ITypedBuilder<TType> Do(Action<TType> setter);
         ITypedBuilder<TType> Do(Action<TType, IBuilder, BuildSession> setter);
 
-        /// <summary>
-        /// Specifies the maximum number of unique instances of a certain
-        /// type to create before simply re-using existing types. 
-        /// </summary>
-        /// <param name="minimum">
-        /// A <see cref="System.Int32"/>
-        /// </param>
-        /// <param name="maximum">
-        /// A <see cref="System.Int32"/>
-        /// </param>
-        /// <returns>
-        /// A <see cref="IBuilder"/>
-        /// </returns>
-        ITypedBuilder<TType> SetNumberOfInstances(int minimum, int maximum);
     }
 }

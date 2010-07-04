@@ -118,6 +118,7 @@
     <Compile Include="BuildGenerators\DefaultReusableInstancesGenerator.cs" />
     <Compile Include="ITypedBuilder.cs" />
     <Compile Include="TypedBuilder.cs" />
+    <Compile Include="IBuilderExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -25,7 +25,7 @@ namespace NGineer.UnitTests.TypedBuilder
         {
             _builder.Set(c => c.IntField, 10);
             _builder.Build<SimpleClass>();
-            _builderMock.Verify(m => m.Build<SimpleClass>());
+            _builderMock.Verify(m => m.Build(typeof(SimpleClass)));
         }
     }
 }

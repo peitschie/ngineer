@@ -178,20 +178,6 @@ namespace NGineer
 			return this;
 		}
 
-        public IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator)
-        {
-            return WithGenerator(new BuilderGenerator(type, generator));
-        }
-
-        public IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator)
-        {
-            return WithGenerator(new BuilderGenerator<TType>(generator));
-        }        
-        
-        public IBuilder WithGenerator<TType>(Func<TType> generator)
-        {
-            return WithGenerator(new BuilderGenerator<TType>((b, s) => generator()));
-        }
         #endregion
 
         private void AssertBuilderIsntSealed()
@@ -235,43 +221,13 @@ namespace NGineer
             return this;
         }
 
-	    public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
-	    {
-	        _collectionSizes.SetForType<TType>(new Range(minimum, maximum));
-	        return this;
-	    }
-
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
             _maxInstances.SetForType(type, _random.NextInRange(minimum, maximum));
             return this;
         }
 
-	    public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
-	    {
-			_maxInstances.SetForType<TType>(_random.NextInRange(minimum, maximum));
-	        return this;
-	    }
-
 	    #region AfterPopulationOf implementations
-
-	    public IBuilder AfterPopulationOf<TType>(Action<TType> setter)
-        {
-			if(setter == null)
-				throw new ArgumentNullException("setter");
-            AssertBuilderIsntSealed();
-            Setters.Add(new Setter<TType>(setter));
-            return this;
-        }
-
-        public IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter)
-	    {
-			if(setter == null)
-				throw new ArgumentNullException("setter");
-            AssertBuilderIsntSealed();
-            Setters.Add(new Setter<TType>(setter));
-            return this;
-	    }
 
 	    public IBuilder AfterPopulationOf(ISetter setter)
 	    {
@@ -293,56 +249,6 @@ namespace NGineer
 			MemberSetters.Add(setter);
 			return this;
 		}
-
-        public IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> setter)
-        {
-			if(member == null)
-				throw new ArgumentNullException("member");
-			if(setter == null)
-				throw new ArgumentNullException("setter");
-            ValidateMember(member, setter);
-			MemberSetters.Add(new MemberSetter(member, setter));
-            return this;
-        }
-
-        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression,
-                                                                Func<TType, IBuilder, BuildSession, TReturnType> setter)
-        {
-			if(expression == null)
-				throw new ArgumentNullException("expression");
-			if(setter == null)
-				throw new ArgumentNullException("setter");
-            var member = MemberExpressions.GetMemberInfo(expression);
-            ValidateMember(member, setter);
-			MemberSetters.Add(new MemberSetter<TType, TReturnType>(member, setter));
-            return this;
-        }
-       
-        public IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value)
-        {
-            return AfterConstructionOf(expression, (o, b, s) => value);
-        }
-
-        public IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression,
-                                                                IGenerator generator)
-        {
-            if(expression == null)
-                throw new ArgumentNullException("expression");
-            if(generator == null)
-                throw new ArgumentNullException("generator");
-            var member = MemberExpressions.GetMemberInfo(expression);
-            // No validation can be done here as the generator only returns a generic object type
-            MemberSetters.Add(new GeneratorMemberSetter(member, generator));
-            return this;
-        }
-
-        private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)
-        {
-			if(!member.ReturnType().IsAssignableFrom(typeof(TReturnType)))
-			{
-				throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
-			}
-        }
 
 	    #endregion
 
@@ -373,16 +279,6 @@ namespace NGineer
 	    }
 
         #region Build implementations
-        public TType Build<TType>()
-		{
-            return (TType)Build(typeof(TType));
-		}
-
-	    public TType Build<TType>(BuildSession session)
-        {
-            return (TType)Build(typeof (TType), session);
-        }
-
         public object Build(Type type)
         {
             return Build(type, new BuildSession(this, CollectionSizes, 
