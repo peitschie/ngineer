@@ -13,7 +13,8 @@ namespace NGineer.BuildHelpers
         private string _statsTop10;
 
         public BuilderMaximumInstancesReached(int maxInstances, BuildSession session)
-            : base("Maximum number of new objects was exceeded at {0} objects".With(maxInstances))
+            : base("Maximum number of new objects was exceeded at {0} objects: {1}".With(maxInstances, 
+            GenerateSummaryString(GenerateStats(session))))
         {
             _session = session;
             _maxInstances = maxInstances;
@@ -23,17 +24,13 @@ namespace NGineer.BuildHelpers
         {
             get
             {
-                return _statsTop10 ?? (_statsTop10 = string.Join(Environment.NewLine, Statistics
-                    .Where(e => BuilderInstanceTracker.IncludeInCount(e.Type))
-                    .Take(10)
-                    .Select(e => "{0}({1})".With(e.Type.Name, e.Count))
-                    .ToArray()));
+                return _statsTop10 ?? (_statsTop10 = GenerateSummaryString(Statistics));
             }
         }
 
         public IList<BuilderStatEntry> Statistics
         {
-            get { return _stats ?? (_stats = GenerateStats()); }
+            get { return _stats ?? (_stats = GenerateStats(Session)); }
         }
 
         public BuildSession Session
@@ -46,10 +43,19 @@ namespace NGineer.BuildHelpers
             get { return _maxInstances; }
         }
 
-        private List<BuilderStatEntry> GenerateStats()
+        private static string GenerateSummaryString(IEnumerable<BuilderStatEntry> statistics)
+        {
+            return string.Join(Environment.NewLine, statistics
+                                                        .Where(e => BuilderInstanceTracker.IncludeInCount(e.Type))
+                                                        .Take(10)
+                                                        .Select(e => "{0}({1})".With(e.Type.Name, e.Count))
+                                                        .ToArray());
+        }
+
+        private static List<BuilderStatEntry> GenerateStats(BuildSession session)
         {
             var stats = new Dictionary<Type, int>();
-            GenerateStats(_session.BuiltObjectTreeRoot, stats, new List<ObjectBuildRecord>());
+            GenerateStats(session.BuiltObjectTreeRoot, stats, new List<ObjectBuildRecord>());
             return stats.Select(e => new BuilderStatEntry(e.Key, e.Value)).OrderByDescending(s => s.Count).ToList();
         }
 
