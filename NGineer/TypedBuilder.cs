@@ -47,6 +47,18 @@ namespace NGineer
             return this;
         }
 
+        public ITypedBuilder<TTarget> IgnoreUnset()
+        {
+            _parent.IgnoreUnset<TTarget>();
+            return this;
+        }
+
+        public ITypedBuilder<TTarget> IgnoreAll()
+        {
+            _parent.IgnoreAll<TTarget>();
+            return this;
+        }
+
 
         public ITypedBuilder<TTarget> Do (Action<TTarget> setter)
         {
@@ -104,12 +116,16 @@ namespace NGineer
         {
             return _parent.AfterConstructionOf(setter);
         }
-        
-        public IBuilder Ignore<TType> (Expression<Func<TType, object>> expression)
+
+        public IBuilder Ignore(MemberInfo member)
         {
-            return _parent.Ignore(expression);
+            return _parent.Ignore(member);
         }
 
+        public IBuilder IgnoreUnset(Type type)
+        {
+            return _parent.IgnoreUnset(type);
+        }
 
         public IBuilder AfterPopulationOf (ISetter setter)
         {
