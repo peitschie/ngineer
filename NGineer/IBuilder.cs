@@ -22,7 +22,6 @@ namespace NGineer
         /// A <see cref="System.Object"/>
         /// </returns>
         object Build(Type type);
-        TType Build<TType>();
 
         /// <summary>
         /// Constructs a new instance of the passed in type re-using the specified
@@ -40,7 +39,6 @@ namespace NGineer
         /// A <see cref="System.Object"/>
         /// </returns>
         object Build(Type type, BuildSession session);
-        TType Build<TType>(BuildSession session);
         #endregion
 
         /// <summary>
@@ -78,9 +76,6 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder WithGenerator(IGenerator generator);
-        IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator);
-        IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator);
-        IBuilder WithGenerator<TType>(Func<TType> generator);
 
         /// <summary>
         /// Registers a post-constructor member setter to fill out a specific property or field.
@@ -96,10 +91,6 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
-        IBuilder AfterConstructionOf(MemberInfo member, Func<object, IBuilder, BuildSession, object> value);
-        IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
-        IBuilder AfterConstructionOf<TType, TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
-        IBuilder AfterConstructionOf<TType>(Expression<Func<TType, object>> expression, IGenerator generator);
 
         IBuilder Ignore<TType>(Expression<Func<TType, object>> expression);
 
@@ -114,8 +105,6 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
 		IBuilder AfterPopulationOf(ISetter setter);
-        IBuilder AfterPopulationOf<TType>(Action<TType> setter);
-        IBuilder AfterPopulationOf<TType>(Action<TType, IBuilder, BuildSession> setter);
 
         /// <summary>
         /// Sets the range of items to put in an array, list or other type of collection by default.
@@ -147,7 +136,6 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder SetCollectionSize(Type type, int minimum, int maximum);
-        IBuilder SetCollectionSize<TType>(int minimum, int maximum);
 
         /// <summary>
         /// Specifies the maximum number of unique instances of a certain
@@ -162,8 +150,9 @@ namespace NGineer
         /// <returns>
         /// A <see cref="IBuilder"/>
         /// </returns>
-		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
         IBuilder SetNumberOfInstances(Type type, int minimum, int maximum);
+
+        ITypedBuilder<TType> For<TType>();
 
         IBuilder CreateNew();
 

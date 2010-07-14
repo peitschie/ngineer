@@ -48,7 +48,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void GenerateAndPopulate_CustomClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(c => c.Build<ClassWithEnumAndProperties>(It.IsAny<BuildSession>()))
+            builderMock.Setup(c => c.Build(typeof(ClassWithEnumAndProperties), It.IsAny<BuildSession>()))
                 .Returns(() => new ClassWithEnumAndProperties(){EnumProperty = SimpleEnum.First});
             
             var list = CreateAndGenerate<IList<ClassWithEnumAndProperties>>(builderMock.Object, BuildSession());

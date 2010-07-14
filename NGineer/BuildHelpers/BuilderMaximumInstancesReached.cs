@@ -56,7 +56,10 @@ namespace NGineer.BuildHelpers
         {
             var stats = new Dictionary<Type, int>();
             GenerateStats(session.BuiltObjectTreeRoot, stats, new List<ObjectBuildRecord>());
-            return stats.Select(e => new BuilderStatEntry(e.Key, e.Value)).OrderByDescending(s => s.Count).ToList();
+            return stats.Select(e => new BuilderStatEntry(e.Key, e.Value))
+				.OrderByDescending(s => s.Count)
+				.ThenBy(s => s.Type.Name)
+				.ToList();
         }
 
         private static void GenerateStats(ObjectBuildTreeEntry node, IDictionary<Type, int> stats, IList<ObjectBuildRecord> seen)

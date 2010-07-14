@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <ValidateXaml>false</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <AssemblyName>NGineer.Silverlight</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <FileUpgradeFlags>
@@ -95,9 +95,6 @@
     </Compile>
     <Compile Include="..\NGineer\BuildGenerators\NullableTypeGenerator.cs">
       <Link>BuildGenerators\NullableTypeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\NullObjectGenerator.cs">
-      <Link>BuildGenerators\NullObjectGenerator.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildGenerators\ReuseInstancesGenerator.cs">
       <Link>BuildGenerators\ReuseInstancesGenerator.cs</Link>
@@ -213,6 +210,9 @@
     <Compile Include="..\NGineer\Utils\StringExtensions.cs">
       <Link>Utils\StringExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\ITypedBuilder.cs" />
+    <Compile Include="..\NGineer\TypedBuilder.cs" />
+    <Compile Include="..\NGineer\IBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BuildGenerators\" />
@@ -221,10 +221,10 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v2.0\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
-      <Properties InternalTargetFrameworkVersion="SL2.0" xmlns="" />
+      <Properties InternalTargetFrameworkVersion="SL2.0" />
     </MonoDevelop>
   </ProjectExtensions>
 </Project>
