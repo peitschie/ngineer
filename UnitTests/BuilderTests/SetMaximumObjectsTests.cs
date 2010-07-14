@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetCollectionSize<TestClass2>(Builder.Defaults.MaximumObjects + 1, Builder.Defaults.MaximumObjects + 1)
                 .Sealed();
             var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<TestClass2[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at {0} objects".With(Builder.Defaults.MaximumObjects), exception.Message);
+            Assert.AreEqual("Maximum number of new objects was exceeded at {0} objects: TestClass2(5001)".With(Builder.Defaults.MaximumObjects), exception.Message);
             Assert.AreEqual(3, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(TestClass2), Builder.Defaults.MaximumObjects+1), exception.Statistics[index++]);
@@ -30,7 +30,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetMaximumObjects(8)
                 .Sealed();
             var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<TestClass2[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 8 objects", exception.Message);
+            Assert.AreEqual("Maximum number of new objects was exceeded at 8 objects: TestClass2(9)", exception.Message);
             Assert.AreEqual(3, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(TestClass2), 9), exception.Statistics[index++]);
@@ -67,7 +67,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetNumberOfInstances<RecursiveClass>(4, 4)
                 .Sealed();
             var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<RecursiveClass>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 3 objects", exception.Message);
+            Assert.AreEqual("Maximum number of new objects was exceeded at 3 objects: RecursiveClass(4)", exception.Message);
             Assert.AreEqual(2, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(RecursiveClass), 4), exception.Statistics[index++]);
@@ -82,7 +82,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetMaximumObjects(4)
                 .Sealed();
             var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<SimpleClass[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 4 objects", exception.Message);
+            Assert.AreEqual("Maximum number of new objects was exceeded at 4 objects: TestClass2(3)\r\nSimpleClass(2)", exception.Message);
             Assert.AreEqual(5, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(string), 5), exception.Statistics[index++]);

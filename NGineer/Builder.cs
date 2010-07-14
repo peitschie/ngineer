@@ -27,6 +27,7 @@ namespace NGineer
 		private readonly Random _random;
 	    private readonly TypeRegistry<Range> _collectionSizes;
 		private readonly TypeRegistry<int?> _maxInstances;
+        private readonly IDictionary<Type, bool> _ignoreUnset;
 	    private readonly IList<IGenerator> _userGenerators;
 	    private readonly IGenerator _defaultGenerator;
 	    private readonly DefaultReusableInstancesGenerator _instancesGenerator;
@@ -47,12 +48,13 @@ namespace NGineer
 			_random = new Random(seed);
 			_maxInstances = new TypeRegistry<int?>();
             _collectionSizes = new TypeRegistry<Range>();
+            _ignoreUnset = new Dictionary<Type, bool>();
             _userGenerators = new List<IGenerator>();
             _instancesGenerator = new DefaultReusableInstancesGenerator();
             _defaultGenerator = new DefaultConstructorGenerator();
         }
 
-        public Builder() : this(0, false)
+        public Builder() : this(0)
         {}
 
 	    public Builder(int seed) : this(seed, false)
@@ -246,19 +248,26 @@ namespace NGineer
 		{
 			if(setter == null)
 				throw new ArgumentNullException("setter");
-			MemberSetters.Add(setter);
+			MemberSetters.Insert(0, setter);
 			return this;
 		}
 
 	    #endregion
 
-        public IBuilder Ignore<TType>(Expression<Func<TType, object>> expression)
+
+        public IBuilder Ignore(MemberInfo member)
         {
-            AfterConstructionOf(new IgnoreMemberSetter(MemberExpressions.GetMemberInfo(expression)));
+            AfterConstructionOf(new IgnoreMemberSetter(member));
             return this;
         }
 
-        public ITypedBuilder<TType> For<TType>()
+	    public IBuilder IgnoreUnset(Type type)
+	    {
+	        _ignoreUnset[type] = true;
+            return this;
+	    }
+
+	    public ITypedBuilder<TType> For<TType>()
         {
             return new TypedBuilder<TType>(this);
         }
@@ -317,8 +326,11 @@ namespace NGineer
                 if (!internalSession.CurrentObject.IsPopulated)
                 {
                     DoMemberSetters(type, internalSession);
-                    generator.Populate(type, obj, this, internalSession);
-                    DoPopulators(type, internalSession);
+                    if (!_ignoreUnset.ContainsKey(type) || _ignoreUnset[type] == false)
+                    {
+                        generator.Populate(type, obj, this, internalSession);
+                        DoPopulators(type, internalSession);
+                    }
                 }
                 internalSession.PopObject();
             }
@@ -332,12 +344,10 @@ namespace NGineer
             foreach (var member in session.CurrentObject.UnconstructedMembers)
             {
 				session.PushMember(member);
-                var setters = MemberSetters.Where(s => s.IsForMember(member, session.Builder, session)).ToArray();
-                foreach (var setter in setters)
-                {
+                var setter = MemberSetters.FirstOrDefault(s => s.IsForMember(member, session.Builder, session));
+                if(setter != null)
                     setter.Set(session.CurrentObject.Object, session.Builder, session);
-                }
-				session.PopMember(setters.Length > 0);
+				session.PopMember(setter != null);
             }
             if (Parent != null)
             {

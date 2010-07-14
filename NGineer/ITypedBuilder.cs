@@ -26,6 +26,8 @@ namespace NGineer
         ITypedBuilder<TType> Set(Expression<Func<TType, object>> expression, IGenerator generator);
 
         ITypedBuilder<TType> Ignore(Expression<Func<TType, object>> expression);
+        ITypedBuilder<TType> IgnoreUnset();
+        ITypedBuilder<TType> IgnoreAll();
 
         /// <summary>
         /// Registers a post-population member that is called after the object has been constructed and populated

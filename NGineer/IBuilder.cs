@@ -92,7 +92,14 @@ namespace NGineer
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
 
-        IBuilder Ignore<TType>(Expression<Func<TType, object>> expression);
+        IBuilder Ignore(MemberInfo member);
+
+        /// <summary>
+        /// Ignores any members for this object type that do not currently have an existing setter
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <returns></returns>
+        IBuilder IgnoreUnset(Type type);
 
         /// <summary>
         /// Registers a post-population member that is called after the object has been constructed and populated
