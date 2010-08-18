@@ -11,27 +11,6 @@ namespace NGineer
 {
     public static class BuilderExtensions
     {
-        public static IBuilder WithGenerator(this IBuilder builder, Type type, Func<IBuilder, BuildSession, object> generator)
-        {
-            if(generator == null)
-                throw new ArgumentNullException("generator");
-            return builder.WithGenerator(new BuilderGenerator(type, generator));
-        }
-
-        public static IBuilder WithGenerator<TType>(this IBuilder builder, Func<IBuilder, BuildSession, TType> generator)
-        {
-            if(generator == null)
-                throw new ArgumentNullException("generator");
-            return builder.WithGenerator(new BuilderGenerator<TType>(generator));
-        }        
-        
-        public static IBuilder WithGenerator<TType>(this IBuilder builder, Func<TType> generator)
-        {
-            if(generator == null)
-                throw new ArgumentNullException("generator");
-            return builder.WithGenerator(new BuilderGenerator<TType>((b, s) => generator()));
-        }
-
         public static IBuilder AfterPopulationOf<TType>(this IBuilder builder, Action<TType> setter)
         {
             if(setter == null)
