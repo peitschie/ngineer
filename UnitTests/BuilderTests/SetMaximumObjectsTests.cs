@@ -77,12 +77,13 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void ManuallySet_ThrowsExceptionWhenReached_MultipleObjects()
         {
-            var builder = new Builder(1)
-                .SetDefaultCollectionSize(10,10)
+        	var builder = new Builder(1)
+                .SetDefaultCollectionSize(10, 10)
                 .SetMaximumObjects(4)
                 .Sealed();
-            var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<SimpleClass[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 4 objects: TestClass2(3)\r\nSimpleClass(2)", exception.Message);
+        	var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<SimpleClass[]>());
+        	Assert.AreEqual("Maximum number of new objects was exceeded at 4 objects: TestClass2(3)SimpleClass(2)", 
+				exception.Message.Replace("\n","").Replace("\r",""));
             Assert.AreEqual(5, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(string), 5), exception.Statistics[index++]);
