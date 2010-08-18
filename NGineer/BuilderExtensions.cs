@@ -102,28 +102,9 @@ namespace NGineer
             return builder.SetNumberOfInstances(typeof(TType), minimum, maximum);
         }
 
-        /// <summary>
-        /// Ignores all members for this type individually (overrides any previous setters)
-        /// </summary>
-        /// <typeparam name="TType"></typeparam>
-        /// <returns></returns> 
-        public static IBuilder IgnoreAll<TType>(this IBuilder builder)
-        {
-            foreach (var member in typeof(TType).GetMembers().Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property))
-            {
-                builder.IgnoreMember(member);
-            }
-            return builder;
-        }
-
         public static IBuilder IgnoreMember<TType>(this IBuilder builder, Expression<Func<TType, object>> expression)
         {
             return builder.IgnoreMember(MemberExpressions.GetMemberInfo(expression));
-        }
-
-        public static IBuilder IgnoreUnset<TType>(this IBuilder builder)
-        {
-            return builder.IgnoreUnset(typeof(TType));
         }
     }
 }

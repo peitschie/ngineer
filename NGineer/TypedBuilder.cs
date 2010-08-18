@@ -49,16 +49,19 @@ namespace NGineer
 
         public ITypedBuilder<TTarget> IgnoreUnset()
         {
-            _parent.IgnoreUnset<TTarget>();
+            _parent.IgnoreUnset(typeof(TTarget));
             return this;
         }
 
         public ITypedBuilder<TTarget> IgnoreAll()
         {
-            _parent.IgnoreAll<TTarget>();
+        	foreach (var member in typeof(TTarget).GetMembers()
+				.Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property)) 
+			{
+				_parent.IgnoreMember(member);
+			}
             return this;
         }
-
 
         public ITypedBuilder<TTarget> Do (Action<TTarget> setter)
         {
