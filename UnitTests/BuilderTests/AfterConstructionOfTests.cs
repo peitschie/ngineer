@@ -278,7 +278,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterConstructionOf_IgnoreProperty()
         {
             var builder = new Builder(1)
-                .Ignore<SimpleClass>(c => c.StringProperty)
+                .IgnoreMember<SimpleClass>(c => c.StringProperty)
                 ;
             SimpleClass newClass = null;
             Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());

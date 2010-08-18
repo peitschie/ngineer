@@ -43,7 +43,7 @@ namespace NGineer
         
         public ITypedBuilder<TTarget> Ignore (Expression<Func<TTarget, object>> expression)
         {
-            _parent.Ignore<TTarget>(expression);
+            _parent.IgnoreMember<TTarget>(expression);
             return this;
         }
 
