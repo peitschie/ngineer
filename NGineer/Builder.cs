@@ -180,6 +180,26 @@ namespace NGineer
 			return this;
 		}
 
+		public IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator)
+		{
+			if (generator == null)
+				throw new ArgumentNullException("generator");
+			return WithGenerator(new BuilderGenerator(type, generator));
+		}
+
+		public IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator)
+		{
+			if (generator == null)
+				throw new ArgumentNullException("generator");
+			return WithGenerator(new BuilderGenerator<TType>(generator));
+		}
+
+		public IBuilder WithGenerator<TType>(Func<TType> generator)
+		{
+			if (generator == null)
+				throw new ArgumentNullException("generator");
+			return WithGenerator(new BuilderGenerator<TType>((b, s) => generator()));
+		}		
         #endregion
 
         private void AssertBuilderIsntSealed()

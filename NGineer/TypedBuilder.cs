@@ -126,6 +126,21 @@ namespace NGineer
             return _parent.WithGenerator(generator);
         }
 
+		public IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator)
+		{
+			return _parent.WithGenerator(type, generator);
+		}
+		
+		public IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator)
+		{
+			return _parent.WithGenerator(generator);
+		}
+		
+		public IBuilder WithGenerator<TType>(Func<TType> generator)
+		{
+			return _parent.WithGenerator(generator);
+		}
+		
         
         public IBuilder AfterConstructionOf (IMemberSetter setter)
         {

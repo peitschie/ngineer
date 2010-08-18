@@ -78,6 +78,9 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder WithGenerator(IGenerator generator);
+		IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator);
+		IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator);
+		IBuilder WithGenerator<TType>(Func<TType> generator);
 
         /// <summary>
         /// Registers a post-constructor member setter to fill out a specific property or field.
