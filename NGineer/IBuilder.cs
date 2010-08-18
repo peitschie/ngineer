@@ -23,6 +23,7 @@ namespace NGineer
         /// </returns>
         object Build(Type type);
 		TType Build<TType>();
+		TType Build<TType>(BuildSession session);
 
         /// <summary>
         /// Constructs a new instance of the passed in type re-using the specified
@@ -93,7 +94,7 @@ namespace NGineer
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
 
-        IBuilder Ignore(MemberInfo member);
+        IBuilder IgnoreMember(MemberInfo member);
 
         /// <summary>
         /// Ignores any members for this object type that do not currently have an existing setter

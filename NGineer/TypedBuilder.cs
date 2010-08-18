@@ -87,12 +87,19 @@ namespace NGineer
         	return _parent.Build(type, session);
         }
 		
+		
 		public TType Build<TType>()
 		{
 			return _parent.Build<TType>();
 		}
 
+		
+		public TType Build<TType>(BuildSession session)
+		{
+			return _parent.Build<TType>(session);
+		}
 
+		
         public IBuilder SetMaximumDepth (Nullable<int> depth)
         {
             return _parent.SetMaximumDepth(depth);
@@ -122,9 +129,9 @@ namespace NGineer
             return _parent.AfterConstructionOf(setter);
         }
 
-        public IBuilder Ignore(MemberInfo member)
+        public IBuilder IgnoreMember(MemberInfo member)
         {
-            return _parent.Ignore(member);
+            return _parent.IgnoreMember(member);
         }
 
         public IBuilder IgnoreUnset(Type type)

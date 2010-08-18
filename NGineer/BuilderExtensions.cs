@@ -116,14 +116,14 @@ namespace NGineer
         {
             foreach (var member in typeof(TType).GetMembers().Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property))
             {
-                builder.Ignore(member);
+                builder.IgnoreMember(member);
             }
             return builder;
         }
 
         public static IBuilder IgnoreMember<TType>(this IBuilder builder, Expression<Func<TType, object>> expression)
         {
-            return builder.Ignore(MemberExpressions.GetMemberInfo(expression));
+            return builder.IgnoreMember(MemberExpressions.GetMemberInfo(expression));
         }
 
         public static IBuilder IgnoreUnset<TType>(this IBuilder builder)

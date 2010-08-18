@@ -255,7 +255,7 @@ namespace NGineer
 	    #endregion
 
 
-        public IBuilder Ignore(MemberInfo member)
+        public IBuilder IgnoreMember(MemberInfo member)
         {
             AfterConstructionOf(new IgnoreMemberSetter(member));
             return this;
@@ -342,6 +342,10 @@ namespace NGineer
 			return (TType)Build(typeof(TType));
 		}
 		
+		public TType Build<TType>(BuildSession session)
+		{
+			return (TType)Build(typeof(TType), session);
+		}		
 	    #endregion
 
         private void DoMemberSetters(Type type, BuildSession session)
