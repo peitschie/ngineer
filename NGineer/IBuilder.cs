@@ -161,6 +161,7 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder SetNumberOfInstances(Type type, int minimum, int maximum);
+		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
 
         ITypedBuilder<TType> For<TType>();
 

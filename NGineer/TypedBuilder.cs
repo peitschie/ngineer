@@ -169,6 +169,10 @@ namespace NGineer
             return _parent.SetNumberOfInstances(type, minimum, maximum);
         }
         
+		public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
+		{
+			return _parent.SetNumberOfInstances<TType>(minimum, maximum);
+		}
         
         public ITypedBuilder<TType> For<TType> ()
         

@@ -97,11 +97,6 @@ namespace NGineer
             }
         }
 
-        public static IBuilder SetNumberOfInstances<TType> (this IBuilder builder, int minimum, int maximum)
-        {
-            return builder.SetNumberOfInstances(typeof(TType), minimum, maximum);
-        }
-
         public static IBuilder IgnoreMember<TType>(this IBuilder builder, Expression<Func<TType, object>> expression)
         {
             return builder.IgnoreMember(MemberExpressions.GetMemberInfo(expression));

@@ -226,7 +226,12 @@ namespace NGineer
 		public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
 		{
 			return SetCollectionSize(typeof(TType), minimum, maximum);
-        }
+		}
+		
+		public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
+		{
+			return SetNumberOfInstances(typeof(TType), minimum, maximum);
+		}
 		
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
