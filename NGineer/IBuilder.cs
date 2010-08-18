@@ -127,7 +127,7 @@ namespace NGineer
         /// <returns>
         /// A <see cref="IBuilder"/>
         /// </returns>
-        IBuilder SetCollectionSize(int minimum, int maximum);
+        IBuilder SetDefaultCollectionSize(int minimum, int maximum);
 
         /// <summary>
         /// Specify the number of items to put a list or collection of a specific type.

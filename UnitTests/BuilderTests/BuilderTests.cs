@@ -70,7 +70,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var newClass = new Builder(1).AfterPopulationOf<int>(n => { }).Sealed();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
-			Assert.Throws<BuilderException>(() => newClass.SetCollectionSize(10, 100));
+			Assert.Throws<BuilderException>(() => newClass.SetDefaultCollectionSize(10, 100));
             Assert.Throws<BuilderException>(() => newClass.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
         }
@@ -81,7 +81,7 @@ namespace NGineer.UnitTests.BuilderTests
             var builder = new Builder(1).AfterPopulationOf<int>(n => { });
             builder.Build<int>();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
-            Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
+            Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
             Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
@@ -92,7 +92,7 @@ namespace NGineer.UnitTests.BuilderTests
             var builder = new Builder(1).AfterPopulationOf<int>(n => { });
             builder.CreateNew().Sealed();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
-            Assert.Throws<BuilderException>(() => builder.SetCollectionSize(10, 100));
+            Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
             Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
@@ -101,7 +101,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void CollectionSize_DefaultSettable()
         {
             var newClass = new Builder(1)
-                .SetCollectionSize(50, 60)
+                .SetDefaultCollectionSize(50, 60)
                 .Build<IList<SimpleClass>>();
 
 			Assert.IsNotNull(newClass);
@@ -112,7 +112,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void CollectionSize_UseParentDefault_BeforeClassDefault()
         {
             var newClass = new Builder(1)
-                .SetCollectionSize(50, 50)
+                .SetDefaultCollectionSize(50, 50)
                 .CreateNew()
                 .Build<IList<SimpleClass>>();
 
@@ -123,7 +123,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void CollectionSize_SettablePerType()
         {
             var newClass = new Builder(1)
-                .SetCollectionSize(50, 50)
+                .SetDefaultCollectionSize(50, 50)
                 .SetCollectionSize<SimpleClass>(10, 10)
                 .Build<IList<SimpleClass>>();
 
@@ -135,7 +135,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void CollectionSize_SettablePerType_ChildInherits()
         {
             var newClass = new Builder(1)
-                .SetCollectionSize(50, 50)
+                .SetDefaultCollectionSize(50, 50)
                 .SetCollectionSize<SimpleClass>(10, 10)
                 .CreateNew()
                 .Build<IList<SimpleClass>>();
@@ -148,7 +148,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void CollectionSize_SettablePerType_CanOverride_WithinPopulator_ReuseSession()
         {
             var newClass = new Builder(1)
-                .SetCollectionSize(50, 50)
+                .SetDefaultCollectionSize(50, 50)
                 .SetCollectionSize<int>(10, 10)
 				.SetCollectionSize<int[]>(30, 30)
 				.AfterPopulationOf<int[][]>((o, b, s) => {

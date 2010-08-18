@@ -210,7 +210,7 @@ namespace NGineer
             return this;
         }
 
-		public IBuilder SetCollectionSize(int minimum, int maximum)
+		public IBuilder SetDefaultCollectionSize(int minimum, int maximum)
 		{
 			AssertBuilderIsntSealed();
 		    _defaultCollectionSize = new Range(minimum, maximum);

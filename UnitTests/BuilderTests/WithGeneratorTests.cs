@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.BuilderTests
 		public void UniqueCollection_SyntaxExample_UsingGenerator()
 		{
 			var builder = new Builder(1)
-				.SetCollectionSize(10,10)
+				.SetDefaultCollectionSize(10,10)
 				.WithGenerator(Generators.UniqueCollection.ForMember<ClassWithEnumAndProperties>(c => c.EnumProperty));
 
             var list = builder.Build<List<ClassWithEnumAndProperties>>();

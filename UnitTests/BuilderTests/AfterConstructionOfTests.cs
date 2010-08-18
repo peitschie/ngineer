@@ -264,7 +264,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void UniqueCollection_SyntaxExample_UsingAfterConstructionOf()
         {
             var builder = new Builder(1)
-                .SetCollectionSize(10,10)
+                .SetDefaultCollectionSize(10,10)
                 .AfterConstructionOf<ListOfClassWithEnumAndProperties>(
                     c => c.Entries,
                     Generators.UniqueCollection.ForMember<ClassWithEnumAndProperties>(c => c.EnumProperty));

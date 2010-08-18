@@ -145,9 +145,9 @@ namespace NGineer
         }
 
 
-        public IBuilder SetCollectionSize (int minimum, int maximum)
+        public IBuilder SetDefaultCollectionSize (int minimum, int maximum)
         {
-            return _parent.SetCollectionSize(minimum, maximum);
+            return _parent.SetDefaultCollectionSize(minimum, maximum);
         }
 
 

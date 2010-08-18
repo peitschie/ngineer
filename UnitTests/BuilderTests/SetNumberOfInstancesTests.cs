@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var builder = new Builder(1)
                 .SetNumberOfInstances<SimpleClass>(3, 3)
-                .SetCollectionSize(10, 10)
+                .SetDefaultCollectionSize(10, 10)
                 .Sealed();
             var simpleClassArray = builder.Build<SimpleClass[]>();
             var simpleClassList = new List<SimpleClass>();
@@ -37,7 +37,7 @@ namespace NGineer.UnitTests.BuilderTests
             var count = 0;
             var builder = new Builder(1)
                 .AfterPopulationOf<SimpleClass>(c => count++)
-                .SetCollectionSize(5,5)
+                .SetDefaultCollectionSize(5,5)
                 .SetNumberOfInstances<SimpleClass>(1, 1)
                 .Sealed();
             var instances = builder.Build<SimpleClass[]>();
