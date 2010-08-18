@@ -337,6 +337,11 @@ namespace NGineer
 	        return obj;
         }
 
+		public TType Build<TType>()
+		{
+			return (TType)Build(typeof(TType));
+		}
+		
 	    #endregion
 
         private void DoMemberSetters(Type type, BuildSession session)

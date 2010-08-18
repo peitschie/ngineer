@@ -22,6 +22,7 @@ namespace NGineer
         /// A <see cref="System.Object"/>
         /// </returns>
         object Build(Type type);
+		TType Build<TType>();
 
         /// <summary>
         /// Constructs a new instance of the passed in type re-using the specified

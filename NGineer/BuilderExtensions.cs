@@ -107,11 +107,6 @@ namespace NGineer
             return builder.SetNumberOfInstances(typeof(TType), minimum, maximum);
         }
 
-        public static TType Build<TType>(this IBuilder builder)
-        {
-            return (TType)builder.Build(typeof(TType));
-        }
-
         public static TType Build<TType>(this IBuilder builder, BuildSession session)
         {
             return (TType)builder.Build(typeof (TType), session);
