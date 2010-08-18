@@ -97,11 +97,6 @@ namespace NGineer
             }
         }
 
-        public static IBuilder SetCollectionSize<TType> (this IBuilder builder, int minimum, int maximum)
-        {
-            return builder.SetCollectionSize(typeof(TType), minimum, maximum);
-        }
-
         public static IBuilder SetNumberOfInstances<TType> (this IBuilder builder, int minimum, int maximum)
         {
             return builder.SetNumberOfInstances(typeof(TType), minimum, maximum);
@@ -111,7 +106,7 @@ namespace NGineer
         /// Ignores all members for this type individually (overrides any previous setters)
         /// </summary>
         /// <typeparam name="TType"></typeparam>
-        /// <returns></returns>
+        /// <returns></returns> 
         public static IBuilder IgnoreAll<TType>(this IBuilder builder)
         {
             foreach (var member in typeof(TType).GetMembers().Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property))

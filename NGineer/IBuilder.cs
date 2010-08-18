@@ -145,6 +145,7 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         IBuilder SetCollectionSize(Type type, int minimum, int maximum);
+		IBuilder SetCollectionSize<TType>(int minimum, int maximum);
 
         /// <summary>
         /// Specifies the maximum number of unique instances of a certain

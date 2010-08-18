@@ -223,6 +223,11 @@ namespace NGineer
             return this;
         }
 
+		public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
+		{
+			return SetCollectionSize(typeof(TType), minimum, maximum);
+        }
+		
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
             _maxInstances.SetForType(type, _random.NextInRange(minimum, maximum));
