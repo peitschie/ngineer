@@ -96,6 +96,7 @@
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
     <Compile Include="Examples\RegisterNewGenerator.cs" />
     <Compile Include="TypedBuilder\SetTests.cs" />
+    <Compile Include="MonoReflectionBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
