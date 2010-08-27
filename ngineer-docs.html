@@ -537,7 +537,7 @@ TertiaryDark: #666
 Error: #f88
 </pre>
 </div>
-<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201008271303" changecount="5">
+<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201008271307" changecount="6">
 <pre>First, one lets define the types...
 &lt;code c#&gt;
 public class Book
@@ -577,7 +577,7 @@ var book = new Builder(1)
       .Set(p =&gt; p.PageNumber, (obj, builder, session) =&gt; pageNumber++)
    .Build&lt;Book&gt;(); 
 &lt;/code&gt;
-Notice the use of lambda expressions to set a specific property.  These allow access to the current build session as well so existing objects can be counted or reused. Another thing of interest is the use of AfterConstructionOf((Page p)...) rather than AfterConstructionOf&lt;Page, int&gt;(..) notation.  The former notation allows C# to infer the types to be used, negating the need for them to be specifically defined, making life easier if the property type changes, while still enforcing static typing.
+Notice the use of lambda expressions to set a specific property.  These allow access to the current build session as well so existing objects can be counted or reused.
 !!Make our author into a best seller
 &lt;code c#&gt;
 var books = new Builder(1)
