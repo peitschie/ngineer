@@ -537,7 +537,7 @@ TertiaryDark: #666
 Error: #f88
 </pre>
 </div>
-<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201005182340" changecount="4">
+<div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201008271303" changecount="5">
 <pre>First, one lets define the types...
 &lt;code c#&gt;
 public class Book
@@ -573,7 +573,8 @@ Of course, at this point the page numbers are not terribly well ordered. Let's f
 var pageNumber = 1;
 var book = new Builder(1)
    // Order the page numbers sequentially from 1 =&gt; ??
-   .AfterConstructionOf((Page p) =&gt; p.PageNumber, (obj, builder, session) =&gt; pageNumber++)
+   .For&lt;Page&gt;()
+      .Set(p =&gt; p.PageNumber, (obj, builder, session) =&gt; pageNumber++)
    .Build&lt;Book&gt;(); 
 &lt;/code&gt;
 Notice the use of lambda expressions to set a specific property.  These allow access to the current build session as well so existing objects can be counted or reused. Another thing of interest is the use of AfterConstructionOf((Page p)...) rather than AfterConstructionOf&lt;Page, int&gt;(..) notation.  The former notation allows C# to infer the types to be used, negating the need for them to be specifically defined, making life easier if the property type changes, while still enforcing static typing.
@@ -1168,6 +1169,10 @@ merge(config.shadowTiddlers,{
 });
 //}}}
 </pre>
+</div>
+<div title="UploadLog" modifier="PhilipPeitsch" created="201008271302" modified="201008271302">
+<pre>| !date | !user | !location | !storeUrl | !uploadDir | !toFilename | !backupdir | !origin |
+| 27/08/2010 23:02:03 | PhilipPeitsch | [[ngineer-docs.html|file:///media/storage/home/insanity/Source/ngineer/trunk/ngineer-docs.html]] | [[store.cgi|http://ngineer.tiddlyspot.com/store.cgi]] | . | [[index.html | http://ngineer.tiddlyspot.com/index.html]] | . | ok |</pre>
 </div>
 <div title="UploadPlugin" modifier="YourName" created="200808080918" modified="201006030910" tags="systemConfig">
 <pre>/***
