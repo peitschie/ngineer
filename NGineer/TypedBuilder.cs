@@ -34,13 +34,22 @@ namespace NGineer
         }
 
 
-        public ITypedBuilder<TTarget> Set<TReturnType> (Expression<Func<TTarget, TReturnType>> expression, TReturnType value)
+        public ITypedBuilder<TTarget> Set<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, TReturnType value)
         {
             Set(expression, (obj, builder, session) => value);
             return this;
         }
         
+		
+		public ITypedBuilder<TTarget> Set<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, Func<TReturnType> value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+			Set(expression, (obj, builder, session) => value());
+			return this;
+		}
         
+		
         public ITypedBuilder<TTarget> Set(Expression<Func<TTarget, object>> expression, IGenerator generator)
         {
             _parent.AfterConstructionOf<TTarget>(expression, generator);
