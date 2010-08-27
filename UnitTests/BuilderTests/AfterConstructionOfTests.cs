@@ -25,7 +25,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterConstructionOf_PropertySetter_NullSetter()
         {
             Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, 
+                .For<SimpleClass>().Set(c => c.StringProperty, 
 			    	(Func<SimpleClass, IBuilder, BuildSession, string>)null));
         }
 		
@@ -33,22 +33,16 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterConstructionOf_PropertySetter_NullMemberInfo()
         {
             Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterConstructionOf((MemberInfo)null, (o, b, s) => "string"));
-        }
-		
-		[Test]
-        public void AfterConstructionOf_PropertySetter_MemberInfo_NullSetter()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterConstructionOf(MemberExpressions.GetMemberInfo<SimpleClass>(c => c.StringProperty), (Func<object, IBuilder, BuildSession, object>)null));
+                .For<SimpleClass>().Set(null, (o, b, s) => "string"));
         }
 		
 		[Test]
         public void AfterConstructionOf_PropertySetter_NullLambdaSetterValue()
         {
-            var builder = new Builder(1)
-                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (o, b, s) => null)
-				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (o, b, s) => null)
+        	var builder = new Builder(1)
+                .For<SimpleClass>()
+					.Set(c => c.StringProperty, (o, b, s) => null)
+					.Set(c => c.StringField, (o, b, s) => null)
 				;
             SimpleClass newClass = null;
 			Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
@@ -61,9 +55,10 @@ namespace NGineer.UnitTests.BuilderTests
 		[Test]
         public void AfterConstructionOf_PropertySetter_NullValue()
         {
-            var builder = new Builder(1)
-                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (string)null)
-				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (string)null)
+        	var builder = new Builder(1)
+                .For<SimpleClass>()
+					.Set(c => c.StringProperty, (string)null)
+					.Set(c => c.StringField, (string)null)
 				;
             SimpleClass newClass = null;
 			Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
@@ -77,7 +72,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterConstructionOf_PropertiesOnlySetOnce()
         {
             var newClass = new Builder(1)
-                .AfterConstructionOf<CountsPropertySets, CountsPropertySets>(c => c.RecursiveProperty, (o, b, s) => null)
+                .For<CountsPropertySets>().Set(c => c.RecursiveProperty, (o, b, s) => null)
                 .Build<CountsPropertySets>();
 
             Assert.AreEqual(1, newClass.GetSomePropertySets());
@@ -92,7 +87,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 9));
+                .For<ClassWithNullableInt>().Set(c => c.Property1, 9));
 
             var obj = builder.Build<ClassWithNullableInt>();
             Assert.AreEqual(9, obj.Property1.Value);
@@ -104,7 +99,7 @@ namespace NGineer.UnitTests.BuilderTests
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
+                .For<ClassWithNullableDateTime>().Set(c => c.Property1, dateTime));
 
             var obj = builder.Build<ClassWithNullableDateTime>();
             Assert.AreEqual(dateTime, obj.Property1.Value);
@@ -116,7 +111,7 @@ namespace NGineer.UnitTests.BuilderTests
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
+                .For<InheritsFromClassWithNullableDateTime>().Set(c => c.Property1, dateTime));
 
             var obj = builder.Build<InheritsFromClassWithNullableDateTime>();
             Assert.AreEqual(dateTime, obj.Property1.Value);
@@ -127,7 +122,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
 			List<MemberInfo> propertyOrder = new List<MemberInfo>();
             new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, 
+                .For<ClassWithNullableInt>().Set(c => c.Property1, 
 			         (o, b, s) => {
 							propertyOrder.Add(s.CurrentMember);
 							return 10;
@@ -141,9 +136,10 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void AfterConstructionOf_MultipeSettersForProperty()
         {
-            var obj = new Builder(1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 1)
-                .AfterConstructionOf<ClassWithNullableInt, int?>(c => c.Property1, (o, b, s) => 2)
+        	var obj = new Builder(1)
+                .For<ClassWithNullableInt>()
+					.Set(c => c.Property1, (o, b, s) => 1)
+                	.Set(c => c.Property1, (o, b, s) => 2)
                 .Build<ClassWithNullableInt>();
             Assert.AreEqual(2, obj.Property1);
         }
@@ -154,36 +150,30 @@ namespace NGineer.UnitTests.BuilderTests
             var dateTime = DateTime.Now;
             IBuilder builder = null;
             Assert.DoesNotThrow(() => builder = new Builder(1)
-                .AfterConstructionOf<InheritsFromClassWithNullableDateTime, DateTime?>(c => c.Property1, dateTime));
+                .For<InheritsFromClassWithNullableDateTime>().Set(c => c.Property1, dateTime));
 
             var obj = builder.Build<InheritsFromClassWithNullableDateTime2>();
             Assert.AreNotEqual(dateTime, obj.Property1.Value);
         }
 
         [Test]
-        public void AfterConstructionOf_InvalidMethodReturnType()
-        {
-            var builder = new Builder(1);
-            Assert.Throws<InvalidCastException>(() => builder.AfterConstructionOf(MemberExpressions.GetMemberInfo<SimpleClass>(c => c.StringProperty), (o, b, s) => 1));
-        }
-
-        [Test]
         public void Hierarchy_AfterConstructionOf_ChildValueIsFinal()
         {
-            var childPropertySetterCalled = -1;
-            var childFieldSetterCalled = -1;
-            var callOrder = 0;
-            var builder = new Builder(1)
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10)
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntField, (o, b, s) => 10)
+        	var childPropertySetterCalled = -1;
+        	var childFieldSetterCalled = -1;
+        	var callOrder = 0;
+        	var builder = new Builder(1)
+                .For<SimpleClass>()
+						.Set(c => c.IntProperty, (o, b, s) => 10)
+                		.Set(c => c.IntField, (o, b, s) => 10)
                 .CreateNew()
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty,
+                .For<SimpleClass>().Set(c => c.IntProperty,
                 (o, b, s) =>
                 {
                     childPropertySetterCalled = callOrder++;
                     return 11;
                 })
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntField,
+                .Set(c => c.IntField,
                 (o, b, s) =>
                 {
                     childFieldSetterCalled = callOrder++;
@@ -201,12 +191,14 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void Hierarchy_AfterConstructionOf_BothParentsAndChildrenCalled()
         {
-            var obj = new Builder(1)
-                .AfterConstructionOf<SimpleClass, int>(c => c.IntProperty, (o, b, s) => 10)
-				.AfterConstructionOf<SimpleClass, int>(c => c.IntField, (o, b, s) => 11)
+        	var obj = new Builder(1)
+                .For<SimpleClass>()
+					.Set(c => c.IntProperty, (o, b, s) => 10)
+					.Set(c => c.IntField, (o, b, s) => 11)
 				.CreateNew()
-                .AfterConstructionOf<SimpleClass, string>(c => c.StringProperty, (o, b, s) => "childValue")
-				.AfterConstructionOf<SimpleClass, string>(c => c.StringField, (o, b, s) => "childValueField")
+                .For<SimpleClass>()
+					.Set(c => c.StringProperty, (o, b, s) => "childValue")
+					.Set(c => c.StringField, (o, b, s) => "childValueField")
                 .Build<SimpleClass>();
 
             Assert.AreEqual(10, obj.IntProperty);
@@ -219,9 +211,9 @@ namespace NGineer.UnitTests.BuilderTests
         public void Hierarchy_AfterConstructionOf_BuildingInParentSession()
         {
             var obj = new Builder(1)
-                .AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>(s))
+                .For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>(s))
 				.CreateNew()
-                .AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o, b, s) => "childValue")
+                .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")
                 .Build<SimpleClass>();
 
 			Assert.AreEqual("childValue", obj.TestClass2Property.StringProperty);
@@ -231,13 +223,13 @@ namespace NGineer.UnitTests.BuilderTests
         public void Hierarchy_AfterConstructionOf_BuildingInParentSession_CreateNew()
         {
             var obj = new Builder(1)
-                .AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => {
+                .For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => {
 					return b
 						.CreateNew()
-						.AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o1, b1, s1) => "new value")
+						.For<TestClass2>().Set(c => c.StringProperty, (o1, b1, s1) => "new value")
 						.Build<TestClass2>(s); })
 				.CreateNew()
-                .AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o, b, s) => "childValue")
+                .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")
                 .Build<SimpleClass>();
 
 			Assert.AreEqual("new value", obj.TestClass2Property.StringProperty);
@@ -246,15 +238,16 @@ namespace NGineer.UnitTests.BuilderTests
 		[Test]
         public void Hierarchy_AfterConstructionOf_BuildingInParentSession_CreateNew_CanOverride()
         {
-            var obj = new Builder(1)
-                .AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => {
+        	var obj = new Builder(1)
+                .For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => {
 					return b
 						.CreateNew()
-						.AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o1, b1, s1) => "new value")
+						.For<TestClass2>()
+							.Set(c => c.StringProperty, (o1, b1, s1) => "new value")
 						.Build<TestClass2>(s); })
 				.CreateNew()
-				.AfterConstructionOf<SimpleClass, TestClass2>(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>())
-                .AfterConstructionOf<TestClass2, string>(c => c.StringProperty, (o, b, s) => "childValue")
+				.For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>())
+                .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")
                 .Build<SimpleClass>();
 
 			Assert.AreEqual("childValue", obj.TestClass2Property.StringProperty);
@@ -278,7 +271,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterConstructionOf_IgnoreProperty()
         {
             var builder = new Builder(1)
-                .IgnoreMember<SimpleClass>(c => c.StringProperty)
+                .For<SimpleClass>().Ignore(c => c.StringProperty)
                 ;
             SimpleClass newClass = null;
             Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());

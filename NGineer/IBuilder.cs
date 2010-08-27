@@ -97,7 +97,7 @@ namespace NGineer
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
 
-        IBuilder IgnoreMember(MemberInfo member);
+        IBuilder IgnoreMember(MemberInfo member, bool allowInherited);
 
         /// <summary>
         /// Ignores any members for this object type that do not currently have an existing setter
@@ -167,6 +167,7 @@ namespace NGineer
 		IBuilder SetNumberOfInstances<TType>(int minimum, int maximum);
 
         ITypedBuilder<TType> For<TType>();
+		ITypedBuilder<TType> For<TType>(bool allowInherited);
 
         IBuilder CreateNew();
 

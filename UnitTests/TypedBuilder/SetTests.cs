@@ -17,7 +17,7 @@ namespace NGineer.UnitTests.TypedBuilder
         public void SetUp()
         {
             _builderMock = new Mock<IBuilder>();
-            _builder = new TypedBuilder<SimpleClass>(_builderMock.Object);
+            _builder = new TypedBuilder<SimpleClass>(_builderMock.Object, false);
         }
 
         [Test]

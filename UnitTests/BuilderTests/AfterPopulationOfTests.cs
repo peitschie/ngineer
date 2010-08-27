@@ -17,14 +17,14 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterPopulationOf_Action_NoBuilder()
         {
             Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterPopulationOf<SimpleClass>((Action<SimpleClass>)null));
+                .For<SimpleClass>().Do((Action<SimpleClass>)null));
         }
 		
 		[Test]
         public void AfterPopulationOf_Action_WithBuilder()
         {
             Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterPopulationOf<SimpleClass>((Action<SimpleClass,IBuilder,BuildSession>)null));
+                .For<SimpleClass>().Do((Action<SimpleClass,IBuilder,BuildSession>)null));
         }
 		
 		[Test]
@@ -39,9 +39,9 @@ namespace NGineer.UnitTests.BuilderTests
 		{
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 10)
+				.For<SimpleClass>().Do(s => s.IntProperty = 10)
 				.CreateNew()
-				.AfterPopulationOf<SimpleClass>(s => s.IntProperty = 30)
+				.For<SimpleClass>().Do(s => s.IntProperty = 30)
 				.Build<SimpleClass>();
 			
 			Assert.AreEqual(30, newClass.IntProperty);
@@ -50,7 +50,7 @@ namespace NGineer.UnitTests.BuilderTests
 		[Test]
         public void Build_SettersAreProperlyCalled_SimpleInt()
         {
-            var newClass = new Builder(1).AfterPopulationOf<SimpleClass>(n => n.IntProperty = 190).Build<SimpleClass>();
+        	var newClass = new Builder(1).For<SimpleClass>().Do(n => n.IntProperty = 190).Build<SimpleClass>();
             Assert.AreEqual(190, newClass.IntProperty);
         }
 
@@ -58,7 +58,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void Build_SetupValueToOverrideBehaviour_SimpleClass()
         {
             var newClass = new Builder(1)
-                .AfterPopulationOf<SimpleClass>((t, b, s) => t.StringProperty = b.Build<string>())
+                .For<SimpleClass>().Do((t, b, s) => t.StringProperty = b.Build<string>())
                 .Build<SimpleClass>();
 
             Assert.IsNotNull(newClass.StringProperty);
@@ -70,13 +70,13 @@ namespace NGineer.UnitTests.BuilderTests
             var parentCalled = -1;
             var childCalled = -1;
             var callOrder = 0;
-            var builder = new Builder(1).AfterPopulationOf<SimpleClass>((o, b, s) =>
+            var builder = new Builder(1).For<SimpleClass>().Do((o, b, s) =>
                 {
                     parentCalled = callOrder++;
                     o.IntProperty = 10;
                 });
             var newClass = builder.CreateNew()
-                .AfterPopulationOf<SimpleClass>((o, b, s) =>
+                .For<SimpleClass>().Do((o, b, s) =>
                 {
                     childCalled = callOrder++;
                     o.IntProperty = 11;

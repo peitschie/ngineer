@@ -11,50 +11,6 @@ namespace NGineer
 {
     public static class BuilderExtensions
     {
-        public static IBuilder AfterPopulationOf<TType>(this IBuilder builder, Action<TType> setter)
-        {
-            if(setter == null)
-                throw new ArgumentNullException("setter");
-            return builder.AfterPopulationOf(new Setter<TType>(setter));
-        }
-
-        public static IBuilder AfterPopulationOf<TType>(this IBuilder builder, Action<TType, IBuilder, BuildSession> setter)
-        {
-            if(setter == null)
-                throw new ArgumentNullException("setter");
-            return builder.AfterPopulationOf(new Setter<TType>(setter));
-        }
-
-        public static IBuilder AfterConstructionOf(this IBuilder builder, MemberInfo member, Func<object, IBuilder, BuildSession, object> setter)
-        {
-            if(member == null)
-                throw new ArgumentNullException("member");
-            if(setter == null)
-                throw new ArgumentNullException("setter");
-            ValidateMember(member, setter);
-            return builder.AfterConstructionOf(new MemberSetter(member, setter));
-        }
-
-        public static IBuilder AfterConstructionOf<TType, TReturnType>(this IBuilder builder, Expression<Func<TType,
-                                                                TReturnType>> expression,
-                                                                Func<TType, IBuilder, BuildSession, TReturnType> setter)
-        {
-            if(expression == null)
-                throw new ArgumentNullException("expression");
-            if(setter == null)
-                throw new ArgumentNullException("setter");
-            var member = MemberExpressions.GetMemberInfo(expression);
-            ValidateMember(member, setter);
-            return builder.AfterConstructionOf(new MemberSetter<TType, TReturnType>(member, setter));
-        }
-       
-        public static IBuilder AfterConstructionOf<TType, TReturnType>(this IBuilder builder,
-                                                                Expression<Func<TType, TReturnType>> expression,
-                                                                TReturnType value)
-        {
-            return builder.AfterConstructionOf(expression, (o, b, s) => value);
-        }
-
         public static IBuilder AfterConstructionOf<TType>(this IBuilder builder, Expression<Func<TType, object>> expression,
                                                                 IGenerator generator)
         {
@@ -64,7 +20,7 @@ namespace NGineer
                 throw new ArgumentNullException("generator");
             var member = MemberExpressions.GetMemberInfo(expression);
             // No validation can be done here as the generator only returns a generic object type
-            return builder.AfterConstructionOf(new GeneratorMemberSetter(member, generator));
+            return builder.AfterConstructionOf(new GeneratorMemberSetter(member, generator, false));
         }
 
         private static void ValidateMember<TType, TReturnType>(MemberInfo member,
@@ -74,11 +30,6 @@ namespace NGineer
             {
                 throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
             }
-        }
-
-        public static IBuilder IgnoreMember<TType>(this IBuilder builder, Expression<Func<TType, object>> expression)
-        {
-            return builder.IgnoreMember(MemberExpressions.GetMemberInfo(expression));
         }
     }
 }

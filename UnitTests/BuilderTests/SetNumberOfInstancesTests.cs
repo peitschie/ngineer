@@ -36,7 +36,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var count = 0;
             var builder = new Builder(1)
-                .AfterPopulationOf<SimpleClass>(c => count++)
+                .For<SimpleClass>().Do(c => count++)
                 .SetDefaultCollectionSize(5,5)
                 .SetNumberOfInstances<SimpleClass>(1, 1)
                 .Sealed();

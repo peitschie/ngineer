@@ -41,18 +41,18 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void Build_MaximumRecursionLevel_ChildContainer_SetValueBuilderEnforced()
         {
-            var sessions = new List<BuildSession>();
-            var newClass = new Builder(1)
+        	var sessions = new List<BuildSession>();
+        	var newClass = new Builder(1)
                 .SetMaximumDepth(2)
-                .AfterPopulationOf<TestClassFourDeep>((t, b, s) =>
+				.For<TestClassFourDeep>().Do((t, b, s) =>
                 {
                     sessions.Add(s);
                     t.PropertyTestClass = b.CreateNew()
-                        .AfterPopulationOf<TestClassThreeDeep>((t1, b1, s1) =>
+                        .For<TestClassThreeDeep>().Do((t1, b1, s1) =>
                         {
                             sessions.Add(s1);
                             t1.PropertyTestClass = b1.CreateNew()
-                                .AfterPopulationOf<TestClass>((t2, b2, s2) =>
+                                .For<TestClass>().Do((t2, b2, s2) =>
                                 {
                                     sessions.Add(s2);
                                     t2.Property2 = b2.CreateNew().Build<TestClass2>(s2);
@@ -74,17 +74,17 @@ namespace NGineer.UnitTests.BuilderTests
             List<int> buildDepth = new List<int>();
             var newClass = new Builder(1)
                 .SetMaximumDepth(2)
-                .AfterPopulationOf<TestClassFourDeep>((type, b, s) =>
+                .For<TestClassFourDeep>().Do((type, b, s) =>
                 {
                     buildDepth.Add(s.BuildDepth);
                     type.PropertyTestClass = b
                         .CreateNew()
-                        .AfterPopulationOf<TestClassThreeDeep>((type1, b1, s1) =>
+                        .For<TestClassThreeDeep>().Do((type1, b1, s1) =>
                         {
                             buildDepth.Add(s1.BuildDepth);
                             type1.PropertyTestClass = b1
                                 .CreateNew()
-                                .AfterPopulationOf<TestClass>((type2, b2, s2) =>
+                                .For<TestClass>().Do((type2, b2, s2) =>
                                 {
                                     buildDepth.Add(s2.BuildDepth);
                                     type2.Property2 = b2.Build<TestClass2>(s2);

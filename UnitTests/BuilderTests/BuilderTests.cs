@@ -57,9 +57,9 @@ namespace NGineer.UnitTests.BuilderTests
 		{
 			var newClass = new Builder(1)
 				.SetMaximumDepth(2)
-				.AfterPopulationOf<RecursiveClass>((t, b, s) => {
+				.For<RecursiveClass>().Do((t, b, s) => {
 					t.RecursiveReference = b
-							.AfterPopulationOf<RecursiveClass>(s1 => {})
+							.For<RecursiveClass>().Do(s1 => {})
 							.Build<RecursiveClass>(s);
 				});
 			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
@@ -68,32 +68,32 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
         {
-            var newClass = new Builder(1).AfterPopulationOf<int>(n => { }).Sealed();
+            var newClass = new Builder(1).For<int>().Do(n => { }).Sealed();
             Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
 			Assert.Throws<BuilderException>(() => newClass.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => newClass.AfterPopulationOf<int>(n => { }));
+            Assert.Throws<BuilderException>(() => newClass.For<int>().Do(n => { }));
             Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
         }
 
         [Test]
         public void Sealed_BuildSealsBuilder()
         {
-            var builder = new Builder(1).AfterPopulationOf<int>(n => { });
+            var builder = new Builder(1).For<int>().Do(n => { });
             builder.Build<int>();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
             Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
+            Assert.Throws<BuilderException>(() => builder.For<int>().Do(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
         [Test]
         public void Sealed_SealOnChildSealsParent()
         {
-            var builder = new Builder(1).AfterPopulationOf<int>(n => { });
+            var builder = new Builder(1).For<int>().Do(n => { });
             builder.CreateNew().Sealed();
             Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
             Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.AfterPopulationOf<int>(n => { }));
+            Assert.Throws<BuilderException>(() => builder.For<int>().Do(n => { }));
             Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
         }
 
@@ -151,7 +151,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetDefaultCollectionSize(50, 50)
                 .SetCollectionSize<int>(10, 10)
 				.SetCollectionSize<int[]>(30, 30)
-				.AfterPopulationOf<int[][]>((o, b, s) => {
+				.For<int[][]>().Do((o, b, s) => {
 						for(int i = 0; i < o.Length; i++)
 						{
 							o[i] = b.CreateNew()
@@ -170,13 +170,14 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void Build_SetupValueToOverrideBehaviour_RecursiveClass()
         {
-            var newClass = new Builder(1)
+        	var newClass = new Builder(1)
                 .SetMaximumDepth(3)
-                .AfterPopulationOf<RecursiveClass>(n => n.IntProperty = 10)
-                .AfterPopulationOf<RecursiveClass>((t, b, s) =>
+                .For<RecursiveClass>()
+					.Do(n => n.IntProperty = 10)
+                	.Do((t, b, s) =>
                                                   {
                                                       t.RecursiveReference = b.CreateNew()
-                                                          .AfterPopulationOf<RecursiveClass>(c => c.IntProperty = 20)
+                                                          .For<RecursiveClass>().Do(c => c.IntProperty = 20)
                                                           .Build<RecursiveClass>(s);
                                                   })
                 .Sealed()

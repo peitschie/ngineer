@@ -3,15 +3,19 @@ using System.Reflection;
 
 namespace NGineer.BuildHelpers
 {
-    public class IgnoreMemberSetter : MemberSetter
+    public class IgnoreMemberSetter : AbstractMemberSetter, IMemberSetter
     {
-        public IgnoreMemberSetter(MemberInfo member) : base(member, (o, b, s) => null)
+        public IgnoreMemberSetter(MemberInfo member, bool allowInherited)
+			: base(member, allowInherited)
         {
-            if(member == null)
-                throw new ArgumentNullException("member");
         }
+		
+		public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
+		{
+			return IsForMember(member);
+		}
 
-        public override void Set(object obj, IBuilder builder, BuildSession session)
+        public void Set(object obj, IBuilder builder, BuildSession session)
         {
         }
     }

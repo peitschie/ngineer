@@ -120,6 +120,8 @@
     <Compile Include="ITypedBuilder.cs" />
     <Compile Include="TypedBuilder.cs" />
     <Compile Include="BuilderExtensions.cs" />
+    <Compile Include="BuildHelpers\Setters.cs" />
+    <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -4,48 +4,27 @@ using System;
 
 namespace NGineer.BuildHelpers
 {
-    public class MemberSetter<TObjType, TReturnType> : IMemberSetter
+    public class MemberSetter<TObjType, TReturnType> : AbstractMemberSetter, IMemberSetter
     {
-		protected readonly MemberInfo Member;
-        protected readonly Type MemberReturnType;
+        private readonly Func<TObjType, IBuilder, BuildSession, TReturnType> _setter;
 
-        protected readonly Func<TObjType, IBuilder, BuildSession, TReturnType> Setter;
-
-        protected MemberSetter(MemberInfo member)
+        public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter, 
+			bool allowInherited)
+            : base(member, allowInherited)
         {
-            if(member == null)
-                throw new ArgumentNullException("member");
-            Member = member;
-            MemberReturnType = member.ReturnType();
+        	if (setter == null)
+        		throw new ArgumentNullException("setter");
+        	_setter = setter;
         }
 
-        public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter)
-            : this(member)
+        public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
         {
-			if(setter == null)
-				throw new ArgumentNullException("setter");
-            Setter = setter;
+            return IsForMember(member);
         }
 
-        public virtual bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
-        {
-            return member != null 
-                && Member.ReflectedType.IsAssignableFrom(member.ReflectedType)
-                && Equals(Member.DeclaringType, member.DeclaringType)
-                && Equals(Member.Name, member.Name)
-				&& Equals(MemberReturnType, member.ReturnType());
-        }
-
-        public virtual void Set(object obj, IBuilder builder, BuildSession session)
+        public void Set(object obj, IBuilder builder, BuildSession session)
 		{
-			Member.SetValue(obj, Setter((TObjType)obj, builder, session));
+			Member.SetValue(obj, _setter((TObjType)obj, builder, session));
 		}
     }
-	
-	public class MemberSetter : MemberSetter<object, object>
-	{
-		public MemberSetter(MemberInfo member, Func<object, IBuilder, BuildSession, object> setter)
-			: base(member, setter)
-        {}
-	}
 }

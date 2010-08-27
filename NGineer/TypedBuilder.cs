@@ -13,37 +13,44 @@ namespace NGineer
     public class TypedBuilder<TTarget> : ITypedBuilder<TTarget>
     {
         private readonly IBuilder _parent;
+		private readonly bool _allowInherited;
 
-        public TypedBuilder (IBuilder parent)
+        public TypedBuilder(IBuilder parent, bool allowInherited)
         {
-            _parent = parent;
+        	_parent = parent;
+        	_allowInherited = allowInherited;
         }
 
         #region ITypedBuilder<TTarget> implementation
-        public ITypedBuilder<TTarget> Set<TReturnType> (Expression<Func<TTarget, TReturnType>> expression, Func<TTarget, IBuilder, BuildSession, TReturnType> value)
+        public ITypedBuilder<TTarget> Set<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, 
+			Func<TTarget, IBuilder, BuildSession, TReturnType> value)
         {
-            _parent.AfterConstructionOf<TTarget, TReturnType>(expression, value);
+        	if (expression == null)
+        		throw new ArgumentNullException("expression");
+			var member = MemberExpressions.GetMemberInfo(expression);
+			ValidateMember(member, value);
+			_parent.AfterConstructionOf(Setters.GetMemberSetter(member, value, _allowInherited));
             return this;
         }
 
 
         public ITypedBuilder<TTarget> Set<TReturnType> (Expression<Func<TTarget, TReturnType>> expression, TReturnType value)
         {
-            _parent.AfterConstructionOf<TTarget, TReturnType>(expression, value);
+            Set(expression, (obj, builder, session) => value);
             return this;
         }
         
         
-        public ITypedBuilder<TTarget> Set (Expression<Func<TTarget, object>> expression, IGenerator generator)
+        public ITypedBuilder<TTarget> Set(Expression<Func<TTarget, object>> expression, IGenerator generator)
         {
             _parent.AfterConstructionOf<TTarget>(expression, generator);
             return this;
         }
         
         
-        public ITypedBuilder<TTarget> Ignore (Expression<Func<TTarget, object>> expression)
+        public ITypedBuilder<TTarget> Ignore(Expression<Func<TTarget, object>> expression)
         {
-            _parent.IgnoreMember<TTarget>(expression);
+			_parent.IgnoreMember(MemberExpressions.GetMemberInfo(expression), _allowInherited);
             return this;
         }
 
@@ -58,21 +65,33 @@ namespace NGineer
         	foreach (var member in typeof(TTarget).GetMembers()
 				.Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property)) 
 			{
-				_parent.IgnoreMember(member);
+				_parent.IgnoreMember(member, false);
 			}
             return this;
         }
 
-        public ITypedBuilder<TTarget> Do (Action<TTarget> setter)
+        public ITypedBuilder<TTarget> Do(Action<TTarget> setter)
         {
-            _parent.AfterPopulationOf<TTarget>(setter);
+        	if (setter == null)
+        		throw new ArgumentNullException("setter");
+        	_parent.AfterPopulationOf(Setters.GetSetter<TTarget>((obj, buildr, session) =>
+        	{
+        		setter(obj);
+        		return obj;
+			}, _allowInherited));
             return this;
         }
 
 
-        public ITypedBuilder<TTarget> Do (Action<TTarget, IBuilder, BuildSession> setter)
+        public ITypedBuilder<TTarget> Do(Action<TTarget, IBuilder, BuildSession> setter)
         {
-            _parent.AfterPopulationOf<TTarget>(setter);
+			if (setter == null)
+				throw new ArgumentNullException("setter");
+			_parent.AfterPopulationOf(Setters.GetSetter<TTarget>((obj, buildr, session) =>
+			{
+				setter(obj, buildr, session);
+				return obj;
+			}, _allowInherited));
             return this;
         }
         
@@ -147,9 +166,9 @@ namespace NGineer
             return _parent.AfterConstructionOf(setter);
         }
 
-        public IBuilder IgnoreMember(MemberInfo member)
+        public IBuilder IgnoreMember(MemberInfo member, bool allowInherited)
         {
-            return _parent.IgnoreMember(member);
+            return _parent.IgnoreMember(member, allowInherited);
         }
 
         public IBuilder IgnoreUnset(Type type)
@@ -189,11 +208,15 @@ namespace NGineer
 			return _parent.SetNumberOfInstances<TType>(minimum, maximum);
 		}
         
-        public ITypedBuilder<TType> For<TType> ()
-        
+        public ITypedBuilder<TType> For<TType>()
         {
-            return _parent.For<TType>();
+        	return _parent.For<TType>();
         }
+		
+		public ITypedBuilder<TType> For<TType>(bool allowInherited)
+		{
+			return _parent.For<TType>(allowInherited);
+		}
 
 
         public IBuilder CreateNew ()
@@ -215,5 +238,12 @@ namespace NGineer
         }
         
         #endregion
+		
+		private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)
+		{
+			if (!member.ReturnType().IsAssignableFrom(typeof(TReturnType))) {
+				throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
+			}
+		}
     }
 }

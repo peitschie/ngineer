@@ -5,24 +5,23 @@ namespace NGineer.BuildHelpers
 {
     public class Setter<TType> : ISetter
     {
+		private readonly Func<Type, bool> _typeCheck;
         private readonly Func<TType, IBuilder, BuildSession, TType> _setter;
 
-        public Setter(Func<TType, IBuilder, BuildSession, TType> setter)
+        public Setter(Func<TType, IBuilder, BuildSession, TType> setter, bool allowInherited)
         {
-            _setter = setter;
+        	if (setter == null)
+        		throw new ArgumentNullException("setter");
+        	_setter = setter;
+			if (allowInherited) 
+			{
+				_typeCheck = t => typeof(TType).IsAssignableFrom(t);
+			} 
+			else 
+			{
+				_typeCheck = t => typeof(TType) == t;
+			}
         }
-
-        public Setter(Action<TType> setter)
-            : this((t, b, s) => { setter(t); return t; })
-        {}
-
-        public Setter(Func<TType, TType> setter)
-            : this((t, b, s) => setter(t))
-        {}
-
-        public Setter(Action<TType, IBuilder, BuildSession> setter)
-            : this((t, b, s) => { setter(t, b, s); return t; })
-        { }
 
         public object Set(object obj, IBuilder builder, BuildSession session)
         {
@@ -31,7 +30,7 @@ namespace NGineer.BuildHelpers
 
         public bool IsForType(Type type)
         {
-            return typeof(TType).IsAssignableFrom(type);
+            return type != null && _typeCheck(type);
         }
     }
 }

@@ -275,9 +275,9 @@ namespace NGineer
         #region AfterConstructionOf implementations
 
         public IBuilder AfterConstructionOf(IMemberSetter setter)
-		{
-			if(setter == null)
-				throw new ArgumentNullException("setter");
+        {
+        	if (setter == null)
+        		throw new ArgumentNullException("setter");
 			MemberSetters.Insert(0, setter);
 			return this;
 		}
@@ -285,9 +285,9 @@ namespace NGineer
 	    #endregion
 
 
-        public IBuilder IgnoreMember(MemberInfo member)
+        public IBuilder IgnoreMember(MemberInfo member, bool allowInherited)
         {
-            AfterConstructionOf(new IgnoreMemberSetter(member));
+            AfterConstructionOf(new IgnoreMemberSetter(member, allowInherited));
             return this;
         }
 
@@ -298,10 +298,15 @@ namespace NGineer
 	    }
 
 	    public ITypedBuilder<TType> For<TType>()
-        {
-            return new TypedBuilder<TType>(this);
+	    {
+	    	return For<TType>(false);
         }
 
+		public ITypedBuilder<TType> For<TType>(bool allowInherited)
+		{
+			return new TypedBuilder<TType>(this, allowInherited);
+		}		
+		
 	    public IBuilder Sealed()
 	    {
 	        _sealed = true;
