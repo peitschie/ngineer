@@ -10,7 +10,7 @@ namespace NGineer.BuildHelpers
 
         public MemberSetter(MemberInfo member, Func<TObjType, IBuilder, BuildSession, TReturnType> setter, 
 			bool allowInherited)
-            : base(member, allowInherited)
+            : base(member, typeof(TObjType), allowInherited)
         {
         	if (setter == null)
         		throw new ArgumentNullException("setter");

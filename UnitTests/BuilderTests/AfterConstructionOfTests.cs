@@ -270,15 +270,65 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void AfterConstructionOf_IgnoreProperty()
         {
-            var builder = new Builder(1)
+        	var builder = new Builder(1)
                 .For<SimpleClass>().Ignore(c => c.StringProperty)
                 ;
-            SimpleClass newClass = null;
-            Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
+        	SimpleClass newClass = null;
+        	Assert.DoesNotThrow(() => newClass = builder.Build<SimpleClass>());
 
             Assert.IsNotNull(newClass);
-            Assert.IsNull(newClass.StringProperty);
-            Assert.IsNotNull(newClass.StringField);
+        	Assert.IsNull(newClass.StringProperty);
+        	Assert.IsNotNull(newClass.StringField);
         }
+		
+		[Test]
+		public void For_ConcreteClass_SetsInheritedTypeValues()
+		{
+			CombinedClasses combinedClasses = new Builder()
+				.For<TopLevel>(true)
+					.Set(x => x.TopLevelProperty, 10)
+				.Build<CombinedClasses>();
+			
+			Assert.AreEqual(10, combinedClasses.Property1.TopLevelProperty);
+			Assert.AreEqual(10, combinedClasses.Property2.TopLevelProperty);
+		}
+		
+		[Test]
+		public void For_ConcreteClass_DoesNotSetInheritedTypeValues()
+		{
+			CombinedClasses combinedClasses = new Builder()
+				.For<TopLevel>(false)
+					.Set(x => x.TopLevelProperty, 10)
+				.Build<CombinedClasses>();
+			
+			Assert.AreEqual(10, combinedClasses.Property1.TopLevelProperty);
+			Assert.AreNotEqual(10, combinedClasses.Property2.TopLevelProperty);
+		}
+		
+		[Test]
+		public void For_Interface_SetsInheritedTypeValues()
+		{
+			CombinedClasses combinedClasses = new Builder()
+				.For<IInterfaceTest>(true)
+					.Set(x => x.InterfaceProperty, 10)
+				.Build<CombinedClasses>();
+			
+			Assert.AreEqual(10, combinedClasses.Property1.InterfaceProperty);
+			Assert.AreEqual(10, combinedClasses.Property2.InterfaceProperty);
+			Assert.AreEqual(10, combinedClasses.Property3.InterfaceProperty);
+		}
+
+		[Test]
+		public void For_Interface_DoesNotSetInheritedTypeValues()
+		{
+			CombinedClasses combinedClasses = new Builder()
+					.For<IInterfaceTest>(false)
+						.Set(x => x.InterfaceProperty, 10)
+					.Build<CombinedClasses>();
+			
+			Assert.AreNotEqual(10, combinedClasses.Property1.InterfaceProperty);
+			Assert.AreNotEqual(10, combinedClasses.Property2.InterfaceProperty);
+			Assert.AreNotEqual(10, combinedClasses.Property3.InterfaceProperty);
+		}
 	}
 }

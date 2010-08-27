@@ -287,7 +287,7 @@ namespace NGineer
 
         public IBuilder IgnoreMember(MemberInfo member, bool allowInherited)
         {
-            AfterConstructionOf(new IgnoreMemberSetter(member, allowInherited));
+            AfterConstructionOf(new IgnoreMemberSetter(member, member.ReflectedType, allowInherited));
             return this;
         }
 

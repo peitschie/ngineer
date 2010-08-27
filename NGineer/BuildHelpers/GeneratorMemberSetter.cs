@@ -9,8 +9,8 @@ namespace NGineer.BuildHelpers
     {
 		private readonly IGenerator _generator;
 		
-        public GeneratorMemberSetter(MemberInfo member, IGenerator generator, bool allowInherited)
-			: base(member, allowInherited)
+        public GeneratorMemberSetter(MemberInfo member, Type declaringType, IGenerator generator, bool allowInherited)
+			: base(member, declaringType, allowInherited)
         {
         	if (generator == null)
         		throw new ArgumentNullException("generator");

@@ -7,21 +7,23 @@ namespace NGineer.BuildHelpers
 	{
 		protected readonly MemberInfo Member;
 		protected readonly Type MemberReturnType;
+		protected readonly Type DeclaringType;
 		private readonly Func<Type, bool> _typeCheck;
 		
-		public AbstractMemberSetter(MemberInfo member, bool allowInherited)
+		public AbstractMemberSetter(MemberInfo member, Type declaringType, bool allowInherited)
 		{
 			if (member == null)
 				throw new ArgumentNullException("member");
 			Member = member;
 			MemberReturnType = member.ReturnType();
+			DeclaringType = declaringType;
 			if (allowInherited) 
 			{
-				_typeCheck = t => member.ReflectedType.IsAssignableFrom(t);
+				_typeCheck = t => DeclaringType.IsAssignableFrom(t);
 			} 
 			else 
 			{
-				_typeCheck = t => member.ReflectedType == t;
+				_typeCheck = t => DeclaringType == t;
 			}
 		}
 		
@@ -29,7 +31,6 @@ namespace NGineer.BuildHelpers
 		{
 			return member != null 
                 && _typeCheck(member.ReflectedType)
-                && Equals(Member.DeclaringType, member.DeclaringType)
                 && Equals(Member.Name, member.Name)
 				&& Equals(MemberReturnType, member.ReturnType());
 		}

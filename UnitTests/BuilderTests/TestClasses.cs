@@ -115,4 +115,32 @@ namespace NGineer.UnitTests.BuilderTests
     {
          public IList<ClassWithEnumAndProperties> Entries { get; set; }
     }
+	
+	public class TopLevel : IInterfaceTest
+	{
+		public int TopLevelProperty { get; set; }
+		public int InterfaceProperty { get; set; }
+	}
+	
+	public class SecondLevel : TopLevel
+	{
+		public string SecondLevelProperty { get; set; }
+	}
+	
+	public class AnotherLevel : IInterfaceTest
+	{
+		public int InterfaceProperty { get; set; }
+	}
+	
+	public interface IInterfaceTest
+	{
+		int InterfaceProperty { get; set; }
+	}
+	
+	public class CombinedClasses
+	{
+		public TopLevel Property1 { get; set; }
+		public SecondLevel Property2 { get; set; }
+		public AnotherLevel Property3 { get; set; }
+	}
 }

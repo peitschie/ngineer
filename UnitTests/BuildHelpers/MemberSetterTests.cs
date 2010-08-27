@@ -8,18 +8,15 @@ namespace NGineer.UnitTests.BuildHelpers
     public class MemberSetterTests
     {
         [Test]
-        public void InheritedProperty_ChildForParent()
+        public void InheritedProperty_PropertyDeclaredOnParent_NotUsedForChild()
         {
             var expectedDateTime = DateTime.Now;
             var member = new InheritsFromClassWithNullableDateTime();
 
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
             var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
-            var parentMember = Setters.GetMemberSetter<object, object>(parentProperty, (o, b, s) => expectedDateTime, true);
-            Assert.IsTrue(parentMember.IsForMember(inheritedProperty, null, null));
-            
-            parentMember.Set(member, null, null);
-            Assert.AreEqual(expectedDateTime, member.Property1);
+            var parentMember = Setters.GetMemberSetter<ClassWithNullableDateTime, object>(parentProperty, (o, b, s) => expectedDateTime, false);
+            Assert.IsFalse(parentMember.IsForMember(inheritedProperty, null, null));
         }
 
         [Test]
@@ -27,7 +24,7 @@ namespace NGineer.UnitTests.BuildHelpers
         {
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
             var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
-            var inheritedMember = Setters.GetMemberSetter<object, object>(inheritedProperty, (o, b, s) => null, true);
+            var inheritedMember = Setters.GetMemberSetter<InheritsFromClassWithNullableDateTime, object>(inheritedProperty, (o, b, s) => null, true);
             Assert.IsFalse(inheritedMember.IsForMember(parentProperty, null, null));
         }
 
@@ -35,7 +32,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void InheritedProperty_NotForSibling()
         {
             var child1Property = typeof(ClassChild1).GetProperty("Property1");
-            var child1PropertyMember = Setters.GetMemberSetter<object, object>(child1Property, (o, b, s) => null, true);
+            var child1PropertyMember = Setters.GetMemberSetter<ClassChild1, object>(child1Property, (o, b, s) => null, true);
 
             var child2Property = typeof(ClassChild2).GetProperty("Property1");
             Assert.IsFalse(child1PropertyMember.IsForMember(child2Property, null, null));
@@ -116,7 +113,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void InheritedProperty_NotForSibling()
         {
             var child1Property = typeof(GenericClassChild1).GetProperty("Property1");
-            var child1PropertyMember = Setters.GetMemberSetter<object, object>(child1Property, (o, b, s) => null, true);
+            var child1PropertyMember = Setters.GetMemberSetter<GenericClassChild1, object>(child1Property, (o, b, s) => null, true);
 
             var child2Property = typeof(GenericClassChild2).GetProperty("Property1");
             Assert.IsFalse(child1PropertyMember.IsForMember(child2Property, null, null));

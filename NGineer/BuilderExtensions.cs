@@ -20,16 +20,7 @@ namespace NGineer
                 throw new ArgumentNullException("generator");
             var member = MemberExpressions.GetMemberInfo(expression);
             // No validation can be done here as the generator only returns a generic object type
-            return builder.AfterConstructionOf(new GeneratorMemberSetter(member, generator, false));
-        }
-
-        private static void ValidateMember<TType, TReturnType>(MemberInfo member,
-                                                               Func<TType, IBuilder, BuildSession, TReturnType> setter)
-        {
-            if(!member.ReturnType().IsAssignableFrom(typeof(TReturnType)))
-            {
-                throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
-            }
+            return builder.AfterConstructionOf(new GeneratorMemberSetter(member, typeof(TType), generator, false));
         }
     }
 }
