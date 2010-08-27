@@ -34,15 +34,6 @@ namespace NGineer.UnitTests.BuilderTests
                 .AfterPopulationOf((ISetter)null));
         }
 		
-        [Test]
-        public void AfterPopulationOf_UsingAdvanceSetterForGenerics()
-        {
-            var newClass = new Builder(1)
-                .AfterPopulationOf(new Setter(type => typeof(IList<>).IsGenericAssignableFrom(type), o => ((IList)o).Clear()))
-                .Build<List<int>>();
-            Assert.IsEmpty(newClass);
-        }
-		
 		[Test]
 		public void Build_Setters_ChildSettersRunLast()
 		{
