@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,6 +17,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,7 +32,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -69,6 +69,7 @@
     <Compile Include="BuildHelpers\BuilderException.cs" />
     <Compile Include="BuildHelpers\BuilderInstanceTracker.cs" />
     <Compile Include="BuildHelpers\BuilderMaximumInstancesReached.cs" />
+    <Compile Include="BuildHelpers\BuilderSealedException.cs" />
     <Compile Include="BuildHelpers\BuilderStatEntry.cs" />
     <Compile Include="BuildHelpers\BuildSession.cs" />
     <Compile Include="BuildHelpers\IgnoreMemberSetter.cs" />

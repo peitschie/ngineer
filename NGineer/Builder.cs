@@ -206,7 +206,7 @@ namespace NGineer
 	    {
             if (_sealed)
             {
-                throw new BuilderException("Builder class has been sealed.  Please use CreateNew to create a child instance");
+                throw new BuilderSealedException();
             }
 	    }
 
@@ -226,6 +226,7 @@ namespace NGineer
 
 	    public IBuilder ThrowsWhenMaximumDepthReached()
         {
+            AssertBuilderIsntSealed();
             _throwOnDepthLimitReached = true;
             return this;
         }
@@ -239,6 +240,7 @@ namespace NGineer
 
         public IBuilder SetCollectionSize(Type type, int minimum, int maximum)
         {
+            AssertBuilderIsntSealed();
             _collectionSizes.SetForType(type, new Range(minimum, maximum));
             return this;
         }
@@ -255,6 +257,7 @@ namespace NGineer
 		
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
+            AssertBuilderIsntSealed();
             _maxInstances.SetForType(type, _random.NextInRange(minimum, maximum));
             return this;
         }
@@ -276,6 +279,7 @@ namespace NGineer
 
         public IBuilder AfterConstructionOf(IMemberSetter setter)
         {
+            AssertBuilderIsntSealed();
         	if (setter == null)
         		throw new ArgumentNullException("setter");
 			MemberSetters.Insert(0, setter);
@@ -293,6 +297,7 @@ namespace NGineer
 
 	    public IBuilder IgnoreUnset(Type type)
 	    {
+            AssertBuilderIsntSealed();
 	        _ignoreUnset[type] = true;
             return this;
 	    }
@@ -304,6 +309,7 @@ namespace NGineer
 
 		public ITypedBuilder<TType> For<TType>(bool allowInherited)
 		{
+            AssertBuilderIsntSealed();
 			return new TypedBuilder<TType>(this, allowInherited);
 		}		
 		
