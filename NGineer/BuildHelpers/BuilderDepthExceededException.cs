@@ -19,19 +19,14 @@ namespace NGineer.BuildHelpers
         {
             var result = new StringBuilder();
             var first = true;
-            var current = session.CurrentObject;
-            while (current != null)
+            foreach (var current in session.CurrentMemberStack)
             {
-                if (current.Type != null)
+                if (!first)
                 {
-                    if (!first)
-                    {
-                        result.Insert(0, "->");
-                    }
-                    first = false;
-                    result.Insert(0, current.Type.Name);
+                    result.Insert(0, "->");
                 }
-                current = current.Parent;
+                first = false;
+                result.Insert(0, "{0} {1}".With(current.ReturnType().Name, current.Name));
             }
             return result.ToString();
         }

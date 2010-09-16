@@ -61,6 +61,7 @@ namespace NGineer.BuildHelpers
         public int BuildDepth { get { return CurrentObject.Depth; } }
         public IList<ObjectBuildTreeEntry> ConstructedNodes { get { return _constructedNodes; } }
 		public Random Random { get { return _random; } }
+        public MemberInfo[] CurrentMemberStack { get { return _memberStack.ToArray(); } }
 		
         #endregion
 
