@@ -154,6 +154,9 @@
     <Compile Include="..\NGineer\BuildHelpers\BuilderMaximumInstancesReached.cs">
       <Link>BuildHelpers\BuilderMaximumInstancesReached.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\BuildHelpers\BuilderSealedException.cs">
+      <Link>BuildHelpers\BuilderSealedException.cs</Link>
+    </Compile>
     <Compile Include="..\NGineer\BuildHelpers\BuilderStatEntry.cs">
       <Link>BuildHelpers\BuilderStatEntry.cs</Link>
     </Compile>
