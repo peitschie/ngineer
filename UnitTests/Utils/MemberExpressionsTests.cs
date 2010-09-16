@@ -8,26 +8,26 @@ namespace NGineer.UnitTests.Utils
     [TestFixture]
     public class MemberExpressionsTests
     {
-		[Test]
-        public void ClassParent_SimpleProperty1()
+        [Test]
+        public void GetMemberInfo_ClassParent_SimpleProperty1()
         {
             var info = (PropertyInfo)MemberExpressions.GetMemberInfo<ClassParent>(c => c.Property1);
-			Assert.IsNotNull(info);
+            Assert.IsNotNull(info);
             Assert.AreEqual(typeof(ClassParent), info.ReflectedType);
             Assert.AreEqual("Property1", info.Name);
         }
 
-		[Test]
-        public void ClassParent_SimpleField1()
+        [Test]
+        public void GetMemberInfo_ClassParent_SimpleField1()
         {
             var info = (FieldInfo)MemberExpressions.GetMemberInfo<ClassParent>(c => c.Field1);
-			Assert.IsNotNull(info);
+            Assert.IsNotNull(info);
             Assert.AreEqual(typeof(ClassParent), info.ReflectedType);
             Assert.AreEqual("Field1", info.Name);
         }
-		
+
         [Test]
-        public void InheritedMember_ReturnsInheritingClassType()
+        public void GetMemberInfo_InheritedMember_ReturnsInheritingClassType()
         {
             var instance = new ClassChild1();
             const int number = 10;
@@ -39,7 +39,7 @@ namespace NGineer.UnitTests.Utils
         }
 
         [Test]
-        public void InheritedMember_NewProperty_HidesInherited()
+        public void GetMemberInfo_InheritedMember_NewProperty_HidesInherited()
         {
             var instance = new SpecificInterface();
             const int number = 10;
@@ -54,7 +54,7 @@ namespace NGineer.UnitTests.Utils
         }
 
         [Test]
-        public void InheritedMember_NewProperty_BaseStillAccessible()
+        public void GetMemberInfo_InheritedMember_NewProperty_BaseStillAccessible()
         {
             var instance = new SpecificInterface();
             const int number = 10;
@@ -69,7 +69,7 @@ namespace NGineer.UnitTests.Utils
         }
 
         [Test]
-        public void LambdaExpression_Basic()
+        public void GetMemberInfo_LambdaExpression_Basic()
         {
             var info = (PropertyInfo)MemberExpressions.GetMemberInfo((ClassParent c) => c.Property1);
 
@@ -86,9 +86,66 @@ namespace NGineer.UnitTests.Utils
         }
 
         [Test]
+        public void GetMemberInfo_DeepMemberChain_WithCast()
+        {
+            var memberInfo = MemberExpressions.GetMemberInfo<DeepClass>(c => ((string)c.String).Length);
+            Assert.IsNotNull(memberInfo);
+            Assert.AreEqual(MemberExpressions.GetMemberInfo<string>(c => c.Length), memberInfo);
+        }
+
+        [Test]
+        public void GetMemberInfo_NonPropertyOrFieldType_ThrowsException()
+        {
+            Assert.Throws<MemberExpressionException>(() => MemberExpressions.GetMemberInfo<DeepClass>(c => c.String.Length + 1));
+        }
+
+        [Test]
+        public void GetMemberInfo_Generic_NullMember_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => MemberExpressions.GetMemberInfo<DeepClass>(null));
+        }
+
+        [Test]
+        public void GetMemberInfo_NonGeneric_NullMember_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => MemberExpressions.GetMemberInfo(null));
+        }
+
+        [Test]
+        public void GetExpressionChain_Generic_NullMember_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => MemberExpressions.GetExpressionChain<DeepClass>(null));
+        }
+
+        [Test]
+        public void GetExpressionChain_NonGeneric_NullMember_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => MemberExpressions.GetExpressionChain(null));
+        }
+
+        [Test]
+        public void GetExpressionChain_NonPropertyOrFieldType_ThrowsException()
+        {
+            Assert.Throws<MemberExpressionException>(() => MemberExpressions.GetExpressionChain<DeepClass>(c => c.String.Length + 1));
+        }
+
+        [Test]
         public void GetMemberChain_DeepMemberChain()
         {
             var memberInfo = MemberExpressions.GetExpressionChain<DeepClass>(c => c.String.Length);
+            var expected = new[]
+                {
+                    MemberExpressions.GetMemberInfo<DeepClass>(c => c.String),
+                    MemberExpressions.GetMemberInfo<string>(c => c.Length)
+                };
+            Assert.IsNotNull(memberInfo);
+            Assert.AreEqual(expected, memberInfo);
+        }
+
+        [Test]
+        public void GetMemberChain_DeepMemberChain_WithCast()
+        {
+            var memberInfo = MemberExpressions.GetExpressionChain<DeepClass>(c => ((string)c.String).Length);
             var expected = new[]
                 {
                     MemberExpressions.GetMemberInfo<DeepClass>(c => c.String),
@@ -108,7 +165,7 @@ namespace NGineer.UnitTests.Utils
         public class ClassParent
         {
             public int Property1 { get; set; }
-			public int Field1;
+            public int Field1;
         }
 
         public class ClassChild1 : ClassParent { }

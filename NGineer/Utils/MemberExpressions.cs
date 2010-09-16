@@ -1,60 +1,58 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System;
 using System.Reflection;
 
 namespace NGineer.Utils
 {
-	public static class MemberExpressions
-	{
-		/// <summary>
-		/// // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/ 
-		/// </summary>
-		/// <param name="expression">
-		/// A <see cref="Expression"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="MemberInfo"/>
-		/// </returns>
-		public static MemberInfo GetMemberInfo(Expression expression)
+    /// <summary>
+    /// // http://handcraftsman.wordpress.com/2008/11/11/how-to-get-c-property-names-without-magic-strings/ 
+    /// </summary>
+    public static class MemberExpressions
+    {
+        public static MemberInfo GetMemberInfo<TMember>(Expression<Func<TMember, object>> expression)
         {
-            if(expression is MemberExpression)
+            if (expression == null) throw new ArgumentNullException("expression");
+            return GetMemberInfo(expression.Body);
+        }
+
+        public static MemberInfo GetMemberInfo(Expression expression)
+        {
+            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression is MemberExpression)
             {
-				var memberExpression = (MemberExpression)expression;
+                var memberExpression = (MemberExpression)expression;
                 // Need to ensure this returns the property setter for the requested type, not
                 // the type that defines the member.  I was unable to find a clean way of
                 // changing the property accessor to by on the requested type.
                 return memberExpression.Expression.Type.GetMember(memberExpression.Member.Name).FirstOrDefault();
             }
-            if(expression is UnaryExpression)
+            else if (expression is UnaryExpression)
             {
-				var unaryExpression = (UnaryExpression)expression;
-				if (unaryExpression.NodeType == ExpressionType.Convert)
-				{
-					return GetMemberInfo(unaryExpression.Operand);
-				}
+                var unaryExpression = (UnaryExpression)expression;
+                if (unaryExpression.NodeType == ExpressionType.Convert)
+                {
+                    return GetMemberInfo(unaryExpression.Operand);
+                }
             }
-            if(expression is LambdaExpression)
+            else if (expression is LambdaExpression)
             {
-                var lambdaExpression = (LambdaExpression) expression;
+                var lambdaExpression = (LambdaExpression)expression;
                 return GetMemberInfo(lambdaExpression.Body);
             }
-            throw new InvalidOperationException("Cannot interpret member from {0}".With(expression.NodeType));
-        }
-		
-		public static MemberInfo GetMemberInfo<TType>(Expression<Func<TType, object>> expression)
-        {
-			return GetMemberInfo(expression.Body);
+            throw new MemberExpressionException(expression);
         }
 
-        public static MemberInfo[] GetExpressionChain<TType>(Expression<Func<TType, object>> expression)
+        public static MemberInfo[] GetExpressionChain<TType>(this Expression<Func<TType, object>> expression)
         {
+            if (expression == null) throw new ArgumentNullException("expression");
             return GetExpressionChain(expression.Body);
         }
 
-        public static MemberInfo[] GetExpressionChain(Expression expression)
+        public static MemberInfo[] GetExpressionChain(this Expression expression)
         {
+            if (expression == null) throw new ArgumentNullException("expression");
             var memberChain = new List<MemberInfo>();
             GetExpressionChain(expression, memberChain);
             return memberChain.ToArray();
@@ -65,7 +63,10 @@ namespace NGineer.Utils
             if (expression is MemberExpression)
             {
                 var memberExpression = (MemberExpression)expression;
-                if (memberExpression.Expression != null && memberExpression.Expression is MemberExpression)
+                if (memberExpression.Expression != null && (
+                    memberExpression.Expression is MemberExpression
+                    || (memberExpression.Expression is UnaryExpression && memberExpression.Expression.NodeType == ExpressionType.Convert)
+                    || memberExpression.Expression is LambdaExpression))
                 {
                     GetExpressionChain(memberExpression.Expression, memberChain);
                 }
@@ -83,8 +84,15 @@ namespace NGineer.Utils
             }
             else
             {
-                throw new InvalidOperationException("Cannot interpret member from {0}".With(expression.NodeType));
+                throw new MemberExpressionException(expression);
             }
         }
-	}
+    }
+
+    public class MemberExpressionException : Exception
+    {
+        public MemberExpressionException(Expression expression)
+            : base(string.Format("Cannot interpret member from {0}", expression.NodeType))
+        { }
+    }
 }
