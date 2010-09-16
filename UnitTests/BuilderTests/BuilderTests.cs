@@ -62,17 +62,17 @@ namespace NGineer.UnitTests.BuilderTests
 							.For<RecursiveClass>().Do(s1 => {})
 							.Build<RecursiveClass>(s);
 				});
-			Assert.Throws<BuilderException>(() => newClass.Build<RecursiveClass>());
+			Assert.Throws<BuilderSealedException>(() => newClass.Build<RecursiveClass>());
 		}
 
         [Test]
         public void Sealed_SealedBuilderPreventsModification()
         {
             var newClass = new Builder(1).For<int>().Do(n => { }).Sealed();
-            Assert.Throws<BuilderException>(() => newClass.SetMaximumDepth(10));
-			Assert.Throws<BuilderException>(() => newClass.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => newClass.For<int>().Do(n => { }));
-            Assert.Throws<BuilderException>(() => newClass.WithGenerator(null));
+            Assert.Throws<BuilderSealedException>(() => newClass.SetMaximumDepth(10));
+            Assert.Throws<BuilderSealedException>(() => newClass.SetDefaultCollectionSize(10, 100));
+            Assert.Throws<BuilderSealedException>(() => newClass.For<int>().Do(n => { }));
+            Assert.Throws<BuilderSealedException>(() => newClass.WithGenerator(null));
         }
 
         [Test]
@@ -80,10 +80,10 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var builder = new Builder(1).For<int>().Do(n => { });
             builder.Build<int>();
-            Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
-            Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.For<int>().Do(n => { }));
-            Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
+            Assert.Throws<BuilderSealedException>(() => builder.SetMaximumDepth(10));
+            Assert.Throws<BuilderSealedException>(() => builder.SetDefaultCollectionSize(10, 100));
+            Assert.Throws<BuilderSealedException>(() => builder.For<int>().Do(n => { }));
+            Assert.Throws<BuilderSealedException>(() => builder.WithGenerator(null));
         }
 
         [Test]
@@ -91,10 +91,10 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var builder = new Builder(1).For<int>().Do(n => { });
             builder.CreateNew().Sealed();
-            Assert.Throws<BuilderException>(() => builder.SetMaximumDepth(10));
-            Assert.Throws<BuilderException>(() => builder.SetDefaultCollectionSize(10, 100));
-            Assert.Throws<BuilderException>(() => builder.For<int>().Do(n => { }));
-            Assert.Throws<BuilderException>(() => builder.WithGenerator(null));
+            Assert.Throws<BuilderSealedException>(() => builder.SetMaximumDepth(10));
+            Assert.Throws<BuilderSealedException>(() => builder.SetDefaultCollectionSize(10, 100));
+            Assert.Throws<BuilderSealedException>(() => builder.For<int>().Do(n => { }));
+            Assert.Throws<BuilderSealedException>(() => builder.WithGenerator(null));
         }
 
 		[Test]
