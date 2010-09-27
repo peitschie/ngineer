@@ -7,7 +7,7 @@ namespace NGineer.UnitTests
 	public class MonoReflectionBehaviour
 	{
 		[Test]
-		public void ReflectedType_CacheReturnsStaleData_Initial()
+		public void A_ReflectedType_CacheReturnsStaleData_Initial()
 		{
 			var siblingProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
 			var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
@@ -18,7 +18,11 @@ namespace NGineer.UnitTests
 			Assert.AreEqual(typeof(ClassWithNullableDateTime), parentProperty.DeclaringType);
 			Assert.AreEqual(typeof(ClassWithNullableDateTime), siblingProperty.DeclaringType);
 		}
-		
+
+        /// <summary>
+        /// This bug will fail if https://bugzilla.novell.com/show_bug.cgi?id=633671 is currently
+        /// present in the executing CLR runtime
+        /// </summary>
 		[Test]
 		public void ReflectedType_CacheReturnsStaleData()
 		{
