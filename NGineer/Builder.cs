@@ -168,6 +168,16 @@ namespace NGineer
 				return _allMaxInstances;
 			}
 		}
+
+        protected bool ShouldIgnoreUnset(Type type)
+        {
+            bool result = false;
+            if(!_ignoreUnset.TryGetValue(type, out result) && Parent != null)
+            {
+                result = Parent.ShouldIgnoreUnset(type);
+            }
+            return result;
+        }
         #endregion
 
         #region WithGenerator implementations
@@ -367,7 +377,7 @@ namespace NGineer
                 if (!internalSession.CurrentObject.IsPopulated)
                 {
                     DoMemberSetters(type, internalSession);
-                    if (!_ignoreUnset.ContainsKey(type) || _ignoreUnset[type] == false)
+                    if (!ShouldIgnoreUnset(type))
                     {
                         generator.Populate(type, obj, this, internalSession);
                         DoPopulators(type, internalSession);

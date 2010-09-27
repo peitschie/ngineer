@@ -32,6 +32,25 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void IgnoreUnset_ChildBuilder_DoesntSetUnsetMembers()
+        {
+            var simpleClass = _builder
+                .For<SimpleClass>()
+                    .IgnoreUnset()
+                    .Set(c => c.IntProperty, 10)
+                    .Set(c => c.StringField, "12fda")
+                    .Ignore(c => c.TestClass2Field)
+                .CreateNew()
+                .Build<SimpleClass>();
+            Assert.IsNull(simpleClass.TestClass2Field);
+            Assert.AreEqual(10, simpleClass.IntProperty);
+            Assert.AreEqual("12fda", simpleClass.StringField);
+            Assert.AreEqual(default(int), simpleClass.IntField);
+            Assert.AreEqual(default(string), simpleClass.StringProperty);
+            Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Property);
+        }
+
+        [Test]
         public void IgnoreAll_OverridesPreviousSetters()
         {
             var simpleClass = _builder
