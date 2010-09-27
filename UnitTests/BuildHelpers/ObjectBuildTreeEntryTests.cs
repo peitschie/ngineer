@@ -12,7 +12,7 @@ namespace NGineer.UnitTests.BuildHelpers
         public void NullRecord_PropertyAccess()
         {
             _treeEntry = new ObjectBuildTreeEntry(null, null, 1);
-            object storage;
+            object storage = null;
             Assert.DoesNotThrow(() => storage = _treeEntry.Type);
             Assert.DoesNotThrow(() => storage = _treeEntry.Record);
             Assert.DoesNotThrow(() => storage = _treeEntry.Parent);
@@ -20,6 +20,7 @@ namespace NGineer.UnitTests.BuildHelpers
             Assert.DoesNotThrow(() => storage = _treeEntry.UnconstructedMembers);
             Assert.DoesNotThrow(() => storage = _treeEntry.Depth);
             Assert.DoesNotThrow(() => storage = _treeEntry.Children);
+            Assert.IsNotNull(storage); // Always true... this stops the warning about the variable never being used
         }
         
     }

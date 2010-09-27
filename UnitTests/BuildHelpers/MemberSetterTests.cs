@@ -12,7 +12,7 @@ namespace NGineer.UnitTests.BuildHelpers
         {
             var expectedDateTime = DateTime.Now;
             var member = new InheritsFromClassWithNullableDateTime();
-
+            Assert.IsNotNull(member); // Always true... this stops the warning about the variable never being used
             var inheritedProperty = typeof(InheritsFromClassWithNullableDateTime).GetProperty("Property1");
             var parentProperty = typeof(ClassWithNullableDateTime).GetProperty("Property1");
             var parentMember = Setters.GetMemberSetter<ClassWithNullableDateTime, object>(parentProperty, (o, b, s) => expectedDateTime, false);
