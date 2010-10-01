@@ -68,5 +68,43 @@ namespace NGineer.UnitTests.BuilderTests
             Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Property);
             Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Field);
         }
+
+        [Test]
+        public void IgnoreAll_OverridesPreviousSetters_AllowsResetting()
+        {
+            var simpleClass = _builder
+                .For<SimpleClass>()
+                    .Set(c => c.IntProperty, 10)
+                    .IgnoreAll()
+                    .Set(c => c.IntProperty, 12)
+                .Build<SimpleClass>();
+            Assert.AreEqual(12, simpleClass.IntProperty);
+            Assert.AreEqual(default(int), simpleClass.IntField);
+            Assert.AreEqual(default(string), simpleClass.StringField);
+            Assert.AreEqual(default(string), simpleClass.StringProperty);
+            Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Property);
+            Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Field);
+        }
+
+        [Test]
+        public void IgnoreAll_OverridesPreviousSetters_BehavesCorrectlyInChildBuilder()
+        {
+            var simpleClass = _builder
+                .For<SimpleClass>()
+                    .Set(c => c.IntProperty, 10)
+                    .Set(c => c.StringField, "12fda")
+                .CreateNew()
+                    .For<SimpleClass>()
+                        .IgnoreAll()
+                        .Set(c => c.IntField, 10)
+                        .Ignore(c => c.TestClass2Field)
+                .Build<SimpleClass>();
+            Assert.AreEqual(default(int), simpleClass.IntProperty);
+            Assert.AreEqual(default(string), simpleClass.StringField);
+            Assert.AreEqual(10, simpleClass.IntField);
+            Assert.AreEqual(default(string), simpleClass.StringProperty);
+            Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Property);
+            Assert.AreEqual(default(TestClass2), simpleClass.TestClass2Field);
+        }
     }
 }
