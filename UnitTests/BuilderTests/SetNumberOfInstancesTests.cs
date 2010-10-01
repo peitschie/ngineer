@@ -45,5 +45,22 @@ namespace NGineer.UnitTests.BuilderTests
             Assert.AreSame(instances[0], instances[1]);
             Assert.AreEqual(1, count);
         }
+
+        [Test]
+        public void SetNumberOfInstances_ObjectsProperlyReused_EvenIfInstanceIsReusedDuringInitialization()
+        {
+            var newClass = new Builder()
+                .SetNumberOfInstances<CountsPropertySets>(1, 1)
+                .For<CountsPropertySets>()
+                    .Set(x => x.RecursiveProperty, (o, b, s) => b.Build<CountsPropertySets>(s))
+                    .Set(x => x.SomeProperty, () => 10)
+                .Build<CountsPropertySets>();
+
+            Assert.AreEqual(newClass, newClass.RecursiveProperty);
+            Assert.AreEqual(1, newClass.GetSomePropertySets());
+            Assert.AreEqual(1, newClass.GetRecursivePropertySets());
+
+            Assert.IsNotNull(newClass.SomeProperty);
+        }
 	}
 }
