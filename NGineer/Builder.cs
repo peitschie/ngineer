@@ -374,7 +374,7 @@ namespace NGineer
             {
                 internalSession.PushObject(type, obj);
                 obj = internalSession.CurrentObject.Object;
-                if (!internalSession.CurrentObject.IsPopulated)
+                if (internalSession.CurrentObject.RequiresPopulation)
                 {
                     DoMemberSetters(type, internalSession);
                     if (!ShouldIgnoreUnset(type))

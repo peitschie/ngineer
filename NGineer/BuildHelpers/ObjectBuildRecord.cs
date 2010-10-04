@@ -12,14 +12,14 @@ namespace NGineer.BuildHelpers
         private readonly object _obj;
         private readonly List<string> _constructedMembers = new List<string>();
         private readonly List<MemberInfo> _unconstructedMembers;
-
-        private bool _isPopulated;
+        private bool _requiresPopulation;
 
         public ObjectBuildRecord(Type type, object obj)
         {
             _type = type;
             _obj = obj;
             _unconstructedMembers = new List<MemberInfo>();
+            _requiresPopulation = true;
             if(_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
             {
                 throw new InvalidCastException("Object type {0} is not equivalent to passed in type {1}".With(obj.GetType(), type));
@@ -45,19 +45,19 @@ namespace NGineer.BuildHelpers
             return _constructedMembers.Contains(property.Name);
         }
 
-        public bool IsPopulated
+        public bool RequiresPopulation
         {
             get
             {
-                return _isPopulated;
+                return _requiresPopulation;
             }
             set
             {
-                if (_isPopulated && !value)
+                if (value && !_requiresPopulation)
                 {
                     throw new InvalidOperationException("A populated object cannot be set back to unpopulated");
                 }
-                _isPopulated = value;
+                _requiresPopulation = value;
             }
         }
 

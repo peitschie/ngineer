@@ -16,7 +16,7 @@ namespace NGineer.UnitTests.BuildHelpers
             Assert.DoesNotThrow(() => storage = _treeEntry.Type);
             Assert.DoesNotThrow(() => storage = _treeEntry.Record);
             Assert.DoesNotThrow(() => storage = _treeEntry.Parent);
-            Assert.DoesNotThrow(() => storage = _treeEntry.IsPopulated);
+            Assert.DoesNotThrow(() => storage = _treeEntry.RequiresPopulation);
             Assert.DoesNotThrow(() => storage = _treeEntry.UnconstructedMembers);
             Assert.DoesNotThrow(() => storage = _treeEntry.Depth);
             Assert.DoesNotThrow(() => storage = _treeEntry.Children);

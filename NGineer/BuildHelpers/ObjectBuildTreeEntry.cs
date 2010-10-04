@@ -61,10 +61,10 @@ namespace NGineer.BuildHelpers
             get { return _record == null ? new MemberInfo[0] : _record.UnconstructedMembers; }
         }
 
-        public bool IsPopulated
+        public bool RequiresPopulation
         {
-            get { return _record != null && _record.IsPopulated; }
-            set { _record.IsPopulated = value; }
+            get { return _record != null && _record.RequiresPopulation; }
+            set { _record.RequiresPopulation = value; }
         }
 
         public bool IsConstructed(MemberInfo property)

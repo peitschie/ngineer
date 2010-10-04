@@ -71,24 +71,29 @@ namespace NGineer.BuildHelpers
 
         public int ConstructedCount { get; private set; }
 
-        public void PushObject(ObjectBuildRecord obj)
-        {
-            CurrentObject = CurrentObject.AddChild(obj);
-            _constructedNodes.Add(CurrentObject);
-        }
-
         public void PushObject(Type type, object  obj)
         {
-            if (!(obj is ObjectBuildRecord) && BuilderInstanceTracker.IncludeInCount(type))
-                ConstructedCount++;
-            PushObject((obj as ObjectBuildRecord) ?? new ObjectBuildRecord(type, obj));
+            var buildRecord = obj as ObjectBuildRecord;
+            if(buildRecord != null)
+            {
+                // On the second pass through, this object is already being populated, so does not require further population
+                buildRecord.RequiresPopulation = false; 
+            }
+            else
+            {
+                if (BuilderInstanceTracker.IncludeInCount(type))
+                    ConstructedCount++;
+                buildRecord = new ObjectBuildRecord(type, obj);
+            }
+            CurrentObject = CurrentObject.AddChild(buildRecord);
+            _constructedNodes.Add(CurrentObject);
         }
 
         public void PopObject()
         {
             if (CurrentObject.Parent == null)
                 throw new BuilderException("Unable to pop beyond the root element of the built object tree");
-            CurrentObject.IsPopulated = true;
+            CurrentObject.RequiresPopulation = false;
             CurrentObject = CurrentObject.Parent;
         }
 		
