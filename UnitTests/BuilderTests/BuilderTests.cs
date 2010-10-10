@@ -189,6 +189,16 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void Build_DepthReached_ReturnsDefaultValueForType()
+        {
+            var result = new Builder().SetMaximumDepth(0)
+                .For<SimpleClass>()
+                    .Set(x => x.IntProperty, (o, b, s) => b.Build<int>(s))
+                .Build<SimpleClass>();
+            Assert.AreEqual(0, result.IntProperty);
+        }
+
+        [Test]
         public void Hierarchy_ChildDoesntBuildIdenticalObjectAsParent()
         {
             var builder = new Builder(1);
