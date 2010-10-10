@@ -361,7 +361,7 @@ namespace NGineer
                 {
                     throw new BuilderDepthExceededException(BuildDepth, internalSession);
                 }
-                return null;
+                return type.IsValueType ? Activator.CreateInstance(type) : null;
             }
             if (internalSession.ConstructedCount > MaximumObjects)
             {
