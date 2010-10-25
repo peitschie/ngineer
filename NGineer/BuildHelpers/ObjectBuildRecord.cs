@@ -27,13 +27,13 @@ namespace NGineer.BuildHelpers
             if (obj != null)
             {
                 
-                _unconstructedMembers.AddRange(obj.GetType().GetProperties());
-                _unconstructedMembers.AddRange(obj.GetType().GetFields());
+                _unconstructedMembers.AddRange(obj.GetType().GetProperties().OrderBy(p => p.Name).Cast<MemberInfo>());
+                _unconstructedMembers.AddRange(obj.GetType().GetFields().OrderBy(p => p.Name).Cast<MemberInfo>());
             }
             else
             {
-                _unconstructedMembers.AddRange(type.GetProperties());
-                _unconstructedMembers.AddRange(type.GetFields());
+                _unconstructedMembers.AddRange(type.GetProperties().OrderBy(p => p.Name).Cast<MemberInfo>());
+                _unconstructedMembers.AddRange(type.GetFields().OrderBy(p => p.Name).Cast<MemberInfo>());
             }
         }
 
