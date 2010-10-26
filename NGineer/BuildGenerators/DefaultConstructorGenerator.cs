@@ -30,13 +30,15 @@ namespace NGineer.BuildGenerators
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            foreach (var property in type.GetProperties().Where(p => p.CanWrite && !session.CurrentObject.Record.IsConstructed(p)))
+            foreach (var property in type.GetProperties().OrderBy(p => p.Name)
+                .Where(p => p.CanWrite && !session.CurrentObject.Record.IsConstructed(p)))
             {
                 session.PushMember(property);
                 property.SetValue(obj, builder.Build(property.PropertyType, session), null);
 				session.PopMember(true);
             }
-            foreach (var field in type.GetFields().Where(f => f.IsPublic && !f.IsLiteral && !session.CurrentObject.Record.IsConstructed(f)))
+            foreach (var field in type.GetFields().OrderBy(p => p.Name)
+                .Where(f => f.IsPublic && !f.IsLiteral && !session.CurrentObject.Record.IsConstructed(f)))
             {
                 session.PushMember(field);
                 field.SetValue(obj, builder.Build(field.FieldType, session));

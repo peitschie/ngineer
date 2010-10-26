@@ -23,6 +23,21 @@ namespace NGineer.UnitTests.BuilderTests
 			Assert.IsNotNull(newClassTyped.Property1);
 			Assert.IsNotNull(newClassTyped.Property2);
 		}
+
+        [Test]
+        public void Builder_BuilderOrderIsConsistent()
+        {
+            var sequence = 0;
+            var newClass = new Builder(1)
+                .WithGenerator(() => sequence++)
+                .Build<BuilderOrderLevel3>();
+                
+            Assert.IsNotNull(newClass);
+            sequence = 0;
+            Assert.AreEqual(new []{0,1,2,3,4,5,6,7}, 
+                new []{newClass.Ap, newClass.Bp, newClass.Cp, newClass.Dp,
+                newClass.A, newClass.B, newClass.C, newClass.D});
+        }
 		
 		[Test]
 		public void Builder_SeedReproducesTest_IntGenerator()

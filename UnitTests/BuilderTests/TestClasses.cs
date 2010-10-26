@@ -3,6 +3,26 @@ using System.Collections.Generic;
 
 namespace NGineer.UnitTests.BuilderTests
 {
+    public class BuilderOrderLevel1
+    {
+        public int B;
+        public int Bp { get; set;}
+    }
+
+    public class BuilderOrderLevel2 : BuilderOrderLevel1
+    {
+        public int A;
+        public int Ap { get; set; }
+        public int C;
+        public int Cp { get; set; }
+    }
+
+    public class BuilderOrderLevel3 : BuilderOrderLevel2
+    {
+        public int D;
+        public int Dp { get; set; }
+    }
+
     public class CountsPropertySets
     {
         private int _somePropertySets;
