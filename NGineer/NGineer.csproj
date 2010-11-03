@@ -71,7 +71,6 @@
     <Compile Include="BuildHelpers\BuilderMaximumInstancesReached.cs" />
     <Compile Include="BuildHelpers\BuilderSealedException.cs" />
     <Compile Include="BuildHelpers\BuilderStatEntry.cs" />
-    <Compile Include="BuildHelpers\BuildSession.cs" />
     <Compile Include="BuildHelpers\IgnoreMemberSetter.cs" />
     <Compile Include="BuildHelpers\IMemberSetter.cs" />
     <Compile Include="BuildHelpers\IObjectBuildRecord.cs" />
@@ -112,9 +111,7 @@
     <Compile Include="Utils\MemberInfoExtensions.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\RandomHelpers.cs" />
-    <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
     <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
-    <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
     <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
     <Compile Include="BuildGenerators\DefaultReusableInstancesGenerator.cs" />
     <Compile Include="ITypedBuilder.cs" />
@@ -124,6 +121,11 @@
     <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
     <Compile Include="Utils\ListUtils.cs" />
     <Compile Include="BuildOrder.cs" />
+    <Compile Include="Populators\DefaultPopulator.cs" />
+    <Compile Include="Populators\IPopulator.cs" />
+    <Compile Include="Populators\ArrayPopulator.cs" />
+    <Compile Include="Populators\ListPopulator.cs" />
+    <Compile Include="BuildSession.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -144,4 +146,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Populators\" />
+    <Folder Include="BuildHelpers\" />
+  </ItemGroup>
 </Project>

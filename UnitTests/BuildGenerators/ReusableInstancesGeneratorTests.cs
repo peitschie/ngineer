@@ -97,7 +97,6 @@ namespace NGineer.UnitTests.BuildGenerators
         private new ObjectBuildRecord CreateAndGenerate<TType>(IBuilder builder, BuildSession session)
         {
             var obj = Generator.Create(typeof(TType), builder, session);
-            Generator.Populate(typeof(TType), obj, builder, session);
             return obj as ObjectBuildRecord;
         }
 

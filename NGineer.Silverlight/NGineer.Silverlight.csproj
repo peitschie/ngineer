@@ -127,12 +127,6 @@
     <Compile Include="..\NGineer\BuildGenerators\SingleTypeGenerator.cs">
       <Link>BuildGenerators\SingleTypeGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorEnumerable.cs">
-      <Link>BuildGenerators\UniqueCollectionGeneratorEnumerable.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorMember.cs">
-      <Link>BuildGenerators\UniqueCollectionGeneratorMember.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\BuildHelpers\BuilderDepthExceededException.cs">
       <Link>BuildHelpers\BuilderDepthExceededException.cs</Link>
     </Compile>
@@ -150,9 +144,6 @@
     </Compile>
     <Compile Include="..\NGineer\BuildHelpers\BuilderStatEntry.cs">
       <Link>BuildHelpers\BuilderStatEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuildSession.cs">
-      <Link>BuildHelpers\BuildSession.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildHelpers\GeneratorMemberSetter.cs">
       <Link>BuildHelpers\GeneratorMemberSetter.cs</Link>
@@ -243,6 +234,21 @@
     <Compile Include="..\NGineer\BuildOrder.cs">
       <Link>BuildOrder.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\Populators\ArrayPopulator.cs">
+      <Link>Populators\ArrayPopulator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Populators\DefaultPopulator.cs">
+      <Link>Populators\DefaultPopulator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Populators\IPopulator.cs">
+      <Link>Populators\IPopulator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Populators\ListPopulator.cs">
+      <Link>Populators\ListPopulator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\BuildSession.cs">
+      <Link>BuildSession.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -274,4 +280,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Populators\" />
+  </ItemGroup>
 </Project>

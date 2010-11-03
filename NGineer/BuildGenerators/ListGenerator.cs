@@ -28,17 +28,5 @@ namespace NGineer.BuildGenerators
 
             return list;
         }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-            var listType = obj.GetType().GetGenericArguments()[0];
-            var range = session.GetCollectionSize(listType);
-            var list = (IList) obj;
-            var listSize = session.Random.NextInRange(range);
-            for (int i = 0; i < listSize; i++)
-            {
-                list.Add(builder.Build(listType, session));
-            }
-        }
     }
 }

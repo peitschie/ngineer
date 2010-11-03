@@ -34,25 +34,6 @@ namespace NGineer.UnitTests.BuildGenerators
             Assert.AreEqual("NamedMember2", Generator.Create(typeof (string), null, session));
         }
 
-        [Test]
-        public void DefaultConstructorGenerator_ProperlyFillsOutNamedMember()
-        {
-            var session = new BuildSession(null, null, null, null, (Random)null);
-            var builder = new Mock<IBuilder>();
-            builder.Setup(b => b.Build(typeof (string), It.IsAny<BuildSession>()))
-                .Returns<Type, BuildSession>((t, s) => Generator.Create(typeof (string), builder.Object, s));
-
-            var defaultConstructorGen = new DefaultConstructorGenerator();
-            var simpleType = (SimpleType)defaultConstructorGen.Create(typeof (SimpleType), builder.Object, session);
-            session.PushObject(typeof(SimpleType), simpleType);
-            defaultConstructorGen.Populate(typeof(SimpleType), simpleType, builder.Object, session);
-            
-            Assert.IsNotNull(simpleType);
-            Assert.IsNull(simpleType.SomeNumber);
-            Assert.AreEqual("NamedMember0", simpleType.NamedMember);
-            Assert.AreEqual("NamedField0", simpleType.NamedField);
-        }
-
 #pragma warning disable 649
         private class SimpleType
         {

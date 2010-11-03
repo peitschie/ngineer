@@ -23,10 +23,6 @@ namespace NGineer.BuildGenerators
         {
             return _constructor(builder, session);
         }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-        }
     }
 
     public class BuilderGenerator<TType> : BuilderGenerator

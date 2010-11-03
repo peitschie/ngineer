@@ -25,7 +25,7 @@ namespace NGineer.BuildHelpers
                 throw new InvalidCastException("Object type {0} is not equivalent to passed in type {1}".With(obj.GetType(), type));
             }
             var objType = obj != null ? obj.GetType() : type;
-            
+
             _unconstructedMembers.AddRange(objType.GetProperties()
                 .Where(p => p.CanWrite)
                 .OrderBy(p => p.Name).Cast<MemberInfo>());

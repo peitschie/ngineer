@@ -2,6 +2,7 @@ using System.Reflection;
 using NGineer.Utils;
 using System;
 using NGineer.BuildGenerators;
+using System.Linq;
 
 namespace NGineer.BuildHelpers
 {
@@ -25,7 +26,9 @@ namespace NGineer.BuildHelpers
         public void Set(object obj, IBuilder builder, BuildSession session)
         {
             var generatorValue = _generator.Create(MemberReturnType, builder, session);
-            _generator.Populate(MemberReturnType, generatorValue, builder, session);
+            var populator = Builder.Populators.LastOrDefault(p => p.PopulatesType(MemberReturnType, builder, session));
+            if(populator != null)
+                populator.Populate(MemberReturnType, generatorValue, builder, session);
             Member.SetValue(obj, generatorValue);
         }
     }

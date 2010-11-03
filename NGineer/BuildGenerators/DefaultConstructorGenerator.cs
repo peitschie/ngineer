@@ -28,16 +28,6 @@ namespace NGineer.BuildGenerators
             return _type == null || Equals(_type, type);
         }
 
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-            foreach (var member in session.CurrentObject.Record.UnconstructedMembers)
-            {
-                session.PushMember(member);
-                member.SetValue(obj, builder.Build(member.ReturnType(), session));
-                session.PopMember(true);
-            }
-        }
-
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
             object newObj = InvokeDefaultConstructor(type);

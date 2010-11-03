@@ -1,8 +1,9 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using NGineer.BuildHelpers;
 
-namespace NGineer.BuildHelpers
+namespace NGineer
 {
     public class BuildSession
     {
