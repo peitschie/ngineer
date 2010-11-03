@@ -26,7 +26,6 @@ namespace NGineer.BuildHelpers
             }
             if (obj != null)
             {
-                
                 _unconstructedMembers.AddRange(obj.GetType().GetProperties().OrderBy(p => p.Name).Cast<MemberInfo>());
                 _unconstructedMembers.AddRange(obj.GetType().GetFields().OrderBy(p => p.Name).Cast<MemberInfo>());
             }
