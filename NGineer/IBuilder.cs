@@ -59,6 +59,21 @@ namespace NGineer
         IBuilder SetMaximumObjects(int? maximum);
 
         /// <summary>
+        /// Set the default build behaviour of an object to either build depth-first or bread-first.
+        /// In depth-first order, a member is fully constructed down to the maximum allowable build depth
+        /// prior to constructing the new member.
+        /// In breadth-first order, each member on a new object is only one deep before completing population
+        /// after all initial members have been made.  This is the default behaviour.
+        /// </summary>
+        /// <param name="order">
+        /// A <see cref="BuildOrder"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        IBuilder SetBuildOrder(BuildOrder? order);
+
+        /// <summary>
         /// By default, if the specified maximum build depth is reached, the builder will simply return null for anything
         /// deeper.  This method can be used to force the builder to throw an exception if the maximum build depth is reached.
         /// This can be useful for ensuring a complete object hierarchy is being constructed

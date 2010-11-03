@@ -240,6 +240,9 @@
     <Compile Include="..\NGineer\Utils\ListUtils.cs">
       <Link>Utils\ListUtils.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\BuildOrder.cs">
+      <Link>BuildOrder.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

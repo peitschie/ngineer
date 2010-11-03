@@ -37,6 +37,12 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void SetBuildOrder()
+        {
+            Assert.Throws<BuilderSealedException>(() => _builder.SetBuildOrder(null));
+        }
+
+        [Test]
         public void SetMaximumObjects()
         {
             Assert.Throws<BuilderSealedException>(() => _builder.SetMaximumObjects(null));

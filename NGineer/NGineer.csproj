@@ -123,6 +123,7 @@
     <Compile Include="BuildHelpers\Setters.cs" />
     <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
     <Compile Include="Utils\ListUtils.cs" />
+    <Compile Include="BuildOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

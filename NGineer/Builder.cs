@@ -37,6 +37,7 @@ namespace NGineer
         private int? _maximumObjects;
 	    private bool _sealed;
 	    private bool? _throwOnDepthLimitReached;
+        private BuildOrder? _buildOrder;
 		
 		// Inherited properties
 		private readonly ITypeRegistry<Range> _allCollectionSizes;
@@ -98,6 +99,16 @@ namespace NGineer
                 return Defaults.BuildDepth;
 			}
 		}
+
+        protected BuildOrder DefaultBuildOrder
+        {
+            get
+            {
+                if(_buildOrder == null && Parent != null)
+                    return Parent.DefaultBuildOrder;
+                return _buildOrder.HasValue ? _buildOrder.Value : BuildOrder.BreadthFirst;
+            }
+        }
 
 	    protected bool ThrowWhenBuildDepthReached
 	    {
@@ -219,6 +230,13 @@ namespace NGineer
                 throw new BuilderSealedException();
             }
 	    }
+
+        public IBuilder SetBuildOrder(BuildOrder? order)
+        {
+            AssertBuilderIsntSealed();
+            _buildOrder = order;
+            return this;
+        }
 
 	    public IBuilder SetMaximumDepth(int? depth)
 		{
