@@ -30,6 +30,8 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             return new[]
                 {
+                    typeof(CustomListType),
+                    typeof(CustomListTypeGeneric<string>),
                     typeof (string[]),
                     typeof (ListGeneratorTests),
                     typeof (string),
@@ -107,5 +109,9 @@ namespace NGineer.UnitTests.BuildGenerators
         }
 
         public class ComplexClassType {}
+
+        public class CustomListType : List<string> {}
+
+        public class CustomListTypeGeneric<TType> : List<TType> {}
     }
 }

@@ -8,7 +8,7 @@ namespace NGineer.BuildGenerators
     {
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return typeof (Nullable<>).IsGenericAssignableFrom(type);
+            return type.IsNullable();
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)

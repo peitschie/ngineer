@@ -99,7 +99,6 @@
     <Compile Include="BuildHelpers\InheritedTypeRegistry.cs" />
     <Compile Include="BuildGenerators\ReuseInstancesGenerator.cs" />
     <Compile Include="Sequences.cs" />
-    <Compile Include="Utils\GenericAssignableFrom.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="IBuilder.cs" />
@@ -123,6 +122,7 @@
     <Compile Include="BuilderExtensions.cs" />
     <Compile Include="BuildHelpers\Setters.cs" />
     <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
+    <Compile Include="Utils\ListUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

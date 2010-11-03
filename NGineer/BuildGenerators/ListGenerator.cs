@@ -10,8 +10,8 @@ namespace NGineer.BuildGenerators
     {
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return typeof (IList<>).IsGenericAssignableFrom(type) 
-                || typeof(IEnumerable<>).IsGenericAssignableFrom(type);
+            var enumerableType = type.GetEnumerableElementType();
+            return enumerableType != null && type.IsAssignableFrom(typeof(List<>).MakeGenericType(enumerableType));
         }
 
         public object Create(Type type, IBuilder builder, BuildSession session)
