@@ -20,20 +20,18 @@ namespace NGineer.BuildHelpers
             _obj = obj;
             _unconstructedMembers = new List<MemberInfo>();
             _requiresPopulation = true;
-            if(_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
+            if (_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
             {
                 throw new InvalidCastException("Object type {0} is not equivalent to passed in type {1}".With(obj.GetType(), type));
             }
-            if (obj != null)
-            {
-                _unconstructedMembers.AddRange(obj.GetType().GetProperties().OrderBy(p => p.Name).Cast<MemberInfo>());
-                _unconstructedMembers.AddRange(obj.GetType().GetFields().OrderBy(p => p.Name).Cast<MemberInfo>());
-            }
-            else
-            {
-                _unconstructedMembers.AddRange(type.GetProperties().OrderBy(p => p.Name).Cast<MemberInfo>());
-                _unconstructedMembers.AddRange(type.GetFields().OrderBy(p => p.Name).Cast<MemberInfo>());
-            }
+            var objType = obj != null ? obj.GetType() : type;
+            
+            _unconstructedMembers.AddRange(objType.GetProperties()
+                .Where(p => p.CanWrite)
+                .OrderBy(p => p.Name).Cast<MemberInfo>());
+            _unconstructedMembers.AddRange(objType.GetFields()
+                .Where(f => f.IsPublic && !f.IsLiteral && !f.IsInitOnly && !f.IsLiteral)
+                .OrderBy(p => p.Name).Cast<MemberInfo>());
         }
 
         public Type Type { get { return _type; } }
