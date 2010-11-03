@@ -29,6 +29,7 @@ Global
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = NGineer\NGineer.csproj
 		version = 0.3
+		outputpath = Output
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
