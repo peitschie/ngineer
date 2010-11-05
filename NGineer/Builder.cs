@@ -408,8 +408,8 @@ namespace NGineer
                         var populator = Populators.LastOrDefault(p => p.PopulatesType(type, this, session));
                         if(populator != null)
                             populator.Populate(type, obj, this, internalSession);
-                        DoPopulators(type, internalSession);
                     }
+                    DoPopulators(type, internalSession);
                 }
                 internalSession.PopObject();
             }

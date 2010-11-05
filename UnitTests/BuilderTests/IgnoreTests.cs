@@ -32,6 +32,20 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void IgnoreUnset_StillPerformsPostPopulators()
+        {
+            var populatorCalled = false;
+            _builder
+                .For<SimpleClass>()
+                    .IgnoreUnset()
+                    .Set(c => c.IntProperty, 10)
+                    .Set(c => c.StringField, "12fda")
+                    .Do(c => populatorCalled = true)
+                .Build<SimpleClass>();
+            Assert.IsTrue(populatorCalled);
+        }
+
+        [Test]
         public void IgnoreUnset_ChildBuilder_DoesntSetUnsetMembers()
         {
             var simpleClass = _builder
