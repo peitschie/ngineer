@@ -36,7 +36,7 @@ namespace NGineer
 	    private readonly TypeRegistry<Range> _collectionSizes;
 		private readonly TypeRegistry<int?> _maxInstances;
         private readonly IDictionary<Type, bool> _ignoreUnset;
-	    private readonly IList<IGenerator> _userGenerators;
+	    private readonly IList<IGenerator> _generators;
 	    private readonly DefaultReusableInstancesGenerator _instancesGenerator;
 		
 		private Range _defaultCollectionSize;
@@ -57,7 +57,7 @@ namespace NGineer
 			_maxInstances = new TypeRegistry<int?>();
             _collectionSizes = new TypeRegistry<Range>();
             _ignoreUnset = new Dictionary<Type, bool>();
-            _userGenerators = new List<IGenerator>();
+            _generators = new List<IGenerator>();
             _instancesGenerator = new DefaultReusableInstancesGenerator();
         }
 
@@ -202,9 +202,7 @@ namespace NGineer
         public IBuilder WithGenerator(IGenerator generator)
 		{
 	        AssertBuilderIsntSealed();
-            // each new generator should be inserted at the front of the queue to allow 
-            // easy overriding of which generator to use
-			_userGenerators.Insert(0, generator);
+			_generators.Add(generator);
 			return this;
 		}
 
@@ -457,7 +455,7 @@ namespace NGineer
         private IGenerator GetGenerator(Type type, BuildSession session)
         {
             var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? 
-				_instancesGenerator : _userGenerators.FirstOrDefault(g => g.GeneratesType(type, session.Builder, session));
+				_instancesGenerator : _generators.LastOrDefault(g => g.GeneratesType(type, session.Builder, session));
             if(thisGenerator == null && Parent != null)
             {
                 thisGenerator = Parent.GetGenerator(type, session);
