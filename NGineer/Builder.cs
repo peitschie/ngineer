@@ -37,7 +37,6 @@ namespace NGineer
 		private readonly TypeRegistry<int?> _maxInstances;
         private readonly IDictionary<Type, bool> _ignoreUnset;
 	    private readonly IList<IGenerator> _userGenerators;
-	    private readonly IGenerator _defaultGenerator;
 	    private readonly DefaultReusableInstancesGenerator _instancesGenerator;
 		
 		private Range _defaultCollectionSize;
@@ -60,7 +59,6 @@ namespace NGineer
             _ignoreUnset = new Dictionary<Type, bool>();
             _userGenerators = new List<IGenerator>();
             _instancesGenerator = new DefaultReusableInstancesGenerator();
-            _defaultGenerator = new DefaultConstructorGenerator();
         }
 
         public Builder() : this(0)
@@ -70,7 +68,8 @@ namespace NGineer
 		{
 			_allMaxInstances = new InheritedTypeRegistry<int?>(null, _maxInstances);
             _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _collectionSizes);
-			WithGenerator(new ListGenerator());
+            WithGenerator(new DefaultConstructorGenerator());
+            WithGenerator(new ListGenerator());
             WithGenerator(new ArrayGenerator());
             WithGenerator(new NullableTypeGenerator());
             WithGenerator(new DateTimeGenerator());
@@ -394,7 +393,7 @@ namespace NGineer
                 throw new BuilderMaximumInstancesReached(MaximumObjects, internalSession);
             }
 
-	        var generator = GetGeneratorOrDefault(type, internalSession);
+            var generator = GetGenerator(type, internalSession);
             var obj = generator.Create(type, this, internalSession);
             if (obj != null)
             {
@@ -455,11 +454,6 @@ namespace NGineer
 			}
         }
 
-		private IGenerator GetGeneratorOrDefault(Type type, BuildSession session)
-        {
-            return GetGenerator(type, session) ?? _defaultGenerator;
-        }
-		
         private IGenerator GetGenerator(Type type, BuildSession session)
         {
             var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? 
