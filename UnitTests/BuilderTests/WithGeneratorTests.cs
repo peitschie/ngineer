@@ -10,7 +10,7 @@ namespace NGineer.UnitTests.BuilderTests
 	[TestFixture]
 	public class WithGeneratorTests
 	{
-	    private IBuilder _builder;
+        private IBuilder _builder;
 
         [SetUp]
         public void SetUp()
@@ -18,14 +18,25 @@ namespace NGineer.UnitTests.BuilderTests
             _builder = new Builder();
         }
 
+		[Test]
+		public void UniqueCollection_SyntaxExample_UsingGenerator()
+		{
+			_builder.SetDefaultCollectionSize(10,10)
+				.WithGenerator(Generators.UniqueCollection.ForMember<ClassWithEnumAndProperties>(c => c.EnumProperty));
+
+            var list = _builder.Build<List<ClassWithEnumAndProperties>>();
+
+            Assert.AreEqual(EnumUtils.GetValues<SimpleEnum>().Count(), list.Count);
+		}
+	    
         [Test]
 		public void CustomGeneratedObject_IsNotThenPopulated()
 		{
             _builder.WithGenerator(() => new ThrowsOnAccess());
-            ThrowsOnAccess result = null;
+            ThrowsOnAccess result;
             result = _builder.Build<ThrowsOnAccess>();
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Property2);
+            Assert.IsNull(result.Property2);
 		}
 
         private class ThrowsOnAccess

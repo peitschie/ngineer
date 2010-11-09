@@ -17,5 +17,15 @@ namespace NGineer.BuildGenerators
             var range = session.GetCollectionSize(arrayType);
             return Array.CreateInstance(arrayType, session.Random.NextInRange(range));
         }
+
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
+            var arrayType = type.GetElementType();
+            var array = (Array) obj;
+            for (int i = 0; i < array.Length; i++)
+            {
+                array.SetValue(builder.Build(arrayType, session), i);
+            }
+        }
     }
 }

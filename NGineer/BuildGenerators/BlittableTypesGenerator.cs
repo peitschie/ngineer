@@ -84,9 +84,13 @@ namespace NGineer.BuildGenerators
             int size = Marshal.SizeOf(type);
             var bytes = new byte[size];
             session.Random.NextBytes(bytes);
-            return Converters[type].Invoke(null, new object[] { bytes, 0 });
+            return Converters[type].Invoke(null, new object[] {bytes, 0});
         }
-		
+
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
+        }
+
         #endregion
     }
 }

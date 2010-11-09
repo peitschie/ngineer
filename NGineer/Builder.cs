@@ -7,26 +7,18 @@ using System.Reflection;
 using NGineer.BuildGenerators;
 using NGineer.BuildHelpers;
 using NGineer.Utils;
-using NGineer.Populators;
 
 namespace NGineer
 {
 	public class Builder : IBuilder
 	{
-        public static readonly IList<IPopulator> Populators = new IPopulator[]{
-            new DefaultPopulator(),
-            new ListPopulator(),
-            new ArrayPopulator(),
-        };
-
         public static class Defaults
         {
-            public const NGineer.BuildOrder BuildOrder = NGineer.BuildOrder.BreadthFirst;
             public const int BuildDepth = 5;
             public static readonly Range CollectionSize = new Range(10, 20);
             public static int MaximumObjects = 5000;
         }
-
+		
         protected readonly Builder Parent;
         protected readonly IList<ISetter> Setters = new List<ISetter>();
         protected readonly IList<IMemberSetter> MemberSetters = new List<IMemberSetter>();
@@ -115,7 +107,7 @@ namespace NGineer
             {
                 if(_buildOrder == null && Parent != null)
                     return Parent.DefaultBuildOrder;
-                return _buildOrder.HasValue ? _buildOrder.Value : Defaults.BuildOrder;
+                return _buildOrder.HasValue ? _buildOrder.Value : BuildOrder.BreadthFirst;
             }
         }
 
@@ -424,9 +416,7 @@ namespace NGineer
                     DoMemberSetters(type, internalSession);
                     if (!ShouldIgnoreUnset(type))
                     {
-                        var populator = Populators.LastOrDefault(p => p.PopulatesType(type, this, session));
-                        if(populator != null)
-                            populator.Populate(type, obj, this, internalSession);
+                        generator.Populate(type, obj, this, internalSession);
                     }
                     DoPopulators(type, internalSession);
                 }

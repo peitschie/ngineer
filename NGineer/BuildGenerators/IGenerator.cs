@@ -7,5 +7,6 @@ namespace NGineer.BuildGenerators
 	{
 	    bool GeneratesType(Type type, IBuilder builder, BuildSession session);
         object Create(Type type, IBuilder builder, BuildSession session);
+	    void Populate(Type type, object obj, IBuilder builder, BuildSession session);
 	}
 }

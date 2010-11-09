@@ -7,6 +7,10 @@ namespace NGineer.BuildGenerators
     {
         protected abstract TType Generate(Random random);
 
+        public override void Populate(TType obj, IBuilder builder, BuildSession session)
+        {
+        }
+
         public override TType Create(Type type, IBuilder builder, BuildSession session)
         {
             return Generate(session.Random);

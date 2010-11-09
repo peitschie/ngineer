@@ -93,6 +93,8 @@
     <Compile Include="BuildHelpers\MemberSetterTests.cs" />
     <Compile Include="BuilderTests\WithGeneratorTests.cs" />
     <Compile Include="BuilderTests\SetNumberOfInstancesTests.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorMemberTests.cs" />
     <Compile Include="Examples\RegisterNewGenerator.cs" />
     <Compile Include="TypedBuilder\SetTests.cs" />
     <Compile Include="MonoReflectionBehaviour.cs" />

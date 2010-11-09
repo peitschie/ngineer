@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -94,6 +94,7 @@
     <Compile Include="BuildGenerators\ListGenerator.cs" />
     <Compile Include="BuildHelpers\ISetter.cs" />
     <Compile Include="BuildHelpers\Setter.cs" />
+    <Compile Include="BuildSession.cs" />
     <Compile Include="Generators.cs" />
     <Compile Include="BuildHelpers\InheritedTypeRegistry.cs" />
     <Compile Include="BuildGenerators\ReuseInstancesGenerator.cs" />
@@ -111,7 +112,9 @@
     <Compile Include="Utils\MemberInfoExtensions.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\RandomHelpers.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
     <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
+    <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
     <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
     <Compile Include="BuildGenerators\DefaultReusableInstancesGenerator.cs" />
     <Compile Include="ITypedBuilder.cs" />
@@ -121,11 +124,6 @@
     <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
     <Compile Include="Utils\ListUtils.cs" />
     <Compile Include="BuildOrder.cs" />
-    <Compile Include="Populators\DefaultPopulator.cs" />
-    <Compile Include="Populators\IPopulator.cs" />
-    <Compile Include="Populators\ArrayPopulator.cs" />
-    <Compile Include="Populators\ListPopulator.cs" />
-    <Compile Include="BuildSession.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -146,8 +144,4 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Populators\" />
-    <Folder Include="BuildHelpers\" />
-  </ItemGroup>
 </Project>

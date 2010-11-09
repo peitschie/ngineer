@@ -8,16 +8,14 @@ namespace NGineer.UnitTests
 
     public class CustomClass
     {
-        private readonly string _name;
-
         public CustomClass (int specialNumber, string name)
         {
             SpecialNumber = specialNumber;
-            _name = name;
+            Name = name;
         }
 
         public int SpecialNumber { get; private set; }
-        public string Name { get { return _name; } }
+        public string Name { get; private set; }
     }
 
     public class CustomClassGenerator : IGenerator
@@ -35,6 +33,12 @@ namespace NGineer.UnitTests
         public object Create (Type type, IBuilder builder, BuildSession session)
         {
             return new CustomClass (session.Random.Next (), "Demo Generator");
+        }
+
+        // Perform initializing of non-constructor related properties
+        // on the object after external setters have been called
+        public void Populate (Type type, object obj, IBuilder builder, BuildSession session)
+        {
         }
     }
 

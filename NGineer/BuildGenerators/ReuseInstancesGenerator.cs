@@ -23,5 +23,9 @@ namespace NGineer.BuildGenerators
         {
             return RandomHelpers.OneFromList(_collection, session.Random);
         }
+
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
+        }
     }
 }

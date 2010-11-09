@@ -20,7 +20,6 @@ namespace NGineer.BuildGenerators
             return false;
         }
 
-        
         private static IEnumerable<ObjectBuildRecord> GetAllInstancesOf(IEnumerable<ObjectBuildTreeEntry> list, Type type)
         {
             return list.Where(o => o.Object != null && type.IsAssignableFrom(o.Object.GetType()))
@@ -31,6 +30,10 @@ namespace NGineer.BuildGenerators
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
             return RandomHelpers.OneFromList(GetAllInstancesOf(session.ConstructedNodes, type), session.Random);
+        }
+
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
         }
     }
 }

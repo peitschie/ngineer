@@ -17,6 +17,10 @@ namespace NGineer.BuildGenerators
             return GetRandomEnum(type, session.Random);
         }
 
+        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+        {
+        }
+
         private object GetRandomEnum(Type type, Random random)
         {
             var array = EnumUtils.GetValues(type);

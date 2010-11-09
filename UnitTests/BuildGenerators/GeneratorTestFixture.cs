@@ -5,7 +5,6 @@ using NGineer.BuildHelpers;
 using NGineer.Utils;
 using NUnit.Framework;
 using Range = NGineer.BuildHelpers.Range;
-using System.Linq;
 
 namespace NGineer.UnitTests.BuildGenerators
 {
@@ -74,13 +73,9 @@ namespace NGineer.UnitTests.BuildGenerators
 
         protected TType CreateAndGenerate<TType>(IGenerator generator, IBuilder builder, BuildSession session)
         {
-            Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), "Does not generate type {0}".With(typeof(TType)));
+			Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), "Does not generate type {0}".With(typeof(TType)));
             var obj = (TType)generator.Create(typeof(TType), builder, session);
-            session.PushObject(typeof(TType), obj);
-            var populator = Builder.Populators.LastOrDefault(p => p.PopulatesType(typeof(TType), builder, session));
-            if (populator != null)
-                populator.Populate(typeof(TType), obj, builder, session);
-            session.PopObject();
+            generator.Populate(typeof(TType), obj, builder, session);
             return obj;
         }
 
