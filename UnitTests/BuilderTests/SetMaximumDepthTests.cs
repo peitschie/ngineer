@@ -11,6 +11,25 @@ namespace NGineer.UnitTests.BuilderTests
     public class SetMaximumDepthTests
     {
         [Test]
+        public void Build_MaximumRecursionLevel_Settable_0CreatesObj()
+        {
+            var newClass = new Builder(1).SetMaximumDepth(0).Build<RecursiveClass>();
+
+            Assert.IsNotNull(newClass);
+            Assert.IsNull(newClass.RecursiveReference);
+        }
+
+        [Test]
+        public void Build_MaximumRecursionLevel_Settable_1CreatesObjAndProperties()
+        {
+            var newClass = new Builder(1).SetMaximumDepth(1).Build<RecursiveClass>();
+
+            Assert.IsNotNull(newClass);
+            Assert.IsNotNull(newClass.RecursiveReference);
+            Assert.IsNull(newClass.RecursiveReference.RecursiveReference);
+        }
+
+        [Test]
         public void Build_MaximumRecursionLevel_Settable()
         {
             var newClass = new Builder(1).SetMaximumDepth(3).Build<RecursiveClass>();

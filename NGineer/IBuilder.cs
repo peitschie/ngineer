@@ -46,7 +46,9 @@ namespace NGineer
         /// <summary>
         /// Set or clear the maximum build depth limit.  This is the number
         /// of levels to populate down the object tree before stopping and returning
-        /// null.
+        /// null. A level of 0 builds just the selected object type (A).  A level of 1 will
+        /// populate the properties directly below the root object (A.Property).  A level of 2 will
+        /// populate the properties' properties (A.Property.Property)
         /// </summary>
         /// <param name="depth">
         /// A <see cref="System.Nullable<System.Int32>"/>
