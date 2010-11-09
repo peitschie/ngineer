@@ -38,6 +38,7 @@ namespace NGineer
         private readonly IDictionary<Type, bool> _ignoreUnset;
 	    private readonly IList<IGenerator> _generators;
 	    private readonly DefaultReusableInstancesGenerator _instancesGenerator;
+        private readonly IList<Action<BuildSession>> _postbuildHooks;
 		
 		private Range _defaultCollectionSize;
 		private int? _maximumDepth;
@@ -51,14 +52,15 @@ namespace NGineer
 		private readonly ITypeRegistry<int?> _allMaxInstances;
 
 	    protected Builder(int seed, bool ignored)
-        {
-            Seed = seed;
-			_random = new Random(seed);
-			_maxInstances = new TypeRegistry<int?>();
-            _collectionSizes = new TypeRegistry<Range>();
-            _ignoreUnset = new Dictionary<Type, bool>();
-            _generators = new List<IGenerator>();
-            _instancesGenerator = new DefaultReusableInstancesGenerator();
+     {
+         Seed = seed;
+	        _random = new Random(seed);
+	        _maxInstances = new TypeRegistry<int?>();
+         _collectionSizes = new TypeRegistry<Range>();
+         _ignoreUnset = new Dictionary<Type, bool>();
+         _generators = new List<IGenerator>();
+         _instancesGenerator = new DefaultReusableInstancesGenerator();
+         _postbuildHooks = new List<Action<BuildSession>>();
         }
 
         public Builder() : this(0)
@@ -345,7 +347,14 @@ namespace NGineer
             AssertBuilderIsntSealed();
 			return new TypedBuilder<TType>(this, allowInherited);
 		}		
-		
+
+        public IBuilder PostBuild(Action<BuildSession> hook)
+        {
+            AssertBuilderIsntSealed();
+            _postbuildHooks.Add(hook);
+            return this;
+        }
+
 	    public IBuilder Sealed()
 	    {
 	        _sealed = true;
@@ -364,10 +373,23 @@ namespace NGineer
         #region Build implementations
         public object Build(Type type)
         {
-            return Build(type, new BuildSession(this, CollectionSizes, 
-			                                    MaxInstances,
-			                                    DefaultCollectionSize,
-			                                    _random));
+            var session = new BuildSession(this, CollectionSizes,
+                                                MaxInstances,
+                                                DefaultCollectionSize,
+                                                _random);
+            var obj = Build(type, session);
+            if (Parent != null)
+            {
+                foreach (var hook in Parent._postbuildHooks)
+                {
+                    hook(session);
+                }
+            }
+            foreach (var hook in _postbuildHooks)
+            {
+                hook(session);
+            }
+            return obj;
         }
 
 	    public object Build(Type type, BuildSession session)

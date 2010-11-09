@@ -14,11 +14,29 @@ namespace NGineer
     {
         private readonly IBuilder _parent;
 		private readonly bool _allowInherited;
+        private bool _isParentHooked = false;
+        private Action<TTarget, BuildSession> _postbuildHook = null;
 
         public TypedBuilder(IBuilder parent, bool allowInherited)
         {
         	_parent = parent;
         	_allowInherited = allowInherited;
+        }
+
+        private void AddAction(Action<TTarget, BuildSession> hook)
+        {
+            if (!_isParentHooked)
+            {
+                _parent.PostBuild(o => {
+                    foreach(var entry in o.ConstructedNodes.Select(e => e.Object)
+                        .OfType<TTarget>().Distinct())
+                    {
+                        _postbuildHook(entry, o);
+                    }
+                });
+                _isParentHooked = true;
+            }
+            _postbuildHook += hook;
         }
 
         #region ITypedBuilder<TTarget> implementation
@@ -55,7 +73,29 @@ namespace NGineer
             _parent.AfterConstructionOf<TTarget>(expression, generator);
             return this;
         }
-        
+
+
+        public ITypedBuilder<TTarget> SetAfterBuild<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, Func<BuildSession, TReturnType> value)
+        {
+            return SetAfterBuild(expression, (obj, session) => value(session));
+        }
+
+
+        public ITypedBuilder<TTarget> SetAfterBuild<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, Func<TTarget, BuildSession, TReturnType> value)
+        {
+            Ignore(expression);
+            var accessor = expression.GetMemberInfo();
+            AddAction((obj, session) => {
+                accessor.SetValue(obj, value(obj, session));
+            });
+            return this;
+        }
+
+        public ITypedBuilder<TTarget> Ignore<TReturnType>(Expression<Func<TTarget, TReturnType>> expression)
+        {
+            _parent.IgnoreMember(MemberExpressions.GetMemberInfo(expression), _allowInherited);
+            return this;
+         }
         
         public ITypedBuilder<TTarget> Ignore(Expression<Func<TTarget, object>> expression)
         {
@@ -232,6 +272,12 @@ namespace NGineer
 		{
 			return _parent.For<TType>(allowInherited);
 		}
+
+
+        public IBuilder PostBuild(Action<BuildSession> hook)
+        {
+            return _parent.PostBuild(hook);
+        }
 
 
         public IBuilder CreateNew ()

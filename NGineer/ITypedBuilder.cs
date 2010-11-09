@@ -23,10 +23,13 @@ namespace NGineer
         /// </returns>
         ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
         ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
-		ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TReturnType> value);		
+		ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TReturnType> value);
+        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<BuildSession, TReturnType> value);
+        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, BuildSession, TReturnType> value);
         ITypedBuilder<TType> Set(Expression<Func<TType, object>> expression, IGenerator generator);
 
         ITypedBuilder<TType> Ignore(Expression<Func<TType, object>> expression);
+        ITypedBuilder<TType> Ignore<TReturnType>(Expression<Func<TType, TReturnType>> expression);
         ITypedBuilder<TType> IgnoreUnset();
         ITypedBuilder<TType> IgnoreAll();
 

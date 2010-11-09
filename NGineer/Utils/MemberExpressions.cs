@@ -11,9 +11,17 @@ namespace NGineer.Utils
     /// </summary>
     public static class MemberExpressions
     {
-        public static MemberInfo GetMemberInfo<TMember>(Expression<Func<TMember, object>> expression)
+        public static MemberInfo GetMemberInfo<TMember>(this Expression<Func<TMember, object>> expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+                throw new ArgumentNullException("expression");
+            return GetMemberInfo(expression.Body);
+        }
+
+        public static MemberInfo GetMemberInfo<TMember, TReturn>(this Expression<Func<TMember, TReturn>> expression)
+        {
+            if (expression == null)
+                throw new ArgumentNullException("expression");
             return GetMemberInfo(expression.Body);
         }
 

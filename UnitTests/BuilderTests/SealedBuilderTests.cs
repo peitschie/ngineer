@@ -97,6 +97,12 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void PostBuild()
+        {
+            Assert.Throws<BuilderSealedException>(() => _builder.PostBuild(o => {}));
+        }
+
+        [Test]
         public void Sealed()
         {
             Assert.DoesNotThrow(() => _builder.Sealed());

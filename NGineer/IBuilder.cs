@@ -184,6 +184,19 @@ namespace NGineer
         ITypedBuilder<TType> For<TType>();
 		ITypedBuilder<TType> For<TType>(bool allowInherited);
 
+        /// <summary>
+        /// Indicates an action that will be run after all construction and population
+        /// has been completed.  It is HIGHLY recommended no further building be done at
+        /// this point
+        /// </summary>
+        /// <param name="hook">
+        /// A <see cref="Action<BuildSession>"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        IBuilder PostBuild(Action<BuildSession> hook);
+
         IBuilder CreateNew();
 
         /// <summary>
