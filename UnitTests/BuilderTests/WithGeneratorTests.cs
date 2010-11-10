@@ -33,15 +33,14 @@ namespace NGineer.UnitTests.BuilderTests
 		public void CustomGeneratedObject_IsNotThenPopulated()
 		{
             _builder.WithGenerator(() => new ThrowsOnAccess());
-            ThrowsOnAccess result;
-            result = _builder.Build<ThrowsOnAccess>();
+            var result = _builder.Build<ThrowsOnAccess>();
             Assert.IsNotNull(result);
+            Assert.Throws<Exception>(() => Console.Out.Write(result.Property));
             Assert.IsNull(result.Property2);
 		}
 
         private class ThrowsOnAccess
         {
-            private int _property;
             public int Property
             {
                 get { throw new Exception("Property should not have been accessed"); }
