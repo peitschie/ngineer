@@ -142,6 +142,19 @@ namespace NGineer.UnitTests.BuilderTests
             Assert.AreEqual(5, builder2.BuildDepth);
         }
 
+        [Test]
+        public void List_DepthSetTo0_CreatesNullEntries()
+        {
+            var list = new Builder()
+                .SetMaximumDepth(0)
+                .Build<string[]>();
+
+            foreach(var entry in list)
+            {
+                Assert.IsNotNull(entry);
+            }
+        }
+
         private static string CreateString(int count)
         {
             var type = typeof (RecursiveClass);
