@@ -114,14 +114,14 @@
     <Compile Include="Internal\ObjectBuildTreeEntry.cs" />
     <Compile Include="Internal\Range.cs" />
     <Compile Include="Internal\TypeRegistry.cs" />
-    <Compile Include="Internal\Setter.cs" />
     <Compile Include="Internal\InheritedTypeRegistry.cs" />
     <Compile Include="Internal\GeneratorMemberSetter.cs" />
-    <Compile Include="Internal\Setters.cs" />
     <Compile Include="Internal\AbstractMemberSetter.cs" />
     <Compile Include="IGenerator.cs" />
-    <Compile Include="ISetter.cs" />
     <Compile Include="RandomExtensions.cs" />
+    <Compile Include="Internal\InstanceProcessor.cs" />
+    <Compile Include="IInstanceProcessor.cs" />
+    <Compile Include="Utils\BuilderUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

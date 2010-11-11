@@ -117,7 +117,7 @@ namespace NGineer
         /// <returns>
         /// A <see cref="IBuilder"/>
         /// </returns>
-		IBuilder AfterPopulationOf(ISetter setter);
+		IBuilder AfterPopulationOf(IInstanceProcessor setter);
 
         /// <summary>
         /// Sets the range of items to put in an array, list or other type of collection by default.

@@ -46,7 +46,7 @@ namespace NGineer
                 throw new ArgumentNullException("expression");
             var member = MemberExpressions.GetMemberInfo(expression);
             ValidateMember(member, value);
-            _parent.AfterConstructionOf(Setters.GetMemberSetter(member, value, _allowInherited));
+            _parent.AfterConstructionOf(BuilderUtils.GetMemberSetter(member, value, _allowInherited));
             return this;
         }
 
@@ -119,7 +119,7 @@ namespace NGineer
         {
             if(setter == null)
                 throw new ArgumentNullException("setter");
-            _parent.AfterPopulationOf(Setters.GetSetter<TTarget>((obj, buildr, session) =>
+            _parent.AfterPopulationOf(BuilderUtils.GetSetter<TTarget>((obj, buildr, session) =>
             {
                 setter(obj);
                 return obj;
@@ -132,7 +132,7 @@ namespace NGineer
         {
             if(setter == null)
                 throw new ArgumentNullException("setter");
-            _parent.AfterPopulationOf(Setters.GetSetter<TTarget>((obj, buildr, session) =>
+            _parent.AfterPopulationOf(BuilderUtils.GetSetter<TTarget>((obj, buildr, session) =>
             {
                 setter(obj, buildr, session);
                 return obj;
@@ -216,7 +216,7 @@ namespace NGineer
             return _parent.IgnoreUnset(type);
         }
 
-        public IBuilder AfterPopulationOf(ISetter setter)
+        public IBuilder AfterPopulationOf(IInstanceProcessor setter)
         {
             return _parent.AfterPopulationOf(setter);
         }

@@ -121,7 +121,7 @@ namespace NGineer.UnitTests.BuilderTests
             }
         }
 
-        public class TestSetter : ISetter
+        public class TestSetter : IInstanceProcessor
         {
             public bool IsForType(Type type)
             {

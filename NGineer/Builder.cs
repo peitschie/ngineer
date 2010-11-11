@@ -20,7 +20,7 @@ namespace NGineer
         }
 
         private readonly Builder _parent;
-        private readonly IList<ISetter> _setters = new List<ISetter>();
+        private readonly IList<IInstanceProcessor> _setters = new List<IInstanceProcessor>();
         private readonly IList<IMemberSetter> _memberSetters = new List<IMemberSetter>();
         private readonly int _seed;
         private readonly Random _random;
@@ -274,7 +274,7 @@ namespace NGineer
 
         #region AfterPopulationOf implementations
 
-        public IBuilder AfterPopulationOf(ISetter setter)
+        public IBuilder AfterPopulationOf(IInstanceProcessor setter)
         {
             if(setter == null)
                 throw new ArgumentNullException("setter");

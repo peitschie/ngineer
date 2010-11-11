@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace NGineer.Internal
 {
-    public class Setter<TType> : ISetter
+    public class InstanceProcessor<TType> : IInstanceProcessor
     {
 		private readonly Func<Type, bool> _typeCheck;
         private readonly Func<TType, IBuilder, BuildSession, TType> _setter;
 
-        public Setter(Func<TType, IBuilder, BuildSession, TType> setter, bool allowInherited)
+        public InstanceProcessor(Func<TType, IBuilder, BuildSession, TType> setter, bool allowInherited)
         {
         	if (setter == null)
         		throw new ArgumentNullException("setter");

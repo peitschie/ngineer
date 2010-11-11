@@ -163,9 +163,6 @@
     <Compile Include="..\NGineer\Utils\MemberInfoExtensions.cs">
       <Link>Utils\MemberInfoExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Utils\StringExtensions.cs">
-      <Link>Utils\StringExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\ITypedBuilder.cs" />
     <Compile Include="..\NGineer\TypedBuilder.cs" />
     <Compile Include="..\NGineer\Utils\ListUtils.cs">
@@ -222,14 +219,8 @@
     <Compile Include="..\NGineer\Internal\Range.cs">
       <Link>Internal\Range.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Internal\Setter.cs">
-      <Link>Internal\Setter.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Internal\TypeRegistry.cs">
       <Link>Internal\TypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Internal\Setters.cs">
-      <Link>Internal\Setters.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\Internal\AbstractMemberSetter.cs">
       <Link>Internal\AbstractMemberSetter.cs</Link>
@@ -237,11 +228,17 @@
     <Compile Include="..\NGineer\IGenerator.cs">
       <Link>IGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\ISetter.cs">
-      <Link>ISetter.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\RandomExtensions.cs">
       <Link>RandomExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Utils\BuilderUtils.cs">
+      <Link>Utils\BuilderUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\IInstanceProcessor.cs">
+      <Link>IInstanceProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\InstanceProcessor.cs">
+      <Link>Internal\InstanceProcessor.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

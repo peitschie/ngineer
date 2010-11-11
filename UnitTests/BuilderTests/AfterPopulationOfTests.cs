@@ -31,7 +31,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void AfterPopulationOf_ISetter()
         {
             Assert.Throws<ArgumentNullException>(() => new Builder(1)
-                .AfterPopulationOf((ISetter)null));
+                .AfterPopulationOf((IInstanceProcessor)null));
         }
 		
 		[Test]
