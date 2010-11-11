@@ -217,11 +217,6 @@ namespace NGineer
             return _parent.AfterConstructionOf(setter);
         }
 
-        public IBuilder IgnoreMember(MemberInfo member, bool allowInherited)
-        {
-            return _parent.IgnoreMember(member, allowInherited);
-        }
-
         public IBuilder IgnoreUnset(Type type)
         {
             return _parent.IgnoreUnset(type);

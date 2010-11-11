@@ -115,8 +115,6 @@ namespace NGineer
         /// </returns>
 		IBuilder AfterConstructionOf(IMemberSetter setter);
 
-        IBuilder IgnoreMember(MemberInfo member, bool allowInherited);
-
         /// <summary>
         /// Ignores any members for this object type that do not currently have an existing setter
         /// </summary>

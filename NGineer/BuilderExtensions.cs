@@ -22,5 +22,10 @@ namespace NGineer
             // No validation can be done here as the generator only returns a generic object type
             return builder.AfterConstructionOf(new GeneratorMemberSetter(member, typeof(TType), generator, false));
         }
+
+        public static IBuilder IgnoreMember(this IBuilder builder, MemberInfo member, bool allowInherited)
+        {
+            return builder.AfterConstructionOf(new IgnoreMemberSetter(member, member.ReflectedType, allowInherited));
+        }
     }
 }

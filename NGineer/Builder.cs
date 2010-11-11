@@ -316,13 +316,6 @@ namespace NGineer
 
         #endregion
 
-
-        public IBuilder IgnoreMember(MemberInfo member, bool allowInherited)
-        {
-            AfterConstructionOf(new IgnoreMemberSetter(member, member.ReflectedType, allowInherited));
-            return this;
-        }
-
         public IBuilder IgnoreUnset(Type type)
         {
             AssertBuilderIsntSealed();
