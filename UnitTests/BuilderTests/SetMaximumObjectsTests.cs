@@ -14,7 +14,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetCollectionSize<TestClass2>(Builder.Defaults.MaximumObjects + 1, Builder.Defaults.MaximumObjects + 1)
                 .Sealed();
             var exception = Assert.Throws<BuilderMaximumInstancesReached>(() => builder.Build<TestClass2[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at {0} objects: TestClass2(5001)".With(Builder.Defaults.MaximumObjects), exception.Message);
+            Assert.AreEqual(string.Format("Maximum number of new objects was exceeded at {0} objects: TestClass2(5001)", Builder.Defaults.MaximumObjects), exception.Message);
             Assert.AreEqual(3, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(TestClass2), Builder.Defaults.MaximumObjects+1), exception.Statistics[index++]);

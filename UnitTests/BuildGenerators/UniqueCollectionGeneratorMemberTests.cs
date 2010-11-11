@@ -58,7 +58,7 @@ namespace NGineer.UnitTests.BuildGenerators
             foreach(var current in expected)
             {
                 var entry = list.FirstOrDefault(c => c.EnumProperty == current);
-                Assert.IsNotNull(entry, "No entry found for {0}".With(current));
+                Assert.IsNotNull(entry, string.Format("No entry found for {0}", current));
                 list.Remove(entry);
             }
             Assert.AreEqual(0, list.Count);

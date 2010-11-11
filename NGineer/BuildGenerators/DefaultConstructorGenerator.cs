@@ -43,7 +43,7 @@ namespace NGineer.BuildGenerators
             object newObj = InvokeDefaultConstructor(type);
             if (newObj == null)
             {
-                throw new BuilderException("Unable to construct {0} as no default constructor was found".With(type));
+                throw new BuilderException(string.Format("Unable to construct {0} as no default constructor was found", type));
             }
             return newObj;
         }

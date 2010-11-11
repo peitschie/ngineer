@@ -85,15 +85,12 @@
     <Compile Include="Builder.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="BuildGenerators\BlittableTypesGenerator.cs" />
-    <Compile Include="BuildGenerators\IGenerator.cs" />
     <Compile Include="BuildGenerators\GarbageStringGenerator.cs" />
     <Compile Include="BuildGenerators\BoolGenerator.cs" />
     <Compile Include="BuildGenerators\BuilderGenerator.cs" />
-    <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\MemberExpressions.cs" />
     <Compile Include="Utils\MemberInfoExtensions.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
-    <Compile Include="Utils\RandomHelpers.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
     <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
@@ -117,13 +114,20 @@
     <Compile Include="Internal\ObjectBuildTreeEntry.cs" />
     <Compile Include="Internal\Range.cs" />
     <Compile Include="Internal\TypeRegistry.cs" />
-    <Compile Include="Internal\ISetter.cs" />
     <Compile Include="Internal\Setter.cs" />
     <Compile Include="Internal\InheritedTypeRegistry.cs" />
     <Compile Include="Internal\GeneratorMemberSetter.cs" />
     <Compile Include="Internal\Setters.cs" />
     <Compile Include="Internal\AbstractMemberSetter.cs" />
+    <Compile Include="IGenerator.cs" />
+    <Compile Include="ISetter.cs" />
+    <Compile Include="RandomExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BuildGenerators\" />
+    <Folder Include="Internal\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
 </Project>

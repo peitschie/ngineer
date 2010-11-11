@@ -53,7 +53,7 @@ namespace NGineer.BuildGenerators
                     ).FirstOrDefault();
                 if (method == null)
                 {
-                    throw new InvalidCastException("No converter found for {0}".With(type));
+                    throw new InvalidCastException(string.Format("No converter found for {0}", type));
                 }
                 Converters.Add(type, method);
             }

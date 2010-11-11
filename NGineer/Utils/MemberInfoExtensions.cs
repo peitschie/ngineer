@@ -11,7 +11,7 @@ namespace NGineer.Utils
                 return ((FieldInfo) self).FieldType;
             if (self.MemberType == MemberTypes.Property)
                 return ((PropertyInfo)self).PropertyType;
-            throw new ArgumentException("Unsupported member type {0}".With(self.MemberType));
+            throw new ArgumentException(string.Format("Unsupported member type {0}", self.MemberType));
         }
 		
 		public static void SetValue(this MemberInfo self, object obj, object value)
@@ -21,7 +21,7 @@ namespace NGineer.Utils
             else if (self.MemberType == MemberTypes.Property)
                 ((PropertyInfo)self).SetValue(obj, value, null);
 			else
-            	throw new ArgumentException("Unsupported member type {0}".With(self.MemberType));
+            	throw new ArgumentException(string.Format("Unsupported member type {0}", self.MemberType));
         }
 
         public static bool IsNullable(this Type type)

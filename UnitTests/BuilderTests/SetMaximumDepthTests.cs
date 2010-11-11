@@ -44,7 +44,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void DefaultValue_ThrowsExceptionWhenReached()
         {
             var exception = Assert.Throws<BuilderDepthExceededException>(() => new Builder(1).Build<RecursiveClass>());
-            Assert.AreEqual("Maximum build depth of 5 was exceeded: {0}".With(CreateString(5)), exception.Message);
+            Assert.AreEqual(string.Format("Maximum build depth of 5 was exceeded: {0}", CreateString(5)), exception.Message);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetMaximumDepth(10)
                 .ThrowsWhenMaximumDepthReached()
                 .Build<RecursiveClass>());
-            Assert.AreEqual("Maximum build depth of 10 was exceeded: {0}".With(CreateString(10)), exception.Message);
+            Assert.AreEqual(string.Format("Maximum build depth of 10 was exceeded: {0}", CreateString(10)), exception.Message);
         }
 
         [Test]

@@ -109,9 +109,6 @@
     <Compile Include="..\NGineer\BuildGenerators\GarbageStringGenerator.cs">
       <Link>BuildGenerators\GarbageStringGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\IGenerator.cs">
-      <Link>BuildGenerators\IGenerator.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\BuildGenerators\ListGenerator.cs">
       <Link>BuildGenerators\ListGenerator.cs</Link>
     </Compile>
@@ -166,9 +163,6 @@
     <Compile Include="..\NGineer\Utils\MemberInfoExtensions.cs">
       <Link>Utils\MemberInfoExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Utils\RandomHelpers.cs">
-      <Link>Utils\RandomHelpers.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Utils\StringExtensions.cs">
       <Link>Utils\StringExtensions.cs</Link>
     </Compile>
@@ -176,9 +170,6 @@
     <Compile Include="..\NGineer\TypedBuilder.cs" />
     <Compile Include="..\NGineer\Utils\ListUtils.cs">
       <Link>Utils\ListUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildOrder.cs">
-      <Link>BuildOrder.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\BuildSession.cs">
       <Link>BuildSession.cs</Link>
@@ -216,9 +207,6 @@
     <Compile Include="..\NGineer\Internal\IObjectBuildRecord.cs">
       <Link>Internal\IObjectBuildRecord.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Internal\ISetter.cs">
-      <Link>Internal\ISetter.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Internal\ITypeRegistry.cs">
       <Link>Internal\ITypeRegistry.cs</Link>
     </Compile>
@@ -245,6 +233,15 @@
     </Compile>
     <Compile Include="..\NGineer\Internal\AbstractMemberSetter.cs">
       <Link>Internal\AbstractMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\IGenerator.cs">
+      <Link>IGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\ISetter.cs">
+      <Link>ISetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\RandomExtensions.cs">
+      <Link>RandomExtensions.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

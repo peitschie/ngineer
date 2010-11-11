@@ -21,7 +21,7 @@ namespace NGineer.BuildGenerators
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return RandomHelpers.OneFromList(_collection, session.Random);
+            return session.Random.OneFromList(_collection);
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

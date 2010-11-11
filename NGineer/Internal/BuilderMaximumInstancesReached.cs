@@ -13,7 +13,7 @@ namespace NGineer.Internal
         private string _statsTop10;
 
         public BuilderMaximumInstancesReached(int maxInstances, BuildSession session)
-            : base("Maximum number of new objects was exceeded at {0} objects: {1}".With(maxInstances, 
+            : base(string.Format("Maximum number of new objects was exceeded at {0} objects: {1}", maxInstances,
             GenerateSummaryString(GenerateStats(session))))
         {
             _session = session;
@@ -48,7 +48,7 @@ namespace NGineer.Internal
             return string.Join(Environment.NewLine, statistics
                                                         .Where(e => BuilderInstanceTracker.IncludeInCount(e.Type))
                                                         .Take(10)
-                                                        .Select(e => "{0}({1})".With(e.Type.Name, e.Count))
+                                                        .Select(e => string.Format("{0}({1})", e.Type.Name, e.Count))
                                                         .ToArray());
         }
 

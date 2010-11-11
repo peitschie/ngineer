@@ -288,7 +288,7 @@ namespace NGineer
         {
             if(!member.ReturnType().IsAssignableFrom(typeof(TReturnType)))
             {
-                throw new InvalidCastException("Unable to cast from {0} to {1}".With(typeof(TReturnType), member.ReturnType()));
+                throw new InvalidCastException(string.Format("Unable to cast from {0} to {1}", typeof(TReturnType), member.ReturnType()));
             }
         }
     }

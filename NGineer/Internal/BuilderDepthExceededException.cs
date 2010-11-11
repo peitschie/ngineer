@@ -9,7 +9,8 @@ namespace NGineer.Internal
         private readonly int _depth;
         private readonly BuildSession _session;
 
-        public BuilderDepthExceededException(int depth, BuildSession session) : base("Maximum build depth of {0} was exceeded: {1}".With(depth, BuildChain(session)))
+        public BuilderDepthExceededException(int depth, BuildSession session)
+            : base(string.Format("Maximum build depth of {0} was exceeded: {1}", depth, BuildChain(session)))
         {
             _depth = depth;
             _session = session;
@@ -26,7 +27,7 @@ namespace NGineer.Internal
                     result.Insert(0, "->");
                 }
                 first = false;
-                result.Insert(0, "{0} {1}".With(current.ReturnType().Name, current.Name));
+                result.Insert(0, string.Format("{0} {1}", current.ReturnType().Name, current.Name));
             }
             return result.ToString();
         }

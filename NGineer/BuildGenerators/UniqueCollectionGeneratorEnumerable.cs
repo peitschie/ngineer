@@ -35,7 +35,7 @@ namespace NGineer.BuildGenerators
 		
 		protected void Populate(IList<TType> list, IBuilder builder, BuildSession session)
 		{
-			RandomHelpers.Shuffle<TType>(list, _entries(builder, session), session.Random);
+			RandomExtensions.Shuffle<TType>(list, _entries(builder, session), session.Random);
 		}
 	}
 }

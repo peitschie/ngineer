@@ -24,7 +24,7 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             foreach (var supportedType in SupportedTypes())
             {
-                Assert.IsTrue(GeneratesType(supportedType), "Expected type {0} was not supported".With(supportedType));    
+                Assert.IsTrue(GeneratesType(supportedType), string.Format("Expected type {0} was not supported", supportedType));
             }
         }
 
@@ -33,7 +33,7 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             foreach (var unsupportedType in UnsupportedTypes())
             {
-                Assert.IsFalse(GeneratesType(unsupportedType), "Unexpected type {0} was supported".With(unsupportedType));
+                Assert.IsFalse(GeneratesType(unsupportedType), string.Format("Unexpected type {0} was supported", unsupportedType));
             }
         }
 
@@ -73,7 +73,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         protected TType CreateAndGenerate<TType>(IGenerator generator, IBuilder builder, BuildSession session)
         {
-			Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), "Does not generate type {0}".With(typeof(TType)));
+			Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), string.Format("Does not generate type {0}", typeof(TType)));
             var obj = (TType)generator.Create(typeof(TType), builder, session);
             generator.Populate(typeof(TType), obj, builder, session);
             return obj;

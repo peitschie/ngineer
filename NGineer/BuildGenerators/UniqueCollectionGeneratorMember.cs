@@ -20,8 +20,7 @@ namespace NGineer.BuildGenerators
         {
             if(!typeof(TType).IsAssignableFrom(memberInfo.ReturnType()))
             {
-                throw new InvalidCastException("Unable to convert member type {0} to {1}"
-                                                       .With(memberInfo.ReturnType(), typeof(TType)));
+                throw new InvalidCastException(string.Format("Unable to convert member type {0} to {1}", memberInfo.ReturnType(), typeof(TType)));
             }
             _member = memberInfo;
         }
@@ -43,7 +42,7 @@ namespace NGineer.BuildGenerators
         
         protected void Populate(IList<TClassType> list, IBuilder builder, BuildSession session)
         {
-            foreach(var memberValue in RandomHelpers.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
+            foreach(var memberValue in RandomExtensions.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
             {
                 var entry = builder.Build<TClassType>(session);
                 _member.SetValue(entry, memberValue);

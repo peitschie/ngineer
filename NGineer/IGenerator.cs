@@ -1,7 +1,7 @@
 using System;
 using NGineer.Internal;
 
-namespace NGineer.BuildGenerators
+namespace NGineer
 {
 	public interface IGenerator
 	{

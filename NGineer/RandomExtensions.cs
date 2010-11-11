@@ -6,14 +6,14 @@ using NGineer.Internal;
 
 namespace NGineer.Utils
 {
-    public static class RandomHelpers
+    public static class RandomExtensions
     {
-        public static object OneFromList(IList list, Random random)
+        public static object OneFromList(this Random random, IList list)
         {
             return list[random.Next(list.Count)];
         }
 
-        public static TType OneFromList<TType>(IEnumerable<TType> list, Random random)
+        public static TType OneFromList<TType>(this Random random, IEnumerable<TType> list)
         {
             return list.ElementAt(random.Next(list.Count()));
         }

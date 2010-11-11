@@ -29,7 +29,7 @@ namespace NGineer.BuildGenerators
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            return RandomHelpers.OneFromList(GetAllInstancesOf(session.ConstructedNodes, type), session.Random);
+            return session.Random.OneFromList(GetAllInstancesOf(session.ConstructedNodes, type));
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

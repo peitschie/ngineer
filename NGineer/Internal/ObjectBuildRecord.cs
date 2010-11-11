@@ -22,7 +22,7 @@ namespace NGineer.Internal
             _requiresPopulation = true;
             if (_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
             {
-                throw new InvalidCastException("Object type {0} is not equivalent to passed in type {1}".With(obj.GetType(), type));
+                throw new InvalidCastException(string.Format("Object type {0} is not equivalent to passed in type {1}", obj.GetType(), type));
             }
             var objType = obj != null ? obj.GetType() : type;
             
