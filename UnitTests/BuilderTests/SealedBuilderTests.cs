@@ -73,12 +73,6 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
-        public void IgnoreMember()
-        {
-            Assert.Throws<BuilderSealedException>(() => _builder.IgnoreMember(MemberExpressions.GetMemberInfo<string>(c => c.Length), true));
-        }
-
-        [Test]
         public void IgnoreUnset()
         {
             Assert.Throws<BuilderSealedException>(() => _builder.IgnoreUnset(typeof(string)));
