@@ -10,6 +10,7 @@ namespace NGineer
     public interface IBuilder
     {
         #region Build and overloads
+
         /// <summary>
         /// Constructs a new instance of the passed in type.  As a by-product,
         /// this will seal this builder class and any parent classes, disallowing any
