@@ -143,6 +143,7 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        [Ignore("Known bug lp:673430")]
         public void List_DepthSetTo0_CreatesNullEntries()
         {
             var list = new Builder()

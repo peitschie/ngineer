@@ -4,6 +4,7 @@ using NGineer.UnitTests.BuilderTests;
 namespace NGineer.UnitTests
 {
 	[TestFixture]
+    [Ignore("Test error no longer prevents NGineer behaviour")]
 	public class MonoReflectionBehaviour
 	{
 		[Test]
