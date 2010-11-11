@@ -179,12 +179,6 @@ namespace NGineer
         }
 
 
-        public IBuilder SetBuildOrder(BuildOrder? order)
-        {
-            return _parent.SetBuildOrder(order);
-        }
-
-
         public IBuilder ThrowsWhenMaximumDepthReached()
         {
             return _parent.ThrowsWhenMaximumDepthReached();

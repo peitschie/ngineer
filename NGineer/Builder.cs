@@ -40,7 +40,6 @@ namespace NGineer
         private int? _maximumObjects;
         private bool _sealed;
         private bool? _throwOnDepthLimitReached;
-        private BuildOrder? _buildOrder;
 
 
         protected Builder(int seed, Builder parent)
@@ -99,16 +98,6 @@ namespace NGineer
                     return _parent.BuildDepth;
                 }
                 return Defaults.BuildDepth;
-            }
-        }
-
-        protected BuildOrder DefaultBuildOrder
-        {
-            get
-            {
-                if(_buildOrder == null && _parent != null)
-                    return _parent.DefaultBuildOrder;
-                return _buildOrder.HasValue ? _buildOrder.Value : BuildOrder.BreadthFirst;
             }
         }
 
@@ -223,13 +212,6 @@ namespace NGineer
             {
                 throw new BuilderSealedException();
             }
-        }
-
-        public IBuilder SetBuildOrder(BuildOrder? order)
-        {
-            AssertBuilderIsntSealed();
-            _buildOrder = order;
-            return this;
         }
 
         public IBuilder SetMaximumDepth(int? depth)

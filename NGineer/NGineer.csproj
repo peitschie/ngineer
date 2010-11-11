@@ -102,7 +102,6 @@
     <Compile Include="TypedBuilder.cs" />
     <Compile Include="BuilderExtensions.cs" />
     <Compile Include="Utils\ListUtils.cs" />
-    <Compile Include="BuildOrder.cs" />
     <Compile Include="Internal\BuilderDepthExceededException.cs" />
     <Compile Include="Internal\BuilderException.cs" />
     <Compile Include="Internal\BuilderInstanceTracker.cs" />
