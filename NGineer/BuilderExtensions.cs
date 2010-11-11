@@ -1,7 +1,7 @@
 
 using System;
 using System.Linq;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using System.Reflection;
 using System.Linq.Expressions;

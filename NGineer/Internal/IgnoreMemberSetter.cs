@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Reflection;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class IgnoreMemberSetter : AbstractMemberSetter, IMemberSetter
     {

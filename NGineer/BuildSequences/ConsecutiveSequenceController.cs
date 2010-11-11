@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 
 namespace NGineer.BuildSequences
 {

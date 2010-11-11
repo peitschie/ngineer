@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 
 namespace NGineer.BuildGenerators

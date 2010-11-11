@@ -1,10 +1,10 @@
 using System;
 using Moq;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
-using Range = NGineer.BuildHelpers.Range;
+using Range = NGineer.Internal.Range;
 
 namespace NGineer.UnitTests.BuildGenerators
 {

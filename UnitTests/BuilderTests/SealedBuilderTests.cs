@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
 

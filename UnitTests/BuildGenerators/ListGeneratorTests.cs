@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System;
 using Moq;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NUnit.Framework;
-using Range = NGineer.BuildHelpers.Range;
+using Range = NGineer.Internal.Range;
 
 namespace NGineer.UnitTests.BuildGenerators
 {

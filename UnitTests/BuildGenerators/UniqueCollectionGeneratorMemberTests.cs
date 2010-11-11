@@ -5,7 +5,7 @@ using NGineer.BuildGenerators;
 using System.Collections;
 using System.Collections.Generic;
 using NGineer.UnitTests.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using Moq;
 using NGineer.Utils;
 using NGineer.UnitTests.BuilderTests;

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 
 namespace NGineer
 {

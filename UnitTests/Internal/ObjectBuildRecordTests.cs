@@ -1,8 +1,8 @@
 using System.Linq;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.BuildHelpers
+namespace NGineer.UnitTests.Internal
 {
     [TestFixture]
     public class ObjectBuildRecordTests

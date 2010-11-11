@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <ValidateXaml>false</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <AssemblyName>NGineer.Silverlight</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <FileUpgradeFlags>
@@ -136,63 +136,6 @@
     <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorMember.cs">
       <Link>BuildGenerators\UniqueCollectionGeneratorMember.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderDepthExceededException.cs">
-      <Link>BuildHelpers\BuilderDepthExceededException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderException.cs">
-      <Link>BuildHelpers\BuilderException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderInstanceTracker.cs">
-      <Link>BuildHelpers\BuilderInstanceTracker.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderMaximumInstancesReached.cs">
-      <Link>BuildHelpers\BuilderMaximumInstancesReached.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderSealedException.cs">
-      <Link>BuildHelpers\BuilderSealedException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\BuilderStatEntry.cs">
-      <Link>BuildHelpers\BuilderStatEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\GeneratorMemberSetter.cs">
-      <Link>BuildHelpers\GeneratorMemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\IgnoreMemberSetter.cs">
-      <Link>BuildHelpers\IgnoreMemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\IMemberSetter.cs">
-      <Link>BuildHelpers\IMemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\InheritedTypeRegistry.cs">
-      <Link>BuildHelpers\InheritedTypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\IObjectBuildRecord.cs">
-      <Link>BuildHelpers\IObjectBuildRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ISetter.cs">
-      <Link>BuildHelpers\ISetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ITypeRegistry.cs">
-      <Link>BuildHelpers\ITypeRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\MemberSetter.cs">
-      <Link>BuildHelpers\MemberSetter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildRecord.cs">
-      <Link>BuildHelpers\ObjectBuildRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\ObjectBuildTreeEntry.cs">
-      <Link>BuildHelpers\ObjectBuildTreeEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\Range.cs">
-      <Link>BuildHelpers\Range.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\Setter.cs">
-      <Link>BuildHelpers\Setter.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\TypeRegistry.cs">
-      <Link>BuildHelpers\TypeRegistry.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\BuildSequences\ConsecutiveSequenceController.cs">
       <Link>BuildSequences\ConsecutiveSequenceController.cs</Link>
     </Compile>
@@ -231,12 +174,6 @@
     </Compile>
     <Compile Include="..\NGineer\ITypedBuilder.cs" />
     <Compile Include="..\NGineer\TypedBuilder.cs" />
-    <Compile Include="..\NGineer\BuildHelpers\Setters.cs">
-      <Link>BuildHelpers\Setters.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\BuildHelpers\AbstractMemberSetter.cs">
-      <Link>BuildHelpers\AbstractMemberSetter.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Utils\ListUtils.cs">
       <Link>Utils\ListUtils.cs</Link>
     </Compile>
@@ -246,27 +183,74 @@
     <Compile Include="..\NGineer\BuildSession.cs">
       <Link>BuildSession.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
+    <Compile Include="..\NGineer\Internal\BuilderDepthExceededException.cs">
+      <Link>Internal\BuilderDepthExceededException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\BuilderException.cs">
+      <Link>Internal\BuilderException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\BuilderInstanceTracker.cs">
+      <Link>Internal\BuilderInstanceTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\BuilderMaximumInstancesReached.cs">
+      <Link>Internal\BuilderMaximumInstancesReached.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\BuilderSealedException.cs">
+      <Link>Internal\BuilderSealedException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\BuilderStatEntry.cs">
+      <Link>Internal\BuilderStatEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\GeneratorMemberSetter.cs">
+      <Link>Internal\GeneratorMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\IgnoreMemberSetter.cs">
+      <Link>Internal\IgnoreMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\IMemberSetter.cs">
+      <Link>Internal\IMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\InheritedTypeRegistry.cs">
+      <Link>Internal\InheritedTypeRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\IObjectBuildRecord.cs">
+      <Link>Internal\IObjectBuildRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\ISetter.cs">
+      <Link>Internal\ISetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\ITypeRegistry.cs">
+      <Link>Internal\ITypeRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\MemberSetter.cs">
+      <Link>Internal\MemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\ObjectBuildRecord.cs">
+      <Link>Internal\ObjectBuildRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\ObjectBuildTreeEntry.cs">
+      <Link>Internal\ObjectBuildTreeEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\Range.cs">
+      <Link>Internal\Range.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\Setter.cs">
+      <Link>Internal\Setter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\TypeRegistry.cs">
+      <Link>Internal\TypeRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\Setters.cs">
+      <Link>Internal\Setters.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\AbstractMemberSetter.cs">
+      <Link>Internal\AbstractMemberSetter.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v2.0\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties InternalTargetFrameworkVersion="SL2.0" />

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,21 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildGenerators\SimpleMemberNameStringGenerator.cs" />
-    <Compile Include="BuildHelpers\BuilderDepthExceededException.cs" />
-    <Compile Include="BuildHelpers\BuilderException.cs" />
-    <Compile Include="BuildHelpers\BuilderInstanceTracker.cs" />
-    <Compile Include="BuildHelpers\BuilderMaximumInstancesReached.cs" />
-    <Compile Include="BuildHelpers\BuilderSealedException.cs" />
-    <Compile Include="BuildHelpers\BuilderStatEntry.cs" />
-    <Compile Include="BuildHelpers\IgnoreMemberSetter.cs" />
-    <Compile Include="BuildHelpers\IMemberSetter.cs" />
-    <Compile Include="BuildHelpers\IObjectBuildRecord.cs" />
-    <Compile Include="BuildHelpers\ITypeRegistry.cs" />
-    <Compile Include="BuildHelpers\MemberSetter.cs" />
-    <Compile Include="BuildHelpers\ObjectBuildRecord.cs" />
-    <Compile Include="BuildHelpers\ObjectBuildTreeEntry.cs" />
-    <Compile Include="BuildHelpers\Range.cs" />
-    <Compile Include="BuildHelpers\TypeRegistry.cs" />
     <Compile Include="BuildGenerators\ArrayGenerator.cs" />
     <Compile Include="BuildGenerators\CharGenerator.cs" />
     <Compile Include="BuildGenerators\NullableTypeGenerator.cs" />
@@ -92,11 +77,8 @@
     <Compile Include="BuildGenerators\SimpleGenerator.cs" />
     <Compile Include="BuildGenerators\SingleTypeGenerator.cs" />
     <Compile Include="BuildGenerators\ListGenerator.cs" />
-    <Compile Include="BuildHelpers\ISetter.cs" />
-    <Compile Include="BuildHelpers\Setter.cs" />
     <Compile Include="BuildSession.cs" />
     <Compile Include="Generators.cs" />
-    <Compile Include="BuildHelpers\InheritedTypeRegistry.cs" />
     <Compile Include="BuildGenerators\ReuseInstancesGenerator.cs" />
     <Compile Include="Sequences.cs" />
     <Compile Include="AssemblyInfo.cs" />
@@ -113,35 +95,36 @@
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\RandomHelpers.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerable.cs" />
-    <Compile Include="BuildHelpers\GeneratorMemberSetter.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorMember.cs" />
     <Compile Include="BuildGenerators\DefaultConstructorGenerator.cs" />
     <Compile Include="BuildGenerators\DefaultReusableInstancesGenerator.cs" />
     <Compile Include="ITypedBuilder.cs" />
     <Compile Include="TypedBuilder.cs" />
     <Compile Include="BuilderExtensions.cs" />
-    <Compile Include="BuildHelpers\Setters.cs" />
-    <Compile Include="BuildHelpers\AbstractMemberSetter.cs" />
     <Compile Include="Utils\ListUtils.cs" />
     <Compile Include="BuildOrder.cs" />
+    <Compile Include="Internal\BuilderDepthExceededException.cs" />
+    <Compile Include="Internal\BuilderException.cs" />
+    <Compile Include="Internal\BuilderInstanceTracker.cs" />
+    <Compile Include="Internal\BuilderMaximumInstancesReached.cs" />
+    <Compile Include="Internal\BuilderSealedException.cs" />
+    <Compile Include="Internal\BuilderStatEntry.cs" />
+    <Compile Include="Internal\IgnoreMemberSetter.cs" />
+    <Compile Include="Internal\IMemberSetter.cs" />
+    <Compile Include="Internal\IObjectBuildRecord.cs" />
+    <Compile Include="Internal\ITypeRegistry.cs" />
+    <Compile Include="Internal\MemberSetter.cs" />
+    <Compile Include="Internal\ObjectBuildRecord.cs" />
+    <Compile Include="Internal\ObjectBuildTreeEntry.cs" />
+    <Compile Include="Internal\Range.cs" />
+    <Compile Include="Internal\TypeRegistry.cs" />
+    <Compile Include="Internal\ISetter.cs" />
+    <Compile Include="Internal\Setter.cs" />
+    <Compile Include="Internal\InheritedTypeRegistry.cs" />
+    <Compile Include="Internal\GeneratorMemberSetter.cs" />
+    <Compile Include="Internal\Setters.cs" />
+    <Compile Include="Internal\AbstractMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
   <ItemGroup />
 </Project>

@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 
 namespace NGineer.BuildGenerators

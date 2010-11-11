@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 
 namespace NGineer.BuildGenerators

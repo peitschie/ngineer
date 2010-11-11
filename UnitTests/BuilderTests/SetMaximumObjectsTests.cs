@@ -1,4 +1,4 @@
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
 

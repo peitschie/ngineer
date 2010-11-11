@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NGineer.Utils;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class ObjectBuildTreeEntry : IObjectBuildRecord
     {

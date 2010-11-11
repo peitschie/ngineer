@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public interface IMemberSetter
     {

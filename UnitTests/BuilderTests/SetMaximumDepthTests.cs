@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
 

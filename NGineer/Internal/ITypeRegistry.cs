@@ -1,6 +1,6 @@
 using System;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public interface ITypeRegistry<TStoreType>
     {

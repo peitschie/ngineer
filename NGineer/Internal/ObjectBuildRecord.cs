@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NGineer.Utils;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class ObjectBuildRecord : IObjectBuildRecord
     {

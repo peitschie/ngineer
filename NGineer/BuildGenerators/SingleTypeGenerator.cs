@@ -1,5 +1,5 @@
 using System;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 
 namespace NGineer.BuildGenerators
 {

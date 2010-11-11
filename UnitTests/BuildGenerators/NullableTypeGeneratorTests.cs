@@ -1,7 +1,7 @@
 using System;
 using Moq;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NUnit.Framework;
 
 namespace NGineer.UnitTests.BuildGenerators

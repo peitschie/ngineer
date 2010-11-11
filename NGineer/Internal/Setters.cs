@@ -2,7 +2,7 @@
 using System.Reflection;
 using NGineer.Utils;
 using System;
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
 	public static class Setters
 	{

@@ -1,4 +1,4 @@
-﻿namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class Range
     {

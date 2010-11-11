@@ -69,10 +69,6 @@
     <Compile Include="BuilderTests\SetMaximumDepthTests.cs" />
     <Compile Include="BuilderTests\SetMaximumObjectsTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
-    <Compile Include="BuildHelpers\BuildSessionTests.cs" />
-    <Compile Include="BuildHelpers\ObjectBuildRecordTests.cs" />
-    <Compile Include="BuildHelpers\ObjectBuildTreeEntryTests.cs" />
-    <Compile Include="BuildHelpers\TypeRegistryTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
     <Compile Include="BuildGenerators\BoolGeneratorTests.cs" />
     <Compile Include="BuildGenerators\BuilderGeneratorTests.cs" />
@@ -90,7 +86,6 @@
     <Compile Include="BuilderTests\TestClasses.cs" />
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
     <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
-    <Compile Include="BuildHelpers\MemberSetterTests.cs" />
     <Compile Include="BuilderTests\WithGeneratorTests.cs" />
     <Compile Include="BuilderTests\SetNumberOfInstancesTests.cs" />
     <Compile Include="BuildGenerators\UniqueCollectionGeneratorEnumerableTests.cs" />
@@ -99,6 +94,11 @@
     <Compile Include="TypedBuilder\SetTests.cs" />
     <Compile Include="MonoReflectionBehaviour.cs" />
     <Compile Include="BuilderTests\PostBuildTests.cs" />
+    <Compile Include="Internal\BuildSessionTests.cs" />
+    <Compile Include="Internal\ObjectBuildRecordTests.cs" />
+    <Compile Include="Internal\ObjectBuildTreeEntryTests.cs" />
+    <Compile Include="Internal\TypeRegistryTests.cs" />
+    <Compile Include="Internal\MemberSetterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -107,23 +107,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup />
 </Project>

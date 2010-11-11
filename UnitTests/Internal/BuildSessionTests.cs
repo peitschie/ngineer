@@ -1,10 +1,10 @@
 using Moq;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NUnit.Framework;
-using Range = NGineer.BuildHelpers.Range;
+using Range = NGineer.Internal.Range;
 using System;
 
-namespace NGineer.UnitTests.BuildHelpers
+namespace NGineer.UnitTests.Internal
 {
     [TestFixture]
     public class BuildSessionTests

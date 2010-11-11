@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using NGineer.BuildGenerators;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public static class BuilderInstanceTracker
     {

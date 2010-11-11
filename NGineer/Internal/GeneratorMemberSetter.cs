@@ -3,7 +3,7 @@ using NGineer.Utils;
 using System;
 using NGineer.BuildGenerators;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class GeneratorMemberSetter : AbstractMemberSetter, IMemberSetter
     {

@@ -1,7 +1,7 @@
 
 using System;
 using System.Linq.Expressions;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.BuildGenerators;
 
 namespace NGineer

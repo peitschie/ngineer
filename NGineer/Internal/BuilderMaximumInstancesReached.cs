@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NGineer.Utils;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class BuilderMaximumInstancesReached : BuilderException
     {

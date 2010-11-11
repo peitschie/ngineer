@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class Setter<TType> : ISetter
     {

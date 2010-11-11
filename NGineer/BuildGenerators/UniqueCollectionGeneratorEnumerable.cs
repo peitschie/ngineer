@@ -1,6 +1,6 @@
 using System;
 using NGineer.BuildGenerators;
-using NGineer.BuildHelpers;
+using NGineer.Internal;
 using NGineer.Utils;
 using System.Collections.Generic;
 using System.Collections;

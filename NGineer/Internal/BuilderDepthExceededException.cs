@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Text;
 using NGineer.Utils;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class BuilderDepthExceededException : BuilderException
     {

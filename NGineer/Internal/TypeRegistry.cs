@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
     public class TypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
     {

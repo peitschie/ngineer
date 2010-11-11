@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using NGineer.Utils;
-namespace NGineer.BuildHelpers
+namespace NGineer.Internal
 {
 	public class AbstractMemberSetter
 	{
