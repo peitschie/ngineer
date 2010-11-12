@@ -123,6 +123,7 @@
     <Compile Include="IInstanceProcessor.cs" />
     <Compile Include="Utils\BuilderUtils.cs" />
     <Compile Include="IConfiguredBuilder.cs" />
+    <Compile Include="Internal\SessionedBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

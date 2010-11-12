@@ -243,6 +243,9 @@
     <Compile Include="..\NGineer\IConfiguredBuilder.cs">
       <Link>IConfiguredBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\Internal\SessionedBuilder.cs">
+      <Link>Internal\SessionedBuilder.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

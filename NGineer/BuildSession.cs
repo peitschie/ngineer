@@ -134,6 +134,11 @@ namespace NGineer
             return _builder.MaxInstances.GetForType(type);
         }
 
+        public TType Build<TType>()
+        {
+            return (TType)Build(typeof(TType));
+        }
+
         public object Build(Type type)
         {
             if(BuildDepth == _builder.BuildDepth)
