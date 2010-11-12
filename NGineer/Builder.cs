@@ -390,6 +390,7 @@ namespace NGineer
         }
         #endregion
 
+        #region Query methods used during construction
         public bool ShouldIgnoreUnset(Type type)
         {
             bool result = false;
@@ -409,5 +410,6 @@ namespace NGineer
             }
             return thisGenerator;
         }
+        #endregion
     }
 }
