@@ -376,7 +376,7 @@ namespace NGineer
         {
             Sealed();
             var internalSession = ReferenceEquals(this, session.Builder) ? session : new BuildSession(this, session);
-            return internalSession.Build(type, session);
+            return internalSession.Build(type);
         }
 
         public TType Build<TType>()

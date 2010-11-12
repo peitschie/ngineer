@@ -134,7 +134,7 @@ namespace NGineer
             return _builder.MaxInstances.GetForType(type);
         }
 
-        public object Build(Type type, BuildSession session)
+        public object Build(Type type)
         {
             if(BuildDepth == _builder.BuildDepth)
             {
