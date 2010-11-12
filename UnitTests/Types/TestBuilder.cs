@@ -10,6 +10,7 @@ namespace NGineer.UnitTests.Types
 {
     public class TestBuilder : IConfiguredBuilder, IBuilder
     {
+        public IEnumerable<Action<BuildSession>> PostBuildHooks { get; set; }
         public bool ThrowWhenBuildDepthReached { get; set; }
         public bool IsBuildDepthUnset { get; set; }
         public int MaximumObjects { get; set; }

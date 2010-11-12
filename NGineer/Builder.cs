@@ -22,6 +22,7 @@ namespace NGineer
         private readonly Builder _parent;
         private readonly IList<IInstanceProcessor> _setters = new List<IInstanceProcessor>();
         private readonly IList<IMemberSetter> _memberSetters = new List<IMemberSetter>();
+        private readonly IList<Action<BuildSession>> _postbuildHooks;
         private readonly int _seed;
         private readonly Random _random;
         private readonly TypeRegistry<Range> _collectionSizes;
@@ -29,7 +30,6 @@ namespace NGineer
         private readonly IDictionary<Type, bool> _ignoreUnset;
         private readonly IList<IGenerator> _generators;
         private readonly DefaultReusableInstancesGenerator _instancesGenerator;
-        private readonly IList<Action<BuildSession>> _postbuildHooks;
 
         // Inherited properties
         private readonly ITypeRegistry<Range> _allCollectionSizes;
@@ -85,6 +85,37 @@ namespace NGineer
         }
 
         #region Properties that take into account parent settings as well
+
+        public IEnumerable<Action<BuildSession>> PostBuildHooks
+        {
+            get
+            {
+                if(_parent != null)
+                    return _parent.PostBuildHooks.Union(_postbuildHooks);
+                return _postbuildHooks;
+            }
+        }
+
+        public IEnumerable<IInstanceProcessor> Setters
+        {
+            get
+            {
+                if(_parent != null)
+                    return _parent.Setters.Union(_setters);
+                return _setters;
+            }
+        }
+
+        public IEnumerable<IMemberSetter> MemberSetters
+        {
+            get
+            {
+                if(_parent != null)
+                    return _memberSetters.Union(_parent.MemberSetters);
+                return _memberSetters;
+            }
+        }
+
         public int BuildDepth
         {
             get
@@ -164,17 +195,8 @@ namespace NGineer
         {
             get { return _allMaxInstances; }
         }
-        #endregion
 
-        protected bool ShouldIgnoreUnset(Type type)
-        {
-            bool result = false;
-            if(!_ignoreUnset.TryGetValue(type, out result) && _parent != null)
-            {
-                result = _parent.ShouldIgnoreUnset(type);
-            }
-            return result;
-        }
+        #endregion
 
         #region WithGenerator implementations
         public IBuilder WithGenerator(IGenerator generator)
@@ -343,14 +365,7 @@ namespace NGineer
         {
             var session = new BuildSession(this, _random);
             var obj = Build(type, session);
-            if(_parent != null)
-            {
-                foreach(var hook in _parent._postbuildHooks)
-                {
-                    hook(session);
-                }
-            }
-            foreach(var hook in _postbuildHooks)
+            foreach(var hook in PostBuildHooks)
             {
                 hook(session);
             }
@@ -361,38 +376,7 @@ namespace NGineer
         {
             Sealed();
             var internalSession = ReferenceEquals(this, session.Builder) ? session : new BuildSession(this, session);
-            
-            if(internalSession.BuildDepth == BuildDepth)
-            {
-                if(IsBuildDepthUnset || ThrowWhenBuildDepthReached)
-                {
-                    throw new BuilderDepthExceededException(BuildDepth, internalSession);
-                }
-                return type.IsValueType ? Activator.CreateInstance(type) : null;
-            }
-            if(internalSession.ConstructedCount > MaximumObjects)
-            {
-                throw new BuilderMaximumInstancesReached(MaximumObjects, internalSession);
-            }
-            
-            var generator = GetGenerator(type, internalSession);
-            var obj = generator.Create(type, this, internalSession);
-            if(obj != null)
-            {
-                internalSession.PushObject(type, obj);
-                obj = internalSession.CurrentObject.Object;
-                if(internalSession.CurrentObject.RequiresPopulation)
-                {
-                    DoMemberSetters(type, internalSession);
-                    if(!ShouldIgnoreUnset(type))
-                    {
-                        generator.Populate(type, obj, this, internalSession);
-                    }
-                    DoPopulators(type, internalSession);
-                }
-                internalSession.PopObject();
-            }
-            return obj;
+            return internalSession.Build(type, session);
         }
 
         public TType Build<TType>()
@@ -406,35 +390,17 @@ namespace NGineer
         }
         #endregion
 
-        private void DoMemberSetters(Type type, BuildSession session)
+        public bool ShouldIgnoreUnset(Type type)
         {
-            foreach(var member in session.CurrentObject.UnconstructedMembers)
+            bool result = false;
+            if(!_ignoreUnset.TryGetValue(type, out result) && _parent != null)
             {
-                session.PushMember(member);
-                var setter = _memberSetters.FirstOrDefault(s => s.IsForMember(member, session.Builder, session));
-                if(setter != null)
-                    setter.Set(session.CurrentObject.Object, session.Builder, session);
-                session.PopMember(setter != null);
+                result = _parent.ShouldIgnoreUnset(type);
             }
-            if(_parent != null)
-            {
-                _parent.DoMemberSetters(type, session);
-            }
+            return result;
         }
 
-        private void DoPopulators(Type type, BuildSession session)
-        {
-            if(_parent != null)
-            {
-                _parent.DoPopulators(type, session);
-            }
-            foreach(var setter in _setters.Where(s => s.IsForType(type)).ToArray())
-            {
-                setter.Set(session.CurrentObject.Object, session.Builder, session);
-            }
-        }
-
-        private IGenerator GetGenerator(Type type, BuildSession session)
+        public IGenerator GetGenerator(Type type, BuildSession session)
         {
             var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? _instancesGenerator : _generators.LastOrDefault(g => g.GeneratesType(type, session.Builder, session));
             if(thisGenerator == null && _parent != null)

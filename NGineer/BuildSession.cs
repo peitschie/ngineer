@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using NGineer.Internal;
+using System.Linq;
 
 namespace NGineer
 {
@@ -89,7 +90,6 @@ namespace NGineer
                 // On the second pass through, this object is already being populated, so does not require further population
                 buildRecord.RequiresPopulation = false;
             }
-
             else
             {
                 if(BuilderInstanceTracker.IncludeInCount(type))
@@ -132,6 +132,61 @@ namespace NGineer
         public int? GetMaximumNumberOfInstances(Type type)
         {
             return _builder.MaxInstances.GetForType(type);
+        }
+
+        public object Build(Type type, BuildSession session)
+        {
+            if(BuildDepth == _builder.BuildDepth)
+            {
+                if(_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
+                {
+                    throw new BuilderDepthExceededException(_builder.BuildDepth, this);
+                }
+                return type.IsValueType ? Activator.CreateInstance(type) : null;
+            }
+            if(ConstructedCount > _builder.MaximumObjects)
+            {
+                throw new BuilderMaximumInstancesReached(_builder.MaximumObjects, this);
+            }
+
+            var generator = _builder.GetGenerator(type, this);
+            var obj = generator.Create(type, _builder, this);
+            if(obj != null)
+            {
+                PushObject(type, obj);
+                obj = CurrentObject.Object;
+                if(CurrentObject.RequiresPopulation)
+                {
+                    DoMemberSetters(type);
+                    if(!_builder.ShouldIgnoreUnset(type))
+                    {
+                        generator.Populate(type, obj, _builder, this);
+                    }
+                    DoPopulators(type);
+                }
+                PopObject();
+            }
+            return obj;
+        }
+
+        private void DoMemberSetters(Type type)
+        {
+            foreach(var member in CurrentObject.UnconstructedMembers)
+            {
+                PushMember(member);
+                var setter = _builder.MemberSetters.FirstOrDefault(s => s.IsForMember(member, _builder, this));
+                if(setter != null)
+                    setter.Set(CurrentObject.Object, _builder, this);
+                PopMember(setter != null);
+            }
+        }
+
+        private void DoPopulators(Type type)
+        {
+            foreach(var setter in _builder.Setters.Where(s => s.IsForType(type)).ToArray())
+            {
+                setter.Set(CurrentObject.Object, _builder, this);
+            }
         }
     }
 }
