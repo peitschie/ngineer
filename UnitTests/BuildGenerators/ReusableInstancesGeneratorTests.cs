@@ -3,6 +3,7 @@ using System.Linq;
 using NGineer.Internal;
 using NUnit.Framework;
 using NGineer.BuildGenerators;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuildGenerators
 {
@@ -103,7 +104,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         private BuildSession CreateSession()
         {
-            return new BuildSession(null, null, _maxInstances, null, new Random(10));
+            return new BuildSession(new TestBuilder{ MaxInstances = _maxInstances }, new Random(10));
         }
 
         public class SimpleClass {}

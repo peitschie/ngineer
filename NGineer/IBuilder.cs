@@ -192,7 +192,7 @@ namespace NGineer
         /// </summary>
         /// <returns></returns>
         IBuilder Sealed();
-		
-		int BuildDepth { get; }
+
+        int BuildDepth { get; }
     }
 }

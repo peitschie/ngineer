@@ -10,7 +10,7 @@ using NGineer.Utils;
 
 namespace NGineer
 {
-    public class Builder : IBuilder
+    public class Builder : IConfiguredBuilder
     {
         public static class Defaults
         {
@@ -101,7 +101,7 @@ namespace NGineer
             }
         }
 
-        protected bool ThrowWhenBuildDepthReached
+        public bool ThrowWhenBuildDepthReached
         {
             get
             {
@@ -117,7 +117,7 @@ namespace NGineer
             }
         }
 
-        protected bool IsBuildDepthUnset
+        public bool IsBuildDepthUnset
         {
             get { return _maximumDepth == null && (_parent == null || _parent.IsBuildDepthUnset); }
         }
@@ -155,15 +155,16 @@ namespace NGineer
             }
         }
 
-        protected ITypeRegistry<Range> CollectionSizes
+        public ITypeRegistry<Range> CollectionSizes
         {
             get { return _allCollectionSizes; }
         }
 
-        protected ITypeRegistry<int?> MaxInstances
+        public ITypeRegistry<int?> MaxInstances
         {
             get { return _allMaxInstances; }
         }
+        #endregion
 
         protected bool ShouldIgnoreUnset(Type type)
         {
@@ -174,7 +175,6 @@ namespace NGineer
             }
             return result;
         }
-        #endregion
 
         #region WithGenerator implementations
         public IBuilder WithGenerator(IGenerator generator)
@@ -341,7 +341,7 @@ namespace NGineer
         #region Build implementations
         public object Build(Type type)
         {
-            var session = new BuildSession(this, CollectionSizes, MaxInstances, DefaultCollectionSize, _random);
+            var session = new BuildSession(this, _random);
             var obj = Build(type, session);
             if(_parent != null)
             {
@@ -360,7 +360,7 @@ namespace NGineer
         public object Build(Type type, BuildSession session)
         {
             Sealed();
-            var internalSession = ReferenceEquals(this, session.Builder) ? session : new BuildSession(this, CollectionSizes, MaxInstances, DefaultCollectionSize, session);
+            var internalSession = ReferenceEquals(this, session.Builder) ? session : new BuildSession(this, session);
             
             if(internalSession.BuildDepth == BuildDepth)
             {

@@ -15,7 +15,7 @@ namespace NGineer.UnitTests.BuildSequences
         public void SetUp()
         {
             _sequenceController = Sequences.SiblingConsecutiveInt();
-            _session = new BuildSession(null, null, null, null, (Random)null);
+            _session = new BuildSession(null, (Random)null);
         }
 
         [Test]

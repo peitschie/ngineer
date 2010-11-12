@@ -99,6 +99,7 @@
     <Compile Include="Internal\ObjectBuildTreeEntryTests.cs" />
     <Compile Include="Internal\TypeRegistryTests.cs" />
     <Compile Include="Internal\MemberSetterTests.cs" />
+    <Compile Include="Types\TestBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -109,4 +110,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Types\" />
+    <Folder Include="BuildGenerators\" />
+  </ItemGroup>
 </Project>

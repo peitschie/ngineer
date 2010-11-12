@@ -5,6 +5,7 @@ using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
 using Range = NGineer.Internal.Range;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuildGenerators
 {
@@ -81,10 +82,12 @@ namespace NGineer.UnitTests.BuildGenerators
 
 		protected virtual BuildSession BuildSession()
 		{
-			var defaultRange = new Range(1, 10);
-            var collectionTypes = new TypeRegistry<Range>();
-			var maxInstances = new TypeRegistry<int?>();
-			return new BuildSession(null, collectionTypes, maxInstances, defaultRange, new Random(10));
+            var builder = new TestBuilder {
+                DefaultCollectionSize = new Range(1, 10),
+                CollectionSizes = new TypeRegistry<Range>(),
+                MaxInstances = new TypeRegistry<int?>()
+            };
+			return new BuildSession(builder, new Random(10));
 		}
 		
         protected virtual TGenerator Construct()
@@ -102,5 +105,9 @@ namespace NGineer.UnitTests.BuildGenerators
 
 	    protected abstract Type[] SupportedTypes();
 		protected abstract Type[] UnsupportedTypes();
+
+
 	}
+
+
 }

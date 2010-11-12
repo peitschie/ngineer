@@ -8,38 +8,31 @@ namespace NGineer
     public class BuildSession
     {
         private readonly Random _random;
-        private readonly IBuilder _builder;
-        private readonly ITypeRegistry<Range> _collectionSizes;
-        private readonly ITypeRegistry<int?> _maxInstances;
-        private readonly Range _defaultCollectionSize;
+        private readonly IConfiguredBuilder _builder;
         private readonly ObjectBuildTreeEntry _objectTreeRoot;
         private readonly IList<ObjectBuildTreeEntry> _constructedNodes;
         private readonly Stack<MemberInfo> _memberStack;
 
-        protected BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, ITypeRegistry<int?> maxInstances, Range defaultCollectionSize, bool ignored)
+        protected BuildSession(IConfiguredBuilder builder, Random random, bool ignored)
         {
             _builder = builder;
-            _collectionSizes = collectionSizes;
-            _maxInstances = maxInstances;
-            _defaultCollectionSize = defaultCollectionSize;
+            _random = random;
         }
 
-        public BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, ITypeRegistry<int?> maxInstances, Range defaultCollectionSize, Random random) : this(builder, collectionSizes, maxInstances, defaultCollectionSize, false)
+        public BuildSession(IConfiguredBuilder builder, Random random) : this(builder, random, false)
         {
-            _random = random;
             _constructedNodes = new List<ObjectBuildTreeEntry>();
             _objectTreeRoot = new ObjectBuildTreeEntry(null, null, -1);
             _memberStack = new Stack<MemberInfo>();
             CurrentObject = _objectTreeRoot;
         }
 
-        public BuildSession(IBuilder builder, ITypeRegistry<Range> collectionSizes, ITypeRegistry<int?> maxInstances, Range defaultCollectionSize, BuildSession parent) : this(builder, collectionSizes, maxInstances, defaultCollectionSize, false)
+        public BuildSession(IConfiguredBuilder builder, BuildSession parent) : this(builder, parent._random, false)
         {
-            _random = parent._random;
-            _objectTreeRoot = parent._objectTreeRoot;
             _constructedNodes = parent._constructedNodes;
-            CurrentObject = parent.CurrentObject;
+            _objectTreeRoot = parent._objectTreeRoot;
             _memberStack = parent._memberStack;
+            CurrentObject = parent.CurrentObject;
         }
 
         #region Readonly Properties
@@ -133,12 +126,12 @@ namespace NGineer
 
         public Range GetCollectionSize(Type type)
         {
-            return _collectionSizes.GetForType(type) ?? _defaultCollectionSize;
+            return _builder.CollectionSizes.GetForType(type) ?? _builder.DefaultCollectionSize;
         }
 
         public int? GetMaximumNumberOfInstances(Type type)
         {
-            return _maxInstances.GetForType(type);
+            return _builder.MaxInstances.GetForType(type);
         }
     }
 }
