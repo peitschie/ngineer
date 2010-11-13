@@ -371,19 +371,15 @@ namespace NGineer
         public object Build(Type type)
         {
             Sealed();
-            var session = (_session == null || _session.IsDisposed)
-                ? new BuildSession(this, _random) : _session;
-
-            var internalSession = ReferenceEquals(this, session.Builder)
-                ? session : new BuildSession(this, session);
-
-            var obj = internalSession.Build(type);
-
-            foreach(var hook in PostBuildHooks)
+            using (var session = new BuildSession(this, _session, _random))
             {
-                hook(session);
+                var obj = session.Build(type);
+                foreach (var hook in PostBuildHooks)
+                {
+                    hook(session);
+                }
+                return obj;
             }
-            return obj;
         }
 
         public TType Build<TType>()

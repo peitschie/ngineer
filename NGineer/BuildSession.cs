@@ -15,27 +15,26 @@ namespace NGineer
         private readonly Stack<MemberInfo> _memberStack;
         private readonly SessionedBuilder _wrappedBuilder;
 
-        protected BuildSession(IConfiguredBuilder builder, Random random, bool ignored)
+        public BuildSession(IConfiguredBuilder builder, BuildSession parent, Random random)
         {
             _builder = builder;
-            _random = random;
             _wrappedBuilder = new SessionedBuilder(builder, this);
-        }
-
-        public BuildSession(IConfiguredBuilder builder, Random random) : this(builder, random, false)
-        {
-            _constructedNodes = new List<ObjectBuildTreeEntry>();
-            _objectTreeRoot = new ObjectBuildTreeEntry(null, null, -1);
-            _memberStack = new Stack<MemberInfo>();
-            CurrentObject = _objectTreeRoot;
-        }
-
-        public BuildSession(IConfiguredBuilder builder, BuildSession parent) : this(builder, parent._random, false)
-        {
-            _constructedNodes = parent._constructedNodes;
-            _objectTreeRoot = parent._objectTreeRoot;
-            _memberStack = parent._memberStack;
-            CurrentObject = parent.CurrentObject;
+            if (parent != null && !parent.IsDisposed)
+            {
+                _random = parent._random;
+                _constructedNodes = parent._constructedNodes;
+                _objectTreeRoot = parent._objectTreeRoot;
+                _memberStack = parent._memberStack;
+                CurrentObject = parent.CurrentObject;
+            }
+            else
+            {
+                _random = random;
+                _constructedNodes = new List<ObjectBuildTreeEntry>();
+                _objectTreeRoot = new ObjectBuildTreeEntry(null, null, -1);
+                _memberStack = new Stack<MemberInfo>();
+                CurrentObject = _objectTreeRoot;
+            }
         }
 
         #region Readonly Properties

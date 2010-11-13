@@ -26,7 +26,7 @@ namespace NGineer.UnitTests.Internal
         public void GetCollectionSize_ReturnsDefaultIfNoneDefined()
         {
             var defRange = new Range(10, 1000);
-            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, (Random)null);
+            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, (Random)null);
             Assert.AreSame(defRange, _session.GetCollectionSize(typeof(string)));
         }
 
@@ -36,7 +36,7 @@ namespace NGineer.UnitTests.Internal
             var stringRange = new Range(-10, 1); 
             var defRange = new Range(10, 1000);
             _registry.SetForType<string>(stringRange);
-            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, (Random)null);
+            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, (Random)null);
             
             Assert.AreSame(stringRange, _session.GetCollectionSize(typeof(string)));
         }
@@ -144,7 +144,7 @@ namespace NGineer.UnitTests.Internal
 
         private BuildSession ConstructSession()
         {
-            return new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = _defaultRange }, (Random)null);
+            return new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = _defaultRange }, null, (Random)null);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void Create_SimpleType_NamedMember()
         {
-            var session = new BuildSession(null, (Random)null);
+            var session = new BuildSession(null, null, (Random)null);
             var obj = new SimpleType();
 
             session.PushObject(typeof(SimpleType), obj);
@@ -37,7 +37,7 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void DefaultConstructorGenerator_ProperlyFillsOutNamedMember()
         {
-            var session = new BuildSession(null, (Random)null);
+            var session = new BuildSession(null, null, (Random)null);
             var builder = new Mock<IBuilder>();
             builder.Setup(b => b.Build(typeof (string)))
                 .Returns<Type>(t => Generator.Create(typeof (string), builder.Object, session));

@@ -104,7 +104,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         private BuildSession CreateSession()
         {
-            return new BuildSession(new TestBuilder{ MaxInstances = _maxInstances }, new Random(10));
+            return new BuildSession(new TestBuilder{ MaxInstances = _maxInstances }, null, new Random(10));
         }
 
         public class SimpleClass {}

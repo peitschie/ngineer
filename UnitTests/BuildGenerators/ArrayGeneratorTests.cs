@@ -19,7 +19,7 @@ namespace NGineer.UnitTests.BuildGenerators
                 DefaultCollectionSize = new Range(10,10),
                 CollectionSizes = new TypeRegistry<Range>()
             };
-            return new BuildSession(builder, new Random(10));
+            return new BuildSession(builder, null, new Random(10));
         }
 
         protected override Type[] SupportedTypes()
@@ -80,7 +80,7 @@ namespace NGineer.UnitTests.BuildGenerators
             var registry = new TypeRegistry<Range>();
             registry.SetForType<ComplexClassType>(new Range(20, 20));
             var builder = new TestBuilder { CollectionSizes = registry, DefaultCollectionSize = new Range(10,10) };
-            var session = new BuildSession(builder, new Random(10));
+            var session = new BuildSession(builder, null, new Random(10));
 
             var list = CreateAndGenerate<ComplexClassType[]>(builderMock.Object, session);
             Assert.AreEqual(20, list.Length);

@@ -94,7 +94,7 @@ namespace NGineer.UnitTests.BuildGenerators
                 CollectionSizes = new TypeRegistry<Range>(),
                 MaxInstances = new TypeRegistry<int?>()
             };
-			return new BuildSession(builder, new Random(10));
+			return new BuildSession(builder, null, new Random(10));
 		}
 		
         protected virtual TGenerator Construct()
