@@ -11,12 +11,12 @@ namespace NGineer.UnitTests.TypedBuilder
     public class SetTests
     {
         private ITypedBuilder<SimpleClass> _builder;
-        private Mock<IBuilder> _builderMock;
+        private Mock<IConfiguredBuilder> _builderMock;
 
         [SetUp]
         public void SetUp()
         {
-            _builderMock = new Mock<IBuilder>();
+            _builderMock = new Mock<IConfiguredBuilder>();
             _builder = new TypedBuilder<SimpleClass>(_builderMock.Object, false);
         }
 

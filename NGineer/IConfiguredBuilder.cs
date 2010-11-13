@@ -18,6 +18,8 @@ namespace NGineer
 
         bool ShouldIgnoreUnset(Type type);
         IGenerator GetGenerator(Type type, BuildSession session);
+
+        IConfiguredBuilder CreateNew(BuildSession session);
     }
 }
 

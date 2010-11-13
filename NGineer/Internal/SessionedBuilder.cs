@@ -3,7 +3,7 @@ namespace NGineer
 {
     public class SessionedBuilder : IBuilder
     {
-        private IBuilder _builder;
+        private IConfiguredBuilder _builder;
         private BuildSession _session;
 
         public SessionedBuilder(IConfiguredBuilder builder, BuildSession session)
@@ -32,6 +32,21 @@ namespace NGineer
             return _session.Build(type);
         }
 
+        public IBuilder CreateNew()
+        {
+            return _builder.CreateNew(_session);
+        }
+
+        public IBuilder Sealed()
+        {
+            return this;
+        }
+
+        public int BuildDepth {
+            get { return _builder.BuildDepth; }
+        }
+
+        #region Unimplemented methods not required within a session
         public IBuilder SetMaximumDepth(int? depth)
         {
             throw new NotImplementedException();
@@ -121,24 +136,7 @@ namespace NGineer
         {
             throw new NotImplementedException();
         }
-
-        public IBuilder CreateNew()
-        {
-            return _builder.CreateNew();
-        }
-
-        public IBuilder Sealed()
-        {
-            return this;
-        }
-
-        public int BuildDepth
-        {
-            get
-            {
-                return _builder.BuildDepth;
-            }
-        }
+        #endregion
     }
 }
 

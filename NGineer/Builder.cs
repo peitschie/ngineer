@@ -30,6 +30,7 @@ namespace NGineer
         private readonly IDictionary<Type, bool> _ignoreUnset;
         private readonly IList<IGenerator> _generators;
         private readonly DefaultReusableInstancesGenerator _instancesGenerator;
+        private readonly BuildSession _session;
 
         // Inherited properties
         private readonly ITypeRegistry<Range> _allCollectionSizes;
@@ -42,9 +43,10 @@ namespace NGineer
         private bool? _throwOnDepthLimitReached;
 
 
-        protected Builder(int seed, Builder parent)
+        protected Builder(int seed, Builder parent, BuildSession session)
         {
             _seed = seed;
+            _session = session;
             _random = new Random(seed);
             _maxInstances = new TypeRegistry<int?>();
             _collectionSizes = new TypeRegistry<Range>();
@@ -66,7 +68,7 @@ namespace NGineer
             }
         }
 
-        public Builder(int seed) : this(seed, null)
+        public Builder(int seed) :  this(seed, null, null)
         {
             WithGenerator(new DefaultConstructorGenerator());
             WithGenerator(new ListGenerator());
@@ -357,7 +359,12 @@ namespace NGineer
 
         public IBuilder CreateNew()
         {
-            return new Builder(this._seed + 1, this);
+            return CreateNew(null);
+        }
+
+        public IConfiguredBuilder CreateNew(BuildSession session)
+        {
+            return new Builder(this._seed + 1, this, session);
         }
 
         #region Build implementations

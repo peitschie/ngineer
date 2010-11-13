@@ -12,12 +12,12 @@ namespace NGineer
 {
     public class TypedBuilder<TTarget> : ITypedBuilder<TTarget>
     {
-        private readonly IBuilder _parent;
+        private readonly IConfiguredBuilder _parent;
         private readonly bool _allowInherited;
         private bool _isParentHooked = false;
         private Action<TTarget, BuildSession> _postbuildHook = null;
 
-        public TypedBuilder(IBuilder parent, bool allowInherited)
+        public TypedBuilder(IConfiguredBuilder parent, bool allowInherited)
         {
             _parent = parent;
             _allowInherited = allowInherited;
@@ -268,6 +268,11 @@ namespace NGineer
         public IBuilder CreateNew()
         {
             return _parent.CreateNew();
+        }
+
+        public IBuilder CreateNew(BuildSession session)
+        {
+            return _parent.CreateNew(session);
         }
 
 

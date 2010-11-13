@@ -136,6 +136,11 @@ namespace NGineer.UnitTests.Types
             throw new NotImplementedException();
         }
 
+        public IConfiguredBuilder CreateNew(BuildSession session)
+        {
+            throw new NotImplementedException();
+        }
+
         public IBuilder Sealed()
         {
             throw new NotImplementedException();
