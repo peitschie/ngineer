@@ -27,11 +27,16 @@ namespace NGineer.UnitTests.BuildGenerators
                 };
         }
 
+        protected override IBuilder GetBuilder()
+        {
+            return new Mock<IBuilder>().Object;
+        }
+
         [Test]
         public void Occasionally_Returns_Null()
         {
             var builder = new Mock<IBuilder>();
-            builder.Setup(b => b.Build(typeof (int), It.IsAny<BuildSession>())).Returns(10);
+            builder.Setup(b => b.Build(typeof (int))).Returns(10);
 
             bool someNull = false;
             bool someNotNull = false;

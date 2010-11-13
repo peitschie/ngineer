@@ -211,7 +211,7 @@ namespace NGineer.UnitTests.BuilderTests
         public void Hierarchy_AfterConstructionOf_BuildingInParentSession()
         {
             var obj = new Builder(1)
-                .For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>(s))
+                .For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>())
 				.CreateNew()
                 .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")
                 .Build<SimpleClass>();
@@ -227,7 +227,7 @@ namespace NGineer.UnitTests.BuilderTests
 					return b
 						.CreateNew()
 						.For<TestClass2>().Set(c => c.StringProperty, (o1, b1, s1) => "new value")
-						.Build<TestClass2>(s); })
+						.Build<TestClass2>(); })
 				.CreateNew()
                 .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")
                 .Build<SimpleClass>();
@@ -244,7 +244,7 @@ namespace NGineer.UnitTests.BuilderTests
 						.CreateNew()
 						.For<TestClass2>()
 							.Set(c => c.StringProperty, (o1, b1, s1) => "new value")
-						.Build<TestClass2>(s); })
+						.Build<TestClass2>(); })
 				.CreateNew()
 				.For<SimpleClass>().Set(c => c.TestClass2Property, (o, b, s) => b.Build<TestClass2>())
                 .For<TestClass2>().Set(c => c.StringProperty, (o, b, s) => "childValue")

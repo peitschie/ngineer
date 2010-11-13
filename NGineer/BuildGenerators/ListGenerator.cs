@@ -37,7 +37,7 @@ namespace NGineer.BuildGenerators
             var listSize = session.Random.NextInRange(range);
             for (int i = 0; i < listSize; i++)
             {
-                list.Add(builder.Build(listType, session));
+                list.Add(builder.Build(listType));
             }
         }
     }

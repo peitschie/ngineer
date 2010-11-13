@@ -74,11 +74,11 @@ namespace NGineer.UnitTests.BuilderTests
                                 .For<TestClass>().Do((t2, b2, s2) =>
                                 {
                                     sessions.Add(s2);
-                                    t2.Property2 = b2.CreateNew().Build<TestClass2>(s2);
+                                    t2.Property2 = b2.CreateNew().Build<TestClass2>();
                                 })
-                                .Build<TestClass>(s1);
+                                .Build<TestClass>();
                         })
-                        .Build<TestClassThreeDeep>(s);
+                        .Build<TestClassThreeDeep>();
                 })
                 .Build<TestClassFourDeep>();
 
@@ -106,11 +106,11 @@ namespace NGineer.UnitTests.BuilderTests
                                 .For<TestClass>().Do((type2, b2, s2) =>
                                 {
                                     buildDepth.Add(s2.BuildDepth);
-                                    type2.Property2 = b2.Build<TestClass2>(s2);
+                                    type2.Property2 = b2.Build<TestClass2>();
                                 })
-                                .Build<TestClass>(s1);
+                                .Build<TestClass>();
                         })
-                        .Build<TestClassThreeDeep>(s);
+                        .Build<TestClassThreeDeep>();
                 })
                 .Build<TestClassFourDeep>();
 

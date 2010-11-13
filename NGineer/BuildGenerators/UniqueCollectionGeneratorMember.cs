@@ -44,7 +44,7 @@ namespace NGineer.BuildGenerators
         {
             foreach(var memberValue in RandomExtensions.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
             {
-                var entry = builder.Build<TClassType>(session);
+                var entry = builder.Build<TClassType>();
                 _member.SetValue(entry, memberValue);
                 list.Add(entry);
             }

@@ -1,5 +1,5 @@
 using System;
-namespace NGineer
+namespace NGineer.Internal
 {
     public class SessionedBuilder : IBuilder
     {
@@ -49,92 +49,92 @@ namespace NGineer
         #region Unimplemented methods not required within a session
         public IBuilder SetMaximumDepth(int? depth)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetMaximumObjects(int? maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder ThrowsWhenMaximumDepthReached()
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder WithGenerator(IGenerator generator)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder WithGenerator(Type type, Func<IBuilder, BuildSession, object> generator)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder WithGenerator<TType>(Func<IBuilder, BuildSession, TType> generator)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder WithGenerator<TType>(Func<TType> generator)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder AfterConstructionOf(Internal.IMemberSetter setter)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder IgnoreUnset(Type type)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder AfterPopulationOf(IInstanceProcessor setter)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetDefaultCollectionSize(int minimum, int maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetCollectionSize(Type type, int minimum, int maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetCollectionSize<TType>(int minimum, int maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder SetNumberOfInstances<TType>(int minimum, int maximum)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public ITypedBuilder<TType> For<TType>()
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public ITypedBuilder<TType> For<TType>(bool allowInherited)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
 
         public IBuilder PostBuild(Action<BuildSession> hook)
         {
-            throw new NotImplementedException();
+            throw new BuilderSealedException();
         }
         #endregion
     }

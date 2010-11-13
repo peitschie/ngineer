@@ -39,8 +39,8 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             var session = new BuildSession(null, (Random)null);
             var builder = new Mock<IBuilder>();
-            builder.Setup(b => b.Build(typeof (string), It.IsAny<BuildSession>()))
-                .Returns<Type, BuildSession>((t, s) => Generator.Create(typeof (string), builder.Object, s));
+            builder.Setup(b => b.Build(typeof (string)))
+                .Returns<Type>(t => Generator.Create(typeof (string), builder.Object, session));
 
             var defaultConstructorGen = new DefaultConstructorGenerator();
             var simpleType = (SimpleType)defaultConstructorGen.Create(typeof (SimpleType), builder.Object, session);

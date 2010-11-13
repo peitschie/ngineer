@@ -24,7 +24,7 @@ namespace NGineer.BuildGenerators
             var array = (Array) obj;
             for (int i = 0; i < array.Length; i++)
             {
-                array.SetValue(builder.Build(arrayType, session), i);
+                array.SetValue(builder.Build(arrayType), i);
             }
         }
     }

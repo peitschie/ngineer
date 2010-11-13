@@ -41,21 +41,28 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public virtual void Create_AllSupportedTypes()
         {
-            var builder = new Mock<IBuilder>();
-            builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
+            var builder = GetBuilder();
             foreach (var supportedType in SupportedTypes())
             {
                 try
                 {
-                    Generator.Create(supportedType, builder.Object, BuildSession());
+                    Generator.Create(supportedType, builder, BuildSession());
                 }
-                catch(BuilderCalledException)
-                {}
-                catch(Exception e)
+                catch (BuilderCalledException)
+                {
+                }
+                catch (Exception e)
                 {
                     Assert.Fail("Unable to construct {0}: {1}", supportedType, e);
                 }
             }
+        }
+
+        protected virtual IBuilder GetBuilder()
+        {
+            var builder = new Mock<IBuilder>();
+            builder.Setup(b => b.Build(It.IsAny<Type>())).Throws(new BuilderCalledException());
+            return builder.Object;
         }
 
         private class BuilderCalledException : Exception

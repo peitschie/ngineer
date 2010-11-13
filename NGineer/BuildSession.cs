@@ -6,18 +6,20 @@ using System.Linq;
 
 namespace NGineer
 {
-    public class BuildSession
+    public class BuildSession : IDisposable
     {
         private readonly Random _random;
         private readonly IConfiguredBuilder _builder;
         private readonly ObjectBuildTreeEntry _objectTreeRoot;
         private readonly IList<ObjectBuildTreeEntry> _constructedNodes;
         private readonly Stack<MemberInfo> _memberStack;
+        private readonly SessionedBuilder _wrappedBuilder;
 
         protected BuildSession(IConfiguredBuilder builder, Random random, bool ignored)
         {
             _builder = builder;
             _random = random;
+            _wrappedBuilder = new SessionedBuilder(builder, this);
         }
 
         public BuildSession(IConfiguredBuilder builder, Random random) : this(builder, random, false)
@@ -37,9 +39,14 @@ namespace NGineer
         }
 
         #region Readonly Properties
+        public bool IsDisposed {
+            get;
+            private set;
+        }
+
         public IBuilder Builder
         {
-            get { return _builder; }
+            get { return _wrappedBuilder; }
         }
         public ObjectBuildTreeEntry BuiltObjectTreeRoot
         {
@@ -155,7 +162,7 @@ namespace NGineer
             }
 
             var generator = _builder.GetGenerator(type, this);
-            var obj = generator.Create(type, _builder, this);
+            var obj = generator.Create(type, this.Builder, this);
             if(obj != null)
             {
                 PushObject(type, obj);
@@ -165,7 +172,7 @@ namespace NGineer
                     DoMemberSetters(type);
                     if(!_builder.ShouldIgnoreUnset(type))
                     {
-                        generator.Populate(type, obj, _builder, this);
+                        generator.Populate(type, obj, this.Builder, this);
                     }
                     DoPopulators(type);
                 }
@@ -179,18 +186,26 @@ namespace NGineer
             foreach(var member in CurrentObject.UnconstructedMembers)
             {
                 PushMember(member);
-                var setter = _builder.MemberSetters.FirstOrDefault(s => s.IsForMember(member, _builder, this));
+                var setter = _builder.MemberSetters.FirstOrDefault(s => s.IsForMember(member, this.Builder, this));
                 if(setter != null)
-                    setter.Set(CurrentObject.Object, _builder, this);
+                    setter.Set(CurrentObject.Object, this.Builder, this);
                 PopMember(setter != null);
             }
         }
 
         private void DoPopulators(Type type)
         {
-            foreach(var setter in _builder.Setters.Where(s => s.IsForType(type)).ToArray())
+            foreach (var setter in _builder.Setters.Where(s => s.IsForType(type)).ToArray())
             {
-                setter.Set(CurrentObject.Object, _builder, this);
+                setter.Set(CurrentObject.Object, this.Builder, this);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (!IsDisposed)
+            {
+                IsDisposed = true;
             }
         }
     }

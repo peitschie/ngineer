@@ -47,7 +47,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_Simple_ArrayOfStrings()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof (string), It.IsAny<BuildSession>())).Returns("teststring");
+            builderMock.Setup(b => b.Build(typeof (string))).Returns("teststring");
 
             var list = CreateAndGenerate<string[]>(builderMock.Object, NewSession());
             Assert.AreEqual(10, list.Length);
@@ -61,7 +61,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_Simple_ArrayOfComplexClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
 
             var list = CreateAndGenerate<ComplexClassType[]>(builderMock.Object, NewSession());
             Assert.AreEqual(10, list.Length);
@@ -76,7 +76,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_ChecksCollectionSizeForComplexClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
             var registry = new TypeRegistry<Range>();
             registry.SetForType<ComplexClassType>(new Range(20, 20));
             var builder = new TestBuilder { CollectionSizes = registry, DefaultCollectionSize = new Range(10,10) };
@@ -95,8 +95,8 @@ namespace NGineer.UnitTests.BuildGenerators
         public void Create_Simple_Nested_ArrayOfArrayOfComplexClassType()
         {
             var builderMock = new Mock<IBuilder>();
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType), It.IsAny<BuildSession>())).Returns(new ComplexClassType());
-            builderMock.Setup(b => b.Build(typeof(ComplexClassType[]), It.IsAny<BuildSession>())).Returns(CreateAndGenerate<ComplexClassType[]>(builderMock.Object, NewSession()));
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
+            builderMock.Setup(b => b.Build(typeof(ComplexClassType[]))).Returns(CreateAndGenerate<ComplexClassType[]>(builderMock.Object, NewSession()));
 
             var outerList = CreateAndGenerate<ComplexClassType[][]>(builderMock.Object, NewSession());
             Assert.AreEqual(10, outerList.Length);

@@ -149,21 +149,9 @@ namespace NGineer
         }
 
 
-        public object Build(Type type, BuildSession session)
-        {
-            return _parent.Build(type, session);
-        }
-
-
         public TType Build<TType>()
         {
             return _parent.Build<TType>();
-        }
-
-
-        public TType Build<TType>(BuildSession session)
-        {
-            return _parent.Build<TType>(session);
         }
 
 

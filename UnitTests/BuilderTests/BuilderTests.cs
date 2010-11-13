@@ -75,7 +75,7 @@ namespace NGineer.UnitTests.BuilderTests
 				.For<RecursiveClass>().Do((t, b, s) => {
 					t.RecursiveReference = b
 							.For<RecursiveClass>().Do(s1 => {})
-							.Build<RecursiveClass>(s);
+							.Build<RecursiveClass>();
 				});
 			Assert.Throws<BuilderSealedException>(() => newClass.Build<RecursiveClass>());
 		}
@@ -171,7 +171,7 @@ namespace NGineer.UnitTests.BuilderTests
 						{
 							o[i] = b.CreateNew()
 									.SetCollectionSize<int>(20,20)
-									.Build<int[]>(s);
+									.Build<int[]>();
 						}
 					})
                 .Build<int[][]>();
@@ -193,7 +193,7 @@ namespace NGineer.UnitTests.BuilderTests
                                                   {
                                                       t.RecursiveReference = b.CreateNew()
                                                           .For<RecursiveClass>().Do(c => c.IntProperty = 20)
-                                                          .Build<RecursiveClass>(s);
+                                                          .Build<RecursiveClass>();
                                                   })
                 .Sealed()
                 .Build<RecursiveClass>();
@@ -208,7 +208,7 @@ namespace NGineer.UnitTests.BuilderTests
         {
             var result = new Builder().SetMaximumDepth(0)
                 .For<SimpleClass>()
-                    .Set(x => x.IntProperty, (o, b, s) => b.Build<int>(s))
+                    .Set(x => x.IntProperty, (o, b, s) => b.Build<int>())
                 .Build<SimpleClass>();
             Assert.AreEqual(0, result.IntProperty);
         }

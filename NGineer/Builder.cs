@@ -370,8 +370,15 @@ namespace NGineer
         #region Build implementations
         public object Build(Type type)
         {
-            var session = new BuildSession(this, _random);
-            var obj = Build(type, session);
+            Sealed();
+            var session = (_session == null || _session.IsDisposed)
+                ? new BuildSession(this, _random) : _session;
+
+            var internalSession = ReferenceEquals(this, session.Builder)
+                ? session : new BuildSession(this, session);
+
+            var obj = internalSession.Build(type);
+
             foreach(var hook in PostBuildHooks)
             {
                 hook(session);
@@ -379,21 +386,9 @@ namespace NGineer
             return obj;
         }
 
-        public object Build(Type type, BuildSession session)
-        {
-            Sealed();
-            var internalSession = ReferenceEquals(this, session.Builder) ? session : new BuildSession(this, session);
-            return internalSession.Build(type);
-        }
-
         public TType Build<TType>()
         {
             return (TType)Build(typeof(TType));
-        }
-
-        public TType Build<TType>(BuildSession session)
-        {
-            return (TType)Build(typeof(TType), session);
         }
         #endregion
 

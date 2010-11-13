@@ -52,7 +52,7 @@ namespace NGineer.UnitTests.BuilderTests
             var newClass = new Builder()
                 .SetNumberOfInstances<CountsPropertySets>(1, 1)
                 .For<CountsPropertySets>()
-                    .Set(x => x.RecursiveProperty, (o, b, s) => b.Build<CountsPropertySets>(s))
+                    .Set(x => x.RecursiveProperty, (o, b, s) => b.Build<CountsPropertySets>())
                     .Set(x => x.SomeProperty, () => 10)
                 .Build<CountsPropertySets>();
 

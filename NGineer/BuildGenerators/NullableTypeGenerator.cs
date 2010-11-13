@@ -14,7 +14,7 @@ namespace NGineer.BuildGenerators
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
             var nullableType = type.GetGenericArguments()[0];
-            return session.Random.Next(5) == 0 ? null : builder.Build(nullableType, session);
+            return session.Random.Next(5) == 0 ? null : builder.Build(nullableType);
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

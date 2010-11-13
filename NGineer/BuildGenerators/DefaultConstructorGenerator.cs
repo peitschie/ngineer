@@ -33,7 +33,7 @@ namespace NGineer.BuildGenerators
             foreach (var member in session.CurrentObject.Record.UnconstructedMembers)
             {
                 session.PushMember(member);
-                member.SetValue(obj, builder.Build(member.ReturnType(), session));
+                member.SetValue(obj, builder.Build(member.ReturnType()));
                 session.PopMember(true);
             }
         }

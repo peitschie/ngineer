@@ -24,24 +24,6 @@ namespace NGineer
         /// </returns>
         object Build(Type type);
 		TType Build<TType>();
-		TType Build<TType>(BuildSession session);
-
-        /// <summary>
-        /// Constructs a new instance of the passed in type re-using the specified
-        /// session.  This is generally only used when chaining builders within a session.
-        /// As a by-product, this will seal this builder class and any parent classes, disallowing any
-        /// direct modification from this point onwards.
-        /// </summary>
-        /// <param name="type">
-        /// A <see cref="Type"/>
-        /// </param>
-        /// <param name="session">
-        /// A <see cref="BuildSession"/>
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Object"/>
-        /// </returns>
-        object Build(Type type, BuildSession session);
         #endregion
 
         /// <summary>
