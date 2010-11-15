@@ -67,6 +67,12 @@ namespace NGineer.UnitTests.BuilderTests
         public RecursiveClass RecursiveReference { get; set; }
     }
 
+    public class SimpleClassParent
+    {
+        public SimpleClass[] Child { get; set; }
+        public SimpleClass[] UniqueChild { get; set; }
+    }
+
     public class SimpleClass
     {
         public int IntProperty { get; set; }

@@ -32,6 +32,71 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
+        public void SetNumberOfInstances_ObjectsProperlyReused_InChildBuilder()
+        {
+            var builder = new Builder(1)
+                .SetNumberOfInstances<SimpleClass>(2, 2)
+                .For<SimpleClassParent>()
+                    .Set(x => x.Child, (obj, buildr, session) => new []{
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>()
+                    })
+                    .SetAfterBuild(x => x.UniqueChild, (obj, session) => session.ConstructedNodes.Select(e => e.Object).OfType<SimpleClass>().Distinct().ToArray())
+                .Sealed();
+            var parentClass = builder.Build<SimpleClassParent>();
+            var simpleClassList = new List<SimpleClass>();
+            int instances = 0;
+            foreach (var simpleClass in parentClass.Child)
+            {
+                var existing = simpleClassList.FirstOrDefault(s => ReferenceEquals(s, simpleClass));
+                if(existing == null)
+                {
+                    simpleClassList.Add(simpleClass);
+                    instances++;
+                }
+            }
+            Assert.AreEqual(2, instances);
+            Assert.AreEqual(2, parentClass.UniqueChild.Length);
+        }
+
+        [Test]
+        public void SetNumberOfInstances_ObjectsProperlyReused_ChildBuilder_WithinChildBuilder()
+        {
+            var builder = new Builder(1)
+                .SetNumberOfInstances<SimpleClass>(2, 2)
+                .CreateNew()
+                .For<SimpleClassParent>()
+                    .Set(x => x.Child, (obj, buildr, session) => new []{
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>(),
+                        buildr.CreateNew().Build<SimpleClass>()
+                    })
+                    .SetAfterBuild(x => x.UniqueChild, (obj, session) => session.ConstructedNodes.Select(e => e.Object).OfType<SimpleClass>().Distinct().ToArray())
+                .Sealed();
+            var parentClass = builder.Build<SimpleClassParent>();
+            var simpleClassList = new List<SimpleClass>();
+            int instances = 0;
+            foreach (var simpleClass in parentClass.Child)
+            {
+                var existing = simpleClassList.FirstOrDefault(s => ReferenceEquals(s, simpleClass));
+                if(existing == null)
+                {
+                    simpleClassList.Add(simpleClass);
+                    instances++;
+                }
+            }
+            Assert.AreEqual(2, instances);
+            Assert.AreEqual(2, parentClass.UniqueChild.Length);
+        }
+
+        [Test]
         public void SetNumberOfInstances_ObjectsNotRetouched_WhenReused()
         {
             var count = 0;
