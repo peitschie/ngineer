@@ -60,7 +60,6 @@ namespace NGineer
                 _allMaxInstances = new InheritedTypeRegistry<int?>(_parent._allMaxInstances, _maxInstances);
                 _allCollectionSizes = new InheritedTypeRegistry<Range>(_parent._allCollectionSizes, _collectionSizes);
             }
-
             else
             {
                 _instancesGenerator = new DefaultReusableInstancesGenerator();
