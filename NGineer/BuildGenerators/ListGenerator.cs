@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NGineer.Internal;
 using NGineer.Utils;
+using NGineer.Exceptions;
 
 namespace NGineer.BuildGenerators
 {
@@ -18,7 +19,7 @@ namespace NGineer.BuildGenerators
         {
             var listType = type.GetGenericArguments()[0];
             var constructorType = typeof (List<>).MakeGenericType(listType);
-            var constructor = constructorType.GetConstructor(new Type[0]);
+            var constructor = constructorType.GetConstructor(Type.EmptyTypes);
             if (constructor == null)
             {
                 throw new BuilderException(string.Format("Unable to construct {0} as no default constructor was found", type));

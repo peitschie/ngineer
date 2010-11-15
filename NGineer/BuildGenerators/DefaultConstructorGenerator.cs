@@ -3,6 +3,7 @@ using System.Linq;
 using NGineer.BuildGenerators;
 using NGineer.Internal;
 using NGineer.Utils;
+using NGineer.Exceptions;
 
 namespace NGineer.BuildGenerators
 {
@@ -19,7 +20,7 @@ namespace NGineer.BuildGenerators
 
         private static object InvokeDefaultConstructor(Type type)
         {
-            var constructor = type.GetConstructor(new Type[0]);
+            var constructor = type.GetConstructor(Type.EmptyTypes);
             return constructor != null ? constructor.Invoke(new object[0]) : null;
         }
 

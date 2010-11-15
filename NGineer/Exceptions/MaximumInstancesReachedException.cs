@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NGineer.Utils;
+using NGineer.Exceptions;
+using NGineer.Internal;
 
-namespace NGineer.Internal
+namespace NGineer.Exceptions
 {
-    public class BuilderMaximumInstancesReached : BuilderException
+    public class MaximumInstancesReachedException : BuilderException
     {
         private readonly BuildSession _session;
         private readonly int _maxInstances;
         private List<BuilderStatEntry> _stats;
         private string _statsTop10;
 
-        public BuilderMaximumInstancesReached(int maxInstances, BuildSession session)
+        public MaximumInstancesReachedException(int maxInstances, BuildSession session)
             : base(string.Format("Maximum number of new objects was exceeded at {0} objects: {1}", maxInstances,
             GenerateSummaryString(GenerateStats(session))))
         {
@@ -74,7 +76,7 @@ namespace NGineer.Internal
 
         private static void AddOrIncrement<TKey>(TKey key, IDictionary<TKey, int> values)
         {
-            int existing = 0;
+            int existing;
             values.TryGetValue(key, out existing);
             values[key] = existing + 1;
         }

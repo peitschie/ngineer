@@ -1,6 +1,6 @@
 namespace NGineer.Internal
 {
-    public class Range
+    public sealed class Range
     {
         private readonly int _minimum;
         private readonly int _maximum;

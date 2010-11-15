@@ -171,20 +171,8 @@
     <Compile Include="..\NGineer\BuildSession.cs">
       <Link>BuildSession.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Internal\BuilderDepthExceededException.cs">
-      <Link>Internal\BuilderDepthExceededException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Internal\BuilderException.cs">
-      <Link>Internal\BuilderException.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Internal\BuilderInstanceTracker.cs">
       <Link>Internal\BuilderInstanceTracker.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Internal\BuilderMaximumInstancesReached.cs">
-      <Link>Internal\BuilderMaximumInstancesReached.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Internal\BuilderSealedException.cs">
-      <Link>Internal\BuilderSealedException.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\Internal\BuilderStatEntry.cs">
       <Link>Internal\BuilderStatEntry.cs</Link>
@@ -246,6 +234,21 @@
     <Compile Include="..\NGineer\Internal\SessionedBuilder.cs">
       <Link>Internal\SessionedBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\Exceptions\BuilderDepthExceededException.cs">
+      <Link>Exceptions\BuilderDepthExceededException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\BuilderException.cs">
+      <Link>Exceptions\BuilderException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\BuilderMaximumInstancesReachedException.cs">
+      <Link>Exceptions\BuilderMaximumInstancesReachedException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\BuilderSealedException.cs">
+      <Link>Exceptions\BuilderSealedException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\MemberExpressionException.cs">
+      <Link>Exceptions\MemberExpressionException.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
@@ -262,4 +265,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
 </Project>

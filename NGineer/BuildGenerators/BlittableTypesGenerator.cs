@@ -63,7 +63,7 @@ namespace NGineer.BuildGenerators
             if(nonBitMethod == null)
             {
                 // Changed to use the inner exception parameter due to Silverlight Compatibility
-                throw new MissingMethodException(typeof(BlittableTypesGenerator).Name, new Exception("NonBitConverterMethod"));
+                throw new MissingMethodException(typeof(BlittableTypesGenerator).Name + ".NonBitConverterMethod()");
             }
             foreach (var type in NonBitConverterTypes)
             {

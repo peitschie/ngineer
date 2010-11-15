@@ -67,7 +67,7 @@ namespace NGineer.BuildSequences
             return nextInt;
         }
 
-        private class NestedEntry
+        private sealed class NestedEntry
         {
             public readonly ObjectBuildTreeEntry Parent;
             public TSeqType LastValue;

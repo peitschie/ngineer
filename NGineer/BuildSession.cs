@@ -3,10 +3,11 @@ using System.Reflection;
 using System.Collections.Generic;
 using NGineer.Internal;
 using System.Linq;
+using NGineer.Exceptions;
 
 namespace NGineer
 {
-    public class BuildSession : IDisposable
+    public sealed class BuildSession : IDisposable
     {
         private readonly Random _random;
         private readonly IConfiguredBuilder _builder;
@@ -90,6 +91,8 @@ namespace NGineer
 
         public void PushObject(Type type, object obj)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             var buildRecord = obj as ObjectBuildRecord;
             if(buildRecord != null)
             {
@@ -108,6 +111,8 @@ namespace NGineer
 
         public void PopObject()
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             if(CurrentObject.Parent == null)
                 throw new BuilderException("Unable to pop beyond the root element of the built object tree");
             CurrentObject.RequiresPopulation = false;
@@ -116,12 +121,16 @@ namespace NGineer
 
         public void PushMember(MemberInfo property)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             _memberStack.Push(property);
             CurrentMember = property;
         }
 
         public void PopMember(bool valueHasChanged)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             var member = _memberStack.Pop();
             CurrentMember = _memberStack.Count > 0 ? _memberStack.Peek() : null;
             if(valueHasChanged)
@@ -132,11 +141,15 @@ namespace NGineer
 
         public Range GetCollectionSize(Type type)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             return _builder.CollectionSizes.GetForType(type) ?? _builder.DefaultCollectionSize;
         }
 
         public int? GetMaximumNumberOfInstances(Type type)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             return _builder.MaxInstances.GetForType(type);
         }
 
@@ -147,17 +160,19 @@ namespace NGineer
 
         public object Build(Type type)
         {
+            if(IsDisposed)
+                throw new ObjectDisposedException("BuildSession");
             if(BuildDepth == _builder.BuildDepth)
             {
                 if(_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
                 {
-                    throw new BuilderDepthExceededException(_builder.BuildDepth, this);
+                    throw new DepthExceededException(_builder.BuildDepth, this);
                 }
                 return type.IsValueType ? Activator.CreateInstance(type) : null;
             }
             if(ConstructedCount > _builder.MaximumObjects)
             {
-                throw new BuilderMaximumInstancesReached(_builder.MaximumObjects, this);
+                throw new MaximumInstancesReachedException(_builder.MaximumObjects, this);
             }
 
             var generator = _builder.GetGenerator(type, this);
@@ -168,7 +183,7 @@ namespace NGineer
                 obj = CurrentObject.Object;
                 if(CurrentObject.RequiresPopulation)
                 {
-                    DoMemberSetters(type);
+                    DoMemberSetters();
                     if(!_builder.ShouldIgnoreUnset(type))
                     {
                         generator.Populate(type, obj, this.Builder, this);
@@ -180,7 +195,7 @@ namespace NGineer
             return obj;
         }
 
-        private void DoMemberSetters(Type type)
+        private void DoMemberSetters()
         {
             foreach(var member in CurrentObject.UnconstructedMembers)
             {
@@ -202,9 +217,19 @@ namespace NGineer
 
         public void Dispose()
         {
+            Dispose(true);
+            // Take yourself off the Finalization queue
+            // to prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
             if (!IsDisposed)
             {
-                IsDisposed = true;
+                if(disposing)
+                    IsDisposed = true;
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Text;
 using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
+using NGineer.Exceptions;
 
 namespace NGineer.UnitTests.BuilderTests
 {
@@ -43,14 +44,14 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void DefaultValue_ThrowsExceptionWhenReached()
         {
-            var exception = Assert.Throws<BuilderDepthExceededException>(() => new Builder(1).Build<RecursiveClass>());
+            var exception = Assert.Throws<DepthExceededException>(() => new Builder(1).Build<RecursiveClass>());
             Assert.AreEqual(string.Format("Maximum build depth of 5 was exceeded: {0}", CreateString(5)), exception.Message);
         }
 
         [Test]
         public void SetMaximumDepth_ManuallySet_CanThrowExceptionWhenReached()
         {
-            var exception = Assert.Throws<BuilderDepthExceededException>(() => new Builder(1)
+            var exception = Assert.Throws<DepthExceededException>(() => new Builder(1)
                 .SetMaximumDepth(10)
                 .ThrowsWhenMaximumDepthReached()
                 .Build<RecursiveClass>());

@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using NGineer.Utils;
 using NUnit.Framework;
+using NGineer.Exceptions;
 
 namespace NGineer.UnitTests.Utils
 {

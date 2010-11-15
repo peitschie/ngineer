@@ -99,11 +99,7 @@
     <Compile Include="TypedBuilder.cs" />
     <Compile Include="BuilderExtensions.cs" />
     <Compile Include="Utils\ListUtils.cs" />
-    <Compile Include="Internal\BuilderDepthExceededException.cs" />
-    <Compile Include="Internal\BuilderException.cs" />
     <Compile Include="Internal\BuilderInstanceTracker.cs" />
-    <Compile Include="Internal\BuilderMaximumInstancesReached.cs" />
-    <Compile Include="Internal\BuilderSealedException.cs" />
     <Compile Include="Internal\BuilderStatEntry.cs" />
     <Compile Include="Internal\IgnoreMemberSetter.cs" />
     <Compile Include="Internal\IMemberSetter.cs" />
@@ -124,6 +120,11 @@
     <Compile Include="Utils\BuilderUtils.cs" />
     <Compile Include="IConfiguredBuilder.cs" />
     <Compile Include="Internal\SessionedBuilder.cs" />
+    <Compile Include="Exceptions\DepthExceededException.cs" />
+    <Compile Include="Exceptions\BuilderException.cs" />
+    <Compile Include="Exceptions\BuilderSealedException.cs" />
+    <Compile Include="Exceptions\MemberExpressionException.cs" />
+    <Compile Include="Exceptions\MaximumInstancesReachedException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
@@ -131,5 +132,6 @@
     <Folder Include="BuildGenerators\" />
     <Folder Include="Internal\" />
     <Folder Include="Utils\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

@@ -2,14 +2,14 @@ using System;
 using System.Text;
 using NGineer.Utils;
 
-namespace NGineer.Internal
+namespace NGineer.Exceptions
 {
-    public class BuilderDepthExceededException : BuilderException
+    public class DepthExceededException : BuilderException
     {
         private readonly int _depth;
         private readonly BuildSession _session;
 
-        public BuilderDepthExceededException(int depth, BuildSession session)
+        public DepthExceededException(int depth, BuildSession session)
             : base(string.Format("Maximum build depth of {0} was exceeded: {1}", depth, BuildChain(session)))
         {
             _depth = depth;

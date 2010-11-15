@@ -2,7 +2,7 @@ using System;
 
 namespace NGineer.Internal
 {
-    public class BuilderStatEntry
+    public sealed class BuilderStatEntry : IEquatable<BuilderStatEntry>
     {
         private readonly Type _type;
         private readonly int _count;

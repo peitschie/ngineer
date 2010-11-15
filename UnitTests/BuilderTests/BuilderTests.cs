@@ -6,6 +6,7 @@ using NGineer.Utils;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
+using NGineer.Exceptions;
 
 
 namespace NGineer.UnitTests.BuilderTests

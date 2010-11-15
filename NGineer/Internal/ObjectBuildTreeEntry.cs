@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NGineer.Utils;
+using NGineer.Exceptions;
 
 namespace NGineer.Internal
 {
@@ -67,9 +68,9 @@ namespace NGineer.Internal
             set { _record.RequiresPopulation = value; }
         }
 
-        public bool IsConstructed(MemberInfo property)
+        public bool IsConstructed(MemberInfo member)
         {
-            return _record != null && _record.IsConstructed(property);
+            return _record != null && _record.IsConstructed(member);
         }
 
         public void RegisterConstructed(MemberInfo member)

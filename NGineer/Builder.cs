@@ -7,6 +7,7 @@ using System.Reflection;
 using NGineer.BuildGenerators;
 using NGineer.Internal;
 using NGineer.Utils;
+using NGineer.Exceptions;
 
 namespace NGineer
 {
@@ -16,7 +17,7 @@ namespace NGineer
         {
             public const int BuildDepth = 5;
             public static readonly Range CollectionSize = new Range(10, 20);
-            public static int MaximumObjects = 5000;
+            public const int MaximumObjects = 5000;
         }
 
         private readonly Builder _parent;
@@ -245,10 +246,10 @@ namespace NGineer
             return this;
         }
 
-        public IBuilder SetMaximumObjects(int? objects)
+        public IBuilder SetMaximumObjects(int? maximum)
         {
             AssertBuilderIsntSealed();
-            _maximumObjects = objects;
+            _maximumObjects = maximum;
             return this;
         }
 

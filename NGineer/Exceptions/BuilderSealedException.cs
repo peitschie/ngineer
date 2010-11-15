@@ -1,4 +1,4 @@
-namespace NGineer.Internal
+namespace NGineer.Exceptions
 {
     public class BuilderSealedException : BuilderException
     {

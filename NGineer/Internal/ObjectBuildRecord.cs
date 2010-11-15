@@ -37,9 +37,9 @@ namespace NGineer.Internal
         public Type Type { get { return _type; } }
         public object Object { get { return _obj; } }
 
-        public bool IsConstructed(MemberInfo property)
+        public bool IsConstructed(MemberInfo member)
         {
-            return _constructedMembers.Contains(property.Name);
+            return _constructedMembers.Contains(member.Name);
         }
 
         public bool RequiresPopulation

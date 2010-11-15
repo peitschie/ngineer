@@ -4,6 +4,7 @@ using NGineer.BuildGenerators;
 using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
+using NGineer.Exceptions;
 
 namespace NGineer.UnitTests.BuilderTests
 {

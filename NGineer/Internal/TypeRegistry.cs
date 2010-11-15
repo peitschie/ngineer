@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NGineer.Internal
 {
-    public class TypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
+    public sealed class TypeRegistry<TStoreType> : ITypeRegistry<TStoreType>
     {
         private readonly List<TypeRegistryEntry> _entries = new List<TypeRegistryEntry>();
 
@@ -46,7 +46,7 @@ namespace NGineer.Internal
             SetForType(typeof(TType), value);
         }
 
-        private class TypeRegistryEntry
+        private sealed class TypeRegistryEntry : IEquatable<TypeRegistryEntry>
         {
             private readonly Type _type;
             private readonly TStoreType _value;
@@ -67,7 +67,7 @@ namespace NGineer.Internal
                 return _type.IsAssignableFrom(type);
             }
 
-            private bool Equals(TypeRegistryEntry other)
+            public bool Equals(TypeRegistryEntry other)
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;

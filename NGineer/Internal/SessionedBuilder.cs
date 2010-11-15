@@ -1,7 +1,8 @@
 using System;
+using NGineer.Exceptions;
 namespace NGineer.Internal
 {
-    public class SessionedBuilder : IBuilder
+    internal sealed class SessionedBuilder : IBuilder
     {
         private IConfiguredBuilder _builder;
         private BuildSession _session;

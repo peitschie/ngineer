@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using NGineer.Exceptions;
 
 namespace NGineer.Utils
 {
@@ -28,25 +29,24 @@ namespace NGineer.Utils
         public static MemberInfo GetMemberInfo(Expression expression)
         {
             if (expression == null) throw new ArgumentNullException("expression");
-            if (expression is MemberExpression)
+            var memberExpression = expression as MemberExpression;
+            if (memberExpression != null)
             {
-                var memberExpression = (MemberExpression)expression;
                 // Need to ensure this returns the property setter for the requested type, not
                 // the type that defines the member.  I was unable to find a clean way of
                 // changing the property accessor to by on the requested type.
                 return memberExpression.Expression.Type.GetMember(memberExpression.Member.Name).FirstOrDefault();
             }
-            else if (expression is UnaryExpression)
+
+            var unaryExpression = expression as UnaryExpression;
+            if (unaryExpression != null && unaryExpression.NodeType == ExpressionType.Convert)
             {
-                var unaryExpression = (UnaryExpression)expression;
-                if (unaryExpression.NodeType == ExpressionType.Convert)
-                {
-                    return GetMemberInfo(unaryExpression.Operand);
-                }
+                return GetMemberInfo(unaryExpression.Operand);
             }
-            else if (expression is LambdaExpression)
+
+            var lambdaExpression = expression as LambdaExpression;
+            if (lambdaExpression != null)
             {
-                var lambdaExpression = (LambdaExpression)expression;
                 return GetMemberInfo(lambdaExpression.Body);
             }
             throw new MemberExpressionException(expression);
@@ -68,9 +68,9 @@ namespace NGineer.Utils
 
         private static void GetExpressionChain(Expression expression, List<MemberInfo> memberChain)
         {
-            if (expression is MemberExpression)
+            var memberExpression = expression as MemberExpression;
+            if (memberExpression != null)
             {
-                var memberExpression = (MemberExpression)expression;
                 if (memberExpression.Expression != null && (
                     memberExpression.Expression is MemberExpression
                     || (memberExpression.Expression is UnaryExpression && memberExpression.Expression.NodeType == ExpressionType.Convert)
@@ -79,28 +79,24 @@ namespace NGineer.Utils
                     GetExpressionChain(memberExpression.Expression, memberChain);
                 }
                 memberChain.Add(GetMemberInfo(memberExpression));
+                return;
             }
-            else if (expression is UnaryExpression && expression.NodeType == ExpressionType.Convert)
-            {
-                var unaryExpression = (UnaryExpression)expression;
-                GetExpressionChain(unaryExpression.Operand, memberChain);
-            }
-            else if (expression is LambdaExpression)
-            {
-                var lambdaExpression = (LambdaExpression)expression;
-                GetExpressionChain(lambdaExpression.Body, memberChain);
-            }
-            else
-            {
-                throw new MemberExpressionException(expression);
-            }
-        }
-    }
 
-    public class MemberExpressionException : Exception
-    {
-        public MemberExpressionException(Expression expression)
-            : base(string.Format("Cannot interpret member from {0}", expression.NodeType))
-        { }
+            var unaryExpression = expression as UnaryExpression;
+            if (unaryExpression != null && unaryExpression.NodeType == ExpressionType.Convert)
+            {
+                GetExpressionChain(unaryExpression.Operand, memberChain);
+                return;
+            }
+
+            var lambdaExpression = expression as LambdaExpression;
+            if (lambdaExpression != null)
+            {
+                GetExpressionChain(lambdaExpression.Body, memberChain);
+                return;
+            }
+
+            throw new MemberExpressionException(expression);
+        }
     }
 }
