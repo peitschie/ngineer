@@ -57,8 +57,8 @@ namespace NGineer
             _parent = parent;
             if(_parent != null)
             {
-                _allMaxInstances = new InheritedTypeRegistry<int?>(_parent._maxInstances, _maxInstances);
-                _allCollectionSizes = new InheritedTypeRegistry<Range>(_parent._collectionSizes, _collectionSizes);
+                _allMaxInstances = new InheritedTypeRegistry<int?>(_parent._allMaxInstances, _maxInstances);
+                _allCollectionSizes = new InheritedTypeRegistry<Range>(_parent._allCollectionSizes, _collectionSizes);
             }
 
             else
