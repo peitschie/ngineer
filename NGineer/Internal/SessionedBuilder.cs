@@ -22,16 +22,6 @@ namespace NGineer.Internal
             return _session.Build<TType>();
         }
 
-        public TType Build<TType>(BuildSession session)
-        {
-            return _session.Build<TType>();
-        }
-
-        public object Build(Type type, BuildSession session)
-        {
-            return _session.Build(type);
-        }
-
         public IBuilder CreateNew()
         {
             return _builder.CreateNew(_session);
