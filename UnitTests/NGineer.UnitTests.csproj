@@ -100,6 +100,7 @@
     <Compile Include="Internal\TypeRegistryTests.cs" />
     <Compile Include="Internal\MemberSetterTests.cs" />
     <Compile Include="Types\TestBuilder.cs" />
+    <Compile Include="BuilderTests\SetCollectionSizeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
