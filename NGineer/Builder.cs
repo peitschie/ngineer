@@ -52,17 +52,18 @@ namespace NGineer
             _collectionSizes = new TypeRegistry<Range>();
             _ignoreUnset = new Dictionary<Type, bool>();
             _generators = new List<IGenerator>();
-            _instancesGenerator = new DefaultReusableInstancesGenerator();
             _postbuildHooks = new List<Action<BuildSession>>();
             _parent = parent;
             if(_parent != null)
             {
+                _instancesGenerator = _parent._instancesGenerator;
                 _allMaxInstances = new InheritedTypeRegistry<int?>(_parent._allMaxInstances, _maxInstances);
                 _allCollectionSizes = new InheritedTypeRegistry<Range>(_parent._allCollectionSizes, _collectionSizes);
             }
 
             else
             {
+                _instancesGenerator = new DefaultReusableInstancesGenerator();
                 _allMaxInstances = new InheritedTypeRegistry<int?>(null, _maxInstances);
                 _allCollectionSizes = new InheritedTypeRegistry<Range>(null, _collectionSizes);
             }
