@@ -252,6 +252,9 @@
     <Compile Include="..\NGineer\Exceptions\MaximumInstancesReachedException.cs">
       <Link>Exceptions\MaximumInstancesReachedException.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\Utils\ExceptionUtils.cs">
+      <Link>Utils\ExceptionUtils.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

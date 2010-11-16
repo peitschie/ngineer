@@ -6,6 +6,7 @@ using NGineer.Utils;
 using System.Reflection;
 using System.Linq.Expressions;
 using NGineer.BuildGenerators;
+using NGineer.Exceptions;
 
 namespace NGineer
 {
@@ -26,6 +27,13 @@ namespace NGineer
         public static IBuilder IgnoreMember(this IBuilder builder, MemberInfo member, bool allowInherited)
         {
             return builder.AfterConstructionOf(new IgnoreMemberSetter(member, member.ReflectedType, allowInherited));
+        }
+
+        public static IBuilder ThrowWhenGeneratingObjectType(this IBuilder builder)
+        {
+            return builder.WithGenerator<object>((buildr, session) => {
+                throw new BuilderException(string.Format("{0}: Object type should not be generated", session.ConstructedChainInfo()));
+            });
         }
     }
 }

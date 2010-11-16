@@ -126,6 +126,7 @@
     <Compile Include="Exceptions\MemberExpressionException.cs" />
     <Compile Include="Exceptions\MaximumInstancesReachedException.cs" />
     <Compile Include="BuildGenerators\ObjectGenerator.cs" />
+    <Compile Include="Utils\ExceptionUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
