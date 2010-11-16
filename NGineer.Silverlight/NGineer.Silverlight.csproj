@@ -183,9 +183,6 @@
     <Compile Include="..\NGineer\Internal\IgnoreMemberSetter.cs">
       <Link>Internal\IgnoreMemberSetter.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Internal\IMemberSetter.cs">
-      <Link>Internal\IMemberSetter.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Internal\InheritedTypeRegistry.cs">
       <Link>Internal\InheritedTypeRegistry.cs</Link>
     </Compile>
@@ -254,6 +251,9 @@
     </Compile>
     <Compile Include="..\NGineer\Utils\ExceptionUtils.cs">
       <Link>Utils\ExceptionUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\IMemberSetter.cs">
+      <Link>IMemberSetter.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

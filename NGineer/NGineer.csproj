@@ -102,7 +102,6 @@
     <Compile Include="Internal\BuilderInstanceTracker.cs" />
     <Compile Include="Internal\BuilderStatEntry.cs" />
     <Compile Include="Internal\IgnoreMemberSetter.cs" />
-    <Compile Include="Internal\IMemberSetter.cs" />
     <Compile Include="Internal\IObjectBuildRecord.cs" />
     <Compile Include="Internal\ITypeRegistry.cs" />
     <Compile Include="Internal\MemberSetter.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="Exceptions\MaximumInstancesReachedException.cs" />
     <Compile Include="BuildGenerators\ObjectGenerator.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
+    <Compile Include="IMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

@@ -73,7 +73,7 @@ namespace NGineer.Internal
             throw new BuilderSealedException();
         }
 
-        public IBuilder AfterConstructionOf(Internal.IMemberSetter setter)
+        public IBuilder AfterConstructionOf(IMemberSetter setter)
         {
             throw new BuilderSealedException();
         }
