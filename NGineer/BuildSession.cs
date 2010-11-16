@@ -194,7 +194,7 @@ namespace NGineer
                     {
                         generator.Populate(type, obj, this.Builder, this);
                     }
-                    DoPopulators(type);
+                    DoProcessors(type);
                 }
                 PopObject();
             }
@@ -213,9 +213,9 @@ namespace NGineer
             }
         }
 
-        private void DoPopulators(Type type)
+        private void DoProcessors(Type type)
         {
-            foreach (var setter in _builder.Setters.Where(s => s.IsForType(type)).ToArray())
+            foreach (var setter in _builder.Processors.Where(s => s.IsForType(type)).ToArray())
             {
                 setter.Process(CurrentObject.Object, this.Builder, this);
             }

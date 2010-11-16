@@ -100,12 +100,12 @@ namespace NGineer
             }
         }
 
-        public IEnumerable<IInstanceProcessor> Setters
+        public IEnumerable<IInstanceProcessor> Processors
         {
             get
             {
                 if(_parent != null)
-                    return _parent.Setters.Union(_setters);
+                    return _parent.Processors.Union(_setters);
                 return _setters;
             }
         }

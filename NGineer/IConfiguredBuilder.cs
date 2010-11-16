@@ -13,7 +13,7 @@ namespace NGineer
         ITypeRegistry<int?> MaxInstances { get; }
 
         IEnumerable<Action<BuildSession>> PostBuildHooks { get; }
-        IEnumerable<IInstanceProcessor> Setters { get; }
+        IEnumerable<IInstanceProcessor> Processors { get; }
         IEnumerable<IMemberSetter> MemberSetters { get; }
 
         bool ShouldIgnoreUnset(Type type);

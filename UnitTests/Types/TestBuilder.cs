@@ -18,7 +18,7 @@ namespace NGineer.UnitTests.Types
         public ITypeRegistry<Range> CollectionSizes { get; set; }
         public ITypeRegistry<int?> MaxInstances { get; set; }
         public IConfiguredBuilder Parent { get; set; }
-        public IEnumerable<IInstanceProcessor> Setters { get; set; }
+        public IEnumerable<IInstanceProcessor> Processors { get; set; }
         public IEnumerable<IMemberSetter> MemberSetters { get; set; }
 
         public object Build(Type type)
