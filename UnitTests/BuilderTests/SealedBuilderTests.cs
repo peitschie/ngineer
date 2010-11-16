@@ -129,7 +129,7 @@ namespace NGineer.UnitTests.BuilderTests
                 throw new NotImplementedException();
             }
 
-            public object Set(object obj, IBuilder builder, BuildSession session)
+            public void Process(object obj, IBuilder builder, BuildSession session)
             {
                 throw new NotImplementedException();
             }

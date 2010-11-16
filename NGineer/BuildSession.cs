@@ -217,7 +217,7 @@ namespace NGineer
         {
             foreach (var setter in _builder.Setters.Where(s => s.IsForType(type)).ToArray())
             {
-                setter.Set(CurrentObject.Object, this.Builder, this);
+                setter.Process(CurrentObject.Object, this.Builder, this);
             }
         }
 

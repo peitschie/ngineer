@@ -23,9 +23,9 @@ namespace NGineer.Internal
 			}
         }
 
-        public object Set(object obj, IBuilder builder, BuildSession session)
+        public void Process(object obj, IBuilder builder, BuildSession session)
         {
-            return _setter((TType)obj, builder, session);
+            _setter((TType)obj, builder, session);
         }
 
         public bool IsForType(Type type)
