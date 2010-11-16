@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using NGineer.Exceptions;
+using NGineer.UnitTests.Types;
 namespace NGineer.UnitTests.BuilderTests
 {
     [TestFixture]

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NGineer.UnitTests.BuilderTests;
 using Moq;
 using System.Linq.Expressions;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.TypedBuilder
 {

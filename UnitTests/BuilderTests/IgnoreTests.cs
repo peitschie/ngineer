@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuilderTests
 {

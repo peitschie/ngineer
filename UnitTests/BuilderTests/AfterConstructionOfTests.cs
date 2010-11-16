@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
 using NGineer.BuildGenerators;
+using NGineer.UnitTests.Types;
 
 
 namespace NGineer.UnitTests.BuilderTests

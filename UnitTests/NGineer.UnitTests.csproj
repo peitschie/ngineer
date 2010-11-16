@@ -83,7 +83,6 @@
     <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
     <Compile Include="BuilderTests\BuilderTests.cs" />
-    <Compile Include="BuilderTests\TestClasses.cs" />
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
     <Compile Include="BuilderTests\AfterPopulationOfTests.cs" />
     <Compile Include="BuilderTests\WithGeneratorTests.cs" />
@@ -102,6 +101,30 @@
     <Compile Include="Types\TestBuilder.cs" />
     <Compile Include="BuilderTests\SetCollectionSizeTests.cs" />
     <Compile Include="BuilderTests\BuilderExtensionsTests.cs" />
+    <Compile Include="Types\ClassWithObject.cs" />
+    <Compile Include="Types\BuilderOrderLevel1.cs" />
+    <Compile Include="Types\BuilderOrderLevel2.cs" />
+    <Compile Include="Types\BuilderOrderLevel3.cs" />
+    <Compile Include="Types\CountsPropertySets.cs" />
+    <Compile Include="Types\RecursiveClass.cs" />
+    <Compile Include="Types\SimpleClassParent.cs" />
+    <Compile Include="Types\SimpleClass.cs" />
+    <Compile Include="Types\TestClass2.cs" />
+    <Compile Include="Types\ClassWithNullableInt.cs" />
+    <Compile Include="Types\ClassWithNullableDateTime.cs" />
+    <Compile Include="Types\InheritsFromClassWithNullableDateTime.cs" />
+    <Compile Include="Types\InheritsFromClassWithNullableDateTime2.cs" />
+    <Compile Include="Types\TestClass.cs" />
+    <Compile Include="Types\TestClassThreeDeep.cs" />
+    <Compile Include="Types\TestClassFourDeep.cs" />
+    <Compile Include="Types\SimpleEnum.cs" />
+    <Compile Include="Types\ClassWithEnumAndProperties.cs" />
+    <Compile Include="Types\ListOfClassWithEnumAndProperties.cs" />
+    <Compile Include="Types\TopLevel.cs" />
+    <Compile Include="Types\SecondLevel.cs" />
+    <Compile Include="Types\AnotherLevel.cs" />
+    <Compile Include="Types\IInterfaceTest.cs" />
+    <Compile Include="Types\CombinedClasses.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
@@ -115,5 +138,6 @@
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="BuildGenerators\" />
+    <Folder Include="BuilderTests\" />
   </ItemGroup>
 </Project>

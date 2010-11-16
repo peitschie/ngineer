@@ -5,6 +5,7 @@ using NGineer.Internal;
 using NGineer.Utils;
 using NUnit.Framework;
 using NGineer.Exceptions;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuilderTests
 {

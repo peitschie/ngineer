@@ -9,6 +9,7 @@ using NGineer.Internal;
 using Moq;
 using NGineer.Utils;
 using NGineer.UnitTests.BuilderTests;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuildGenerators
 {

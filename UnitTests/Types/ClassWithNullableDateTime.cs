@@ -1,0 +1,10 @@
+
+using System;
+using System.Collections.Generic;
+namespace NGineer.UnitTests.Types
+{
+    public class ClassWithNullableDateTime
+    {
+        public DateTime? Property1 { get; set; }
+    }
+}

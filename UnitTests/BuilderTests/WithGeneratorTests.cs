@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NGineer.UnitTests.BuilderTests;
 using NGineer.Utils;
 using System.Collections.Generic;
+using NGineer.UnitTests.Types;
 
 namespace NGineer.UnitTests.BuilderTests
 {
