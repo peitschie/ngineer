@@ -291,6 +291,8 @@ namespace NGineer
 
         public IBuilder SetNumberOfInstances(Type type, int minimum, int maximum)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
             AssertBuilderIsntSealed();
             _maxInstances.SetForType(type, _random.NextInRange(minimum, maximum));
             return this;
@@ -315,9 +317,9 @@ namespace NGineer
 
         public IBuilder AfterConstructionOf(IMemberSetter setter)
         {
-            AssertBuilderIsntSealed();
             if(setter == null)
                 throw new ArgumentNullException("setter");
+            AssertBuilderIsntSealed();
             _memberSetters.Insert(0, setter);
             return this;
         }
@@ -372,6 +374,8 @@ namespace NGineer
         #region Build implementations
         public object Build(Type type)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
             Sealed();
             using (var session = new BuildSession(this, _session, _random))
             {
@@ -393,6 +397,8 @@ namespace NGineer
         #region Query methods used during construction
         public bool ShouldIgnoreUnset(Type type)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
             bool result = false;
             if(!_ignoreUnset.TryGetValue(type, out result) && _parent != null)
             {
@@ -403,6 +409,10 @@ namespace NGineer
 
         public IGenerator GetGenerator(Type type, BuildSession session)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
+            if(session == null)
+                throw new ArgumentNullException("session");
             var thisGenerator = _instancesGenerator.GeneratesType(type, session.Builder, session) ? _instancesGenerator : _generators.LastOrDefault(g => g.GeneratesType(type, session.Builder, session));
             if(thisGenerator == null && _parent != null)
             {
