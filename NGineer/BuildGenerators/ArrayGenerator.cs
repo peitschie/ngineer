@@ -13,18 +13,28 @@ namespace NGineer.BuildGenerators
 
         public object Create(Type type, IBuilder builder, BuildSession session)
         {
-            var arrayType = type.GetElementType();
-            var range = session.GetCollectionSize(arrayType);
-            return Array.CreateInstance(arrayType, session.Random.NextInRange(range));
+            if(session.AvailableBuildDepth >= 2)
+            {
+                var arrayType = type.GetElementType();
+                var range = session.GetCollectionSize(arrayType);
+                return Array.CreateInstance(arrayType, session.Random.NextInRange(range));
+            }
+            else
+            {
+                return Array.CreateInstance(type.GetElementType(), 0);
+            }
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            var arrayType = type.GetElementType();
-            var array = (Array) obj;
-            for (int i = 0; i < array.Length; i++)
+            if(session.AvailableBuildDepth >= 1)
             {
-                array.SetValue(builder.Build(arrayType), i);
+                var arrayType = type.GetElementType();
+                var array = (Array) obj;
+                for (int i = 0; i < array.Length; i++)
+                {
+                    array.SetValue(builder.Build(arrayType), i);
+                }
             }
         }
     }

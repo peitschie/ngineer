@@ -56,6 +56,12 @@ namespace NGineer
         {
             get { return CurrentObject.Depth; }
         }
+
+        public int AvailableBuildDepth
+        {
+            get { return _builder.BuildDepth - BuildDepth - 1; }
+        }
+
         public IList<ObjectBuildTreeEntry> ConstructedNodes
         {
             get { return _constructedNodes; }

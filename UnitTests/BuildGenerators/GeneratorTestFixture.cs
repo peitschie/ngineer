@@ -92,7 +92,8 @@ namespace NGineer.UnitTests.BuildGenerators
             var builder = new TestBuilder {
                 DefaultCollectionSize = new Range(1, 10),
                 CollectionSizes = new TypeRegistry<Range>(),
-                MaxInstances = new TypeRegistry<int?>()
+                MaxInstances = new TypeRegistry<int?>(),
+                BuildDepth = 10
             };
 			return new BuildSession(builder, null, new Random(10));
 		}

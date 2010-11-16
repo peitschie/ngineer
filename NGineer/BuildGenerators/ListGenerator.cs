@@ -32,13 +32,16 @@ namespace NGineer.BuildGenerators
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
         {
-            var listType = obj.GetType().GetGenericArguments()[0];
-            var range = session.GetCollectionSize(listType);
-            var list = (IList) obj;
-            var listSize = session.Random.NextInRange(range);
-            for (int i = 0; i < listSize; i++)
+            if(session.AvailableBuildDepth >= 1)
             {
-                list.Add(builder.Build(listType));
+                var listType = obj.GetType().GetGenericArguments()[0];
+                var range = session.GetCollectionSize(listType);
+                var list = (IList) obj;
+                var listSize = session.Random.NextInRange(range);
+                for (int i = 0; i < listSize; i++)
+                {
+                    list.Add(builder.Build(listType));
+                }
             }
         }
     }

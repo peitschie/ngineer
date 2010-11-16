@@ -144,13 +144,41 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
-        [Ignore("Known bug lp:673430")]
-        public void List_DepthSetTo0_CreatesNullEntries()
+        public void List_DepthSetTo0_CreatesEmptyArray()
         {
             var list = new Builder()
                 .SetMaximumDepth(0)
                 .Build<string[]>();
 
+            Assert.AreEqual(0, list.Length);
+            foreach(var entry in list)
+            {
+                Assert.IsNotNull(entry);
+            }
+        }
+
+        [Test]
+        public void List_DepthSetTo1_CreatesEmptyArray()
+        {
+            var list = new Builder()
+                .SetMaximumDepth(1)
+                .Build<string[]>();
+
+            Assert.AreEqual(0, list.Length);
+            foreach(var entry in list)
+            {
+                Assert.IsNotNull(entry);
+            }
+        }
+
+        [Test]
+        public void List_DepthSetTo2_PopulatesListAsNormal()
+        {
+            var list = new Builder()
+                .SetMaximumDepth(2)
+                .Build<string[]>();
+
+            Assert.AreNotEqual(0, list.Length);
             foreach(var entry in list)
             {
                 Assert.IsNotNull(entry);

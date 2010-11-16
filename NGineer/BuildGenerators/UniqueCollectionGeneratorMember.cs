@@ -42,11 +42,14 @@ namespace NGineer.BuildGenerators
         
         protected void Populate(IList<TClassType> list, IBuilder builder, BuildSession session)
         {
-            foreach(var memberValue in RandomExtensions.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
+            if(session.AvailableBuildDepth >= 1)
             {
-                var entry = builder.Build<TClassType>();
-                _member.SetValue(entry, memberValue);
-                list.Add(entry);
+                foreach(var memberValue in RandomExtensions.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
+                {
+                    var entry = builder.Build<TClassType>();
+                    _member.SetValue(entry, memberValue);
+                    list.Add(entry);
+                }
             }
         }
     }

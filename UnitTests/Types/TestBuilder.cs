@@ -148,10 +148,7 @@ namespace NGineer.UnitTests.Types
 
         public int BuildDepth
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         public bool ShouldIgnoreUnset(Type type)

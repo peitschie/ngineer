@@ -17,7 +17,8 @@ namespace NGineer.UnitTests.BuildGenerators
             var builder = new TestBuilder
             {
                 DefaultCollectionSize = new Range(10,10),
-                CollectionSizes = new TypeRegistry<Range>()
+                CollectionSizes = new TypeRegistry<Range>(),
+                BuildDepth = 10
             };
             return new BuildSession(builder, null, new Random(10));
         }
@@ -79,7 +80,11 @@ namespace NGineer.UnitTests.BuildGenerators
             builderMock.Setup(b => b.Build(typeof(ComplexClassType))).Returns(new ComplexClassType());
             var registry = new TypeRegistry<Range>();
             registry.SetForType<ComplexClassType>(new Range(20, 20));
-            var builder = new TestBuilder { CollectionSizes = registry, DefaultCollectionSize = new Range(10,10) };
+            var builder = new TestBuilder {
+                CollectionSizes = registry,
+                DefaultCollectionSize = new Range(10,10),
+                BuildDepth = 10
+            };
             var session = new BuildSession(builder, null, new Random(10));
 
             var list = CreateAndGenerate<ComplexClassType[]>(builderMock.Object, session);
