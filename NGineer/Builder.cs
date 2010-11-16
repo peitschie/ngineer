@@ -72,6 +72,7 @@ namespace NGineer
         public Builder(int seed) :  this(seed, null, null)
         {
             WithGenerator(new DefaultConstructorGenerator());
+            WithGenerator(new ObjectGenerator());
             WithGenerator(new ListGenerator());
             WithGenerator(new ArrayGenerator());
             WithGenerator(new NullableTypeGenerator());

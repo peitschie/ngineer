@@ -222,5 +222,13 @@ namespace NGineer.UnitTests.BuilderTests
 
             Assert.AreNotEqual(builder.Build<int>(), builder2.Build<int>());
         }
+
+        [Test]
+        public void Build_ObjectIsLeftAsNull()
+        {
+            var result = new Builder().Build<ClassWithObject>();
+            Assert.IsNull(result.ObjectMember);
+            Assert.IsNotNull(result.NormalMember);
+        }
     }
 }

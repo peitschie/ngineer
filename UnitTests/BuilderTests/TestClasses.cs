@@ -169,4 +169,10 @@ namespace NGineer.UnitTests.BuilderTests
 		public SecondLevel Property2 { get; set; }
 		public AnotherLevel Property3 { get; set; }
 	}
+
+    public class ClassWithObject
+    {
+        public object ObjectMember { get; set; }
+        public string NormalMember { get; set; }
+    }
 }

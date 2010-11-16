@@ -234,20 +234,23 @@
     <Compile Include="..\NGineer\Internal\SessionedBuilder.cs">
       <Link>Internal\SessionedBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\Exceptions\BuilderDepthExceededException.cs">
-      <Link>Exceptions\BuilderDepthExceededException.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\Exceptions\BuilderException.cs">
       <Link>Exceptions\BuilderException.cs</Link>
-    </Compile>
-    <Compile Include="..\NGineer\Exceptions\BuilderMaximumInstancesReachedException.cs">
-      <Link>Exceptions\BuilderMaximumInstancesReachedException.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\Exceptions\BuilderSealedException.cs">
       <Link>Exceptions\BuilderSealedException.cs</Link>
     </Compile>
     <Compile Include="..\NGineer\Exceptions\MemberExpressionException.cs">
       <Link>Exceptions\MemberExpressionException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\BuildGenerators\ObjectGenerator.cs">
+      <Link>BuildGenerators\ObjectGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\DepthExceededException.cs">
+      <Link>Exceptions\DepthExceededException.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Exceptions\MaximumInstancesReachedException.cs">
+      <Link>Exceptions\MaximumInstancesReachedException.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

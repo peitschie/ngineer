@@ -26,7 +26,7 @@ namespace NGineer.BuildGenerators
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
         {
-            return _type == null || Equals(_type, type);
+            return type != typeof(object) && (_type == null || Equals(_type, type));
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
