@@ -130,6 +130,19 @@
     <Compile Include="Internal\DefaultMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Documentation\images\builder-basic-structure.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documentation\images\builder-build-flow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documentation\ngineer-docs.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Documentation\images\builder-basic-structure.dia" />
+    <None Include="Documentation\images\builder-build-flow.dia" />
+  </ItemGroup>
 </Project>

@@ -590,7 +590,7 @@ var books = new Builder(1)
 <pre>[[Introduction]]
 [[Diving In]]</pre>
 </div>
-<div title="Design detail" creator="PhilipPeitsch" modifier="YourName" created="201005121409" modified="201005130240" changecount="5">
+<div title="Design detail" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121409" modified="201011182348" changecount="6">
 <pre>//Note: this page is currently being written.  Apologies for it being incomplete!//
 
 !! Builder design
@@ -598,9 +598,9 @@ var books = new Builder(1)
 * Each separate build call will create a new build session if none are specified.  This build session is used to track things such as recursion depth, object tree currently created and other features
 * Builders can be hierarchial.  Calling CreateNew on a builder will instantiate a new builder that references the existing as a parent
 !! Builder object relationships
-[img[docs/builder-basic-structure.png]]
+[img[images/builder-basic-structure.png]]
 !! Basic build session flow
-[img[docs/builder-build-flow.png]]</pre>
+[img[images/builder-build-flow.png]]</pre>
 </div>
 <div title="Design justification" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121233" modified="201006030956" changecount="7">
 <pre>There are no two ways about it...  generating test objects is painful.  Things start out simple, and before you know it, you have either
