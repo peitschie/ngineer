@@ -115,8 +115,7 @@ namespace NGineer.UnitTests.Internal
         {
             _session = ConstructSession();
 
-            _session.PushObject(new ObjectBuildRecord(typeof(object), new object(), true));
-            _session.PopObject();
+            using(_session.PushObject(new ObjectBuildRecord(typeof(object), new object(), true))){}
 
             Assert.IsNull(_session.CurrentObject.Object);
             Assert.AreEqual(-1, _session.BuildDepth);
@@ -132,8 +131,7 @@ namespace NGineer.UnitTests.Internal
             var expectedParent = _session.CurrentObject;
 
             _session.PushObject(new ObjectBuildRecord(typeof(object), expectedObj, true));
-            _session.PushObject(new ObjectBuildRecord(typeof(object), expectedChild, true));
-            _session.PopObject();
+            using(_session.PushObject(new ObjectBuildRecord(typeof(object), expectedChild, true))){}
 
             Assert.AreSame(expectedObj, _session.CurrentObject.Object);
             Assert.AreEqual(0, _session.BuildDepth);

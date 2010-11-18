@@ -21,48 +21,44 @@ namespace NGineer.UnitTests.BuildSequences
         [Test]
         public void Next_Parent_NewChildren()
         {
-            PushChild(Parent, 0);
-                PushChild(Child, 0);
-                PopChild();
-                PushChild(Child, 1);
-                PopChild();
-            PopChild();
+            using(PushChild(Parent, 0))
+            {
+                using (PushChild(Child, 0)){}
+                using (PushChild(Child, 1)){}
+            }
         }
 
         [Test]
         public void Next_ParentChild_FollowedBy_NewParent_NewChildren()
         {
-            PushChild(Parent, 0);
-                PushChild(Child, 0);
-                PopChild();
-            PopChild();
-            PushChild(Parent, 1);
-                PushChild(Child, 0);
-                PopChild();
-                PushChild(Child, 1);
-                PopChild();
-            PopChild();
+            using(PushChild(Parent, 0))
+            {
+                using (PushChild(Child, 0)) { }
+            }
+            using (PushChild(Parent, 1))
+            {
+                using (PushChild(Child, 0)) { }
+                using (PushChild(Child, 1)) { }
+            }
         }
 
         [Test]
         public void Next_ParentChildChild_FollowedBy_NewParent_NewChildren()
         {
-            PushChild(Parent, 0);
-                PushChild(Child, 0);
-                    PushChild(Child, 0);
-                    PopChild();
-                    PushChild(Child, 1);
-                    PopChild();
-                    PushChild(Child, 2);
-                    PopChild();
-                PopChild();
-                PushChild(Child, 1);
-                PopChild();
-            PopChild();
-            PushChild(Parent, 1);
-                PushChild(Child, 0);
-                PopChild();
-            PopChild();
+            using(PushChild(Parent, 0))
+            {
+                using(PushChild(Child, 0))
+                {
+                    using(PushChild(Child, 0)){}
+                    using(PushChild(Child, 1)){}
+                    using(PushChild(Child, 2)){}
+                }
+                using(PushChild(Child, 1)){}   
+            }
+            using (PushChild(Parent, 1))
+            {
+                using (PushChild(Child, 0)) { }
+            }
         }
 
         private static object Parent
@@ -75,15 +71,11 @@ namespace NGineer.UnitTests.BuildSequences
             get { return new object(); }
         }
 
-        private void PushChild<TType>(TType obj, int expectedDepth)
+        private DisposableAction PushChild<TType>(TType obj, int expectedDepth)
         {
-            _session.PushObject(new ObjectBuildRecord(typeof(TType), obj, true));
+            var disposable = _session.PushObject(new ObjectBuildRecord(typeof(TType), obj, true));
             Assert.AreEqual(expectedDepth, NextInSequence());
-        }
-
-        private void PopChild()
-        {
-            _session.PopObject();
+            return disposable;
         }
 
         private int NextInSequence()

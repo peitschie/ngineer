@@ -100,7 +100,7 @@ namespace NGineer
             return _builder.ShouldIgnoreUnset(type);
         }
 
-        public void PushObject(ObjectBuildRecord buildRecord)
+        public DisposableAction PushObject(ObjectBuildRecord buildRecord)
         {
             if (IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
@@ -112,9 +112,10 @@ namespace NGineer
             }
             CurrentObject = CurrentObject.AddChild(buildRecord);
             _constructedNodes.Add(CurrentObject);
+            return new DisposableAction(PopObject);
         }
 
-        public void PopObject()
+        private void PopObject()
         {
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
@@ -123,19 +124,20 @@ namespace NGineer
             CurrentObject = CurrentObject.Parent;
         }
 
-        public void PushMember(MemberInfo property)
+        public DisposableAction PushMember(MemberInfo property)
         {
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
             _memberStack.Push(property);
             CurrentMember = property;
+            return new DisposableAction(PopMember);
         }
 
-        public void PopMember()
+        private void PopMember()
         {
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
-            var member = _memberStack.Pop();
+            _memberStack.Pop();
             CurrentMember = _memberStack.Count > 0 ? _memberStack.Peek() : null;
         }
 
@@ -177,10 +179,11 @@ namespace NGineer
 
             var generator = _builder.GetGenerator(type, this);
             var obj = generator.CreateRecord(type, this.Builder, this);
-            PushObject(obj);
-            DoMemberSetters();
-            DoProcessors(type);
-            PopObject();
+            using(PushObject(obj))
+            {
+                DoMemberSetters();
+                DoProcessors(type);
+            }
             return obj.Object;
         }
 
@@ -197,9 +200,10 @@ namespace NGineer
             }
             foreach (var member in unconstructed)
             {
-                PushMember(member.Member);
-                member.Setter.Set(CurrentObject.Object, this.Builder, this);
-                PopMember();
+                using(PushMember(member.Member))
+                {
+                    member.Setter.Set(CurrentObject.Object, this.Builder, this);
+                }
             }
         }
 
