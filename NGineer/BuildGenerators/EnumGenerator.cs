@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using NGineer.Internal;
 using NGineer.Utils;
 
@@ -17,7 +16,7 @@ namespace NGineer.BuildGenerators
             return new ObjectBuildRecord(type, GetRandomEnum(type, session.Random), false);
         }
 
-        private object GetRandomEnum(Type type, Random random)
+        private static object GetRandomEnum(Type type, Random random)
         {
             var array = EnumUtils.GetValues(type);
             var index = random.Next(array.Length);

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NGineer.Internal;
-using NGineer.Utils;
 
 namespace NGineer.BuildGenerators
 {

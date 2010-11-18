@@ -1,8 +1,6 @@
 
 using System;
 using System.Linq.Expressions;
-using NGineer.Internal;
-using NGineer.BuildGenerators;
 
 namespace NGineer
 {

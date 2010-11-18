@@ -151,6 +151,9 @@
     <Compile Include="..\NGineer\IBuilder.cs">
       <Link>IBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\Internal\DisposableAction.cs">
+      <Link>Internal\DisposableAction.cs</Link>
+    </Compile>
     <Compile Include="..\NGineer\Sequences.cs">
       <Link>Sequences.cs</Link>
     </Compile>

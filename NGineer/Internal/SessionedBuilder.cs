@@ -4,8 +4,8 @@ namespace NGineer.Internal
 {
     internal sealed class SessionedBuilder : IBuilder
     {
-        private IConfiguredBuilder _builder;
-        private BuildSession _session;
+        private readonly IConfiguredBuilder _builder;
+        private readonly BuildSession _session;
 
         public SessionedBuilder(IConfiguredBuilder builder, BuildSession session)
         {

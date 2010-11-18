@@ -85,7 +85,6 @@ namespace NGineer
         /// <summary>
         /// Ignores any members for this object type that do not currently have an existing setter
         /// </summary>
-        /// <typeparam name="TType"></typeparam>
         /// <returns></returns>
         IBuilder IgnoreUnset(Type type);
 

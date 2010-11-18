@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NGineer.Utils;
 using NGineer.Exceptions;
 
 namespace NGineer.Internal

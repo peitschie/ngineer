@@ -1,5 +1,6 @@
 using System;
 using NGineer.Internal;
+using NGineer.Utils;
 using NUnit.Framework;
 
 namespace NGineer.UnitTests.Internal

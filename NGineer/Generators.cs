@@ -28,7 +28,7 @@ namespace NGineer
     
             public static IGenerator ForMember<TClassType>(Expression<Func<TClassType, object>> expression)
             {
-                var memberInfo = MemberExpressions.GetMemberInfo(expression);
+                var memberInfo = expression.GetMemberInfo();
                 var generatorType = typeof(UniqueCollectionGeneratorMember<,>)
                     .MakeGenericType(typeof(TClassType), memberInfo.ReturnType());
                 var instance = generatorType.GetConstructor(new []{typeof(MemberInfo)});

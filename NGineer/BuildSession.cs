@@ -178,7 +178,7 @@ namespace NGineer
             }
 
             var generator = _builder.GetGenerator(type, this);
-            var obj = generator.CreateRecord(type, this.Builder, this);
+            var obj = generator.CreateRecord(type, Builder, this);
             using(PushObject(obj))
             {
                 DoMemberSetters();
@@ -192,7 +192,7 @@ namespace NGineer
             var unconstructed = CurrentObject.UnconstructedMembers
                 .Select(member => new {
                     Member = member,
-                    Setter = _builder.MemberSetters.FirstOrDefault(setter => setter.IsForMember(member, this.Builder, this))
+                    Setter = _builder.MemberSetters.FirstOrDefault(setter => setter.IsForMember(member, Builder, this))
                 }).Where(e => e.Setter != null).ToList();
             foreach (var member in unconstructed)
             {
@@ -202,7 +202,7 @@ namespace NGineer
             {
                 using(PushMember(member.Member))
                 {
-                    member.Setter.Set(CurrentObject.Object, this.Builder, this);
+                    member.Setter.Set(CurrentObject.Object, Builder, this);
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace NGineer
         {
             foreach (var setter in _builder.Processors.Where(s => s.IsForType(type)).ToArray())
             {
-                setter.Process(CurrentObject.Object, this.Builder, this);
+                setter.Process(CurrentObject.Object, Builder, this);
             }
         }
 

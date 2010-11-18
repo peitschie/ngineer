@@ -1,7 +1,8 @@
 using System;
 using NGineer.Internal;
 using System.Reflection;
-namespace NGineer
+
+namespace NGineer.Utils
 {
     public static class BuilderUtils
     {

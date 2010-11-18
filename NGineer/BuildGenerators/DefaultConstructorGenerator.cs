@@ -1,8 +1,5 @@
 using System;
-using System.Linq;
-using NGineer.BuildGenerators;
 using NGineer.Internal;
-using NGineer.Utils;
 using NGineer.Exceptions;
 
 namespace NGineer.BuildGenerators

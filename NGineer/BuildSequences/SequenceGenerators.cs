@@ -1,5 +1,3 @@
-using System;
-
 namespace NGineer.BuildSequences
 {
     public static class SequenceGenerators

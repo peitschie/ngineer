@@ -1,6 +1,7 @@
 using System;
 using NGineer.Internal;
-namespace NGineer
+
+namespace NGineer.BuildGenerators
 {
     public class ObjectGenerator : IGenerator
     {

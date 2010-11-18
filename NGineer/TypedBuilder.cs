@@ -1,11 +1,7 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using NGineer.BuildGenerators;
-using NGineer.Internal;
 using NGineer.Utils;
 
 namespace NGineer
@@ -14,8 +10,8 @@ namespace NGineer
     {
         private readonly IConfiguredBuilder _parent;
         private readonly bool _allowInherited;
-        private bool _isParentHooked = false;
-        private Action<TTarget, BuildSession> _postbuildHook = null;
+        private bool _isParentHooked;
+        private Action<TTarget, BuildSession> _postbuildHook;
 
         public TypedBuilder(IConfiguredBuilder parent, bool allowInherited)
         {
@@ -44,7 +40,7 @@ namespace NGineer
         {
             if(expression == null)
                 throw new ArgumentNullException("expression");
-            var member = MemberExpressions.GetMemberInfo(expression);
+            var member = expression.GetMemberInfo();
             ValidateMember(member, value);
             _parent.AfterConstructionOf(BuilderUtils.GetMemberSetter(member, value, _allowInherited));
             return this;
@@ -69,7 +65,7 @@ namespace NGineer
 
         public ITypedBuilder<TTarget> Set(Expression<Func<TTarget, object>> expression, IGenerator generator)
         {
-            _parent.AfterConstructionOf<TTarget>(expression, generator);
+            _parent.AfterConstructionOf(expression, generator);
             return this;
         }
 
@@ -84,19 +80,19 @@ namespace NGineer
         {
             Ignore(expression);
             var accessor = expression.GetMemberInfo();
-            AddAction((obj, session) => { accessor.SetValue(obj, value(obj, session)); });
+            AddAction((obj, session) => accessor.SetValue(obj, value(obj, session)));
             return this;
         }
 
         public ITypedBuilder<TTarget> Ignore<TReturnType>(Expression<Func<TTarget, TReturnType>> expression)
         {
-            _parent.IgnoreMember(MemberExpressions.GetMemberInfo(expression), _allowInherited);
+            _parent.IgnoreMember(expression.GetMemberInfo(), _allowInherited);
             return this;
         }
 
         public ITypedBuilder<TTarget> Ignore(Expression<Func<TTarget, object>> expression)
         {
-            _parent.IgnoreMember(MemberExpressions.GetMemberInfo(expression), _allowInherited);
+            _parent.IgnoreMember(expression.GetMemberInfo(), _allowInherited);
             return this;
         }
 
@@ -155,13 +151,13 @@ namespace NGineer
         }
 
 
-        public IBuilder SetMaximumDepth(Nullable<int> depth)
+        public IBuilder SetMaximumDepth(int? depth)
         {
             return _parent.SetMaximumDepth(depth);
         }
 
 
-        public IBuilder SetMaximumObjects(Nullable<int> maximum)
+        public IBuilder SetMaximumObjects(int? maximum)
         {
             return _parent.SetMaximumObjects(maximum);
         }
@@ -277,6 +273,7 @@ namespace NGineer
 
         #endregion
 
+        // ReSharper disable UnusedParameter.Local
         private static void ValidateMember<TType, TReturnType>(MemberInfo member, Func<TType, IBuilder, BuildSession, TReturnType> setter)
         {
             if(!member.ReturnType().IsAssignableFrom(typeof(TReturnType)))
@@ -284,5 +281,6 @@ namespace NGineer
                 throw new InvalidCastException(string.Format("Unable to cast from {0} to {1}", typeof(TReturnType), member.ReturnType()));
             }
         }
+        // ReSharper restore UnusedParameter.Local
     }
 }

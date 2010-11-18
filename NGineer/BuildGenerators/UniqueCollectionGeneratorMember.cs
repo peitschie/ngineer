@@ -13,7 +13,7 @@ namespace NGineer.BuildGenerators
 
         public UniqueCollectionGeneratorMember(Expression<Func<TClassType, TType>> memberInfo)
         {
-            _member = MemberExpressions.GetMemberInfo(memberInfo);
+            _member = memberInfo.GetMemberInfo();
         }
 
         public UniqueCollectionGeneratorMember(MemberInfo memberInfo)
@@ -35,7 +35,7 @@ namespace NGineer.BuildGenerators
             var list = new List<TClassType>();
             if (session.AvailableBuildDepth >= 1)
             {
-                foreach (var memberValue in RandomExtensions.Shuffle<TType>(EnumUtils.GetValues<TType>(), session.Random))
+                foreach (var memberValue in RandomExtensions.Shuffle(EnumUtils.GetValues<TType>(), session.Random))
                 {
                     var entry = builder.Build<TClassType>();
                     _member.SetValue(entry, memberValue);
