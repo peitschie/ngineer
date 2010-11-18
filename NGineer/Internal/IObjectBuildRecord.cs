@@ -8,7 +8,6 @@ namespace NGineer.Internal
         Type Type { get; }
         object Object { get; }
         MemberInfo[] UnconstructedMembers { get; }
-        bool IsConstructed(MemberInfo member);
         void RegisterConstructed(MemberInfo member);
     }
 }
