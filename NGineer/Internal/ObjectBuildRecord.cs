@@ -12,26 +12,28 @@ namespace NGineer.Internal
         private readonly object _obj;
         private readonly List<string> _constructedMembers = new List<string>();
         private readonly List<MemberInfo> _unconstructedMembers;
-        private bool _requiresPopulation;
 
         public ObjectBuildRecord(Type type, object obj, bool requiresPopulation)
         {
             _type = type;
             _obj = obj;
             _unconstructedMembers = new List<MemberInfo>();
-            _requiresPopulation = requiresPopulation;
             if (_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
             {
                 throw new InvalidCastException(string.Format("Object type {0} is not equivalent to passed in type {1}", obj.GetType(), type));
             }
-            var objType = obj != null ? obj.GetType() : type;
-            
-            _unconstructedMembers.AddRange(objType.GetProperties()
-                .Where(p => p.CanWrite)
-                .OrderBy(p => p.Name).Cast<MemberInfo>());
-            _unconstructedMembers.AddRange(objType.GetFields()
-                .Where(f => f.IsPublic && !f.IsLiteral && !f.IsInitOnly && !f.IsLiteral)
-                .OrderBy(p => p.Name).Cast<MemberInfo>());
+
+            if (requiresPopulation)
+            {
+                var objType = obj != null ? obj.GetType() : type;
+
+                _unconstructedMembers.AddRange(objType.GetProperties()
+                    .Where(p => p.CanWrite)
+                    .OrderBy(p => p.Name).Cast<MemberInfo>());
+                _unconstructedMembers.AddRange(objType.GetFields()
+                    .Where(f => f.IsPublic && !f.IsLiteral && !f.IsInitOnly && !f.IsLiteral)
+                    .OrderBy(p => p.Name).Cast<MemberInfo>());
+            }
         }
 
         public Type Type { get { return _type; } }
@@ -44,22 +46,6 @@ namespace NGineer.Internal
 
         public bool Counted { get;set; }
 
-        public bool RequiresPopulation
-        {
-            get
-            {
-                return _requiresPopulation;
-            }
-            set
-            {
-                if (value && !_requiresPopulation)
-                {
-                    throw new InvalidOperationException("A populated object cannot be set back to unpopulated");
-                }
-                _requiresPopulation = value;
-            }
-        }
-
         public MemberInfo[] UnconstructedMembers { get { return _unconstructedMembers.ToArray(); } }
 
         public void RegisterConstructed(MemberInfo member)
@@ -67,8 +53,6 @@ namespace NGineer.Internal
             var existing = _unconstructedMembers.First(p => p.Name == member.Name);
             _constructedMembers.Add(member.Name);
             _unconstructedMembers.Remove(existing);
-            if (_unconstructedMembers.Count == 0)
-                _requiresPopulation = false;
         }
     }
 }

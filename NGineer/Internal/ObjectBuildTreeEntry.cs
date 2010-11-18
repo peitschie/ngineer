@@ -62,12 +62,6 @@ namespace NGineer.Internal
             get { return _record == null ? new MemberInfo[0] : _record.UnconstructedMembers; }
         }
 
-        public bool RequiresPopulation
-        {
-            get { return _record != null && _record.RequiresPopulation; }
-            set { _record.RequiresPopulation = value; }
-        }
-
         public bool IsConstructed(MemberInfo member)
         {
             return _record != null && _record.IsConstructed(member);

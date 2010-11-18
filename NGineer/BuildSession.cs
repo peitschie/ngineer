@@ -120,7 +120,6 @@ namespace NGineer
                 throw new ObjectDisposedException("BuildSession");
             if(CurrentObject.Parent == null)
                 throw new BuilderException("Unable to pop beyond the root element of the built object tree");
-            CurrentObject.RequiresPopulation = false;
             CurrentObject = CurrentObject.Parent;
         }
 
@@ -179,10 +178,7 @@ namespace NGineer
             var generator = _builder.GetGenerator(type, this);
             var obj = generator.CreateRecord(type, this.Builder, this);
             PushObject(obj);
-            if (CurrentObject.RequiresPopulation)
-            {
-                DoMemberSetters();
-            }
+            DoMemberSetters();
             DoProcessors(type);
             PopObject();
             return obj.Object;
