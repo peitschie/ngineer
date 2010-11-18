@@ -14,7 +14,7 @@ namespace NGineer.BuildGenerators
             return type.Equals(typeof(string));
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             var key = session.CurrentMember != null ? session.CurrentMember.Name : type.Name;
             int lastCount;
@@ -25,7 +25,7 @@ namespace NGineer.BuildGenerators
             }
             var newString = key + (lastCount);
             _memberCounts[key] = lastCount + 1;
-            return newString;
+            return new ObjectBuildRecord(type, newString, false);
         }
 
         public void Populate(Type type, object obj, IBuilder builder, BuildSession session)

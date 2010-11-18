@@ -12,7 +12,7 @@ namespace NGineer.UnitTests.Internal
         [Test]
         public void Constructor_UsesObjectTypeForRetrievingProperties()
         {
-            _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), new SimpleClass());
+            _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), new SimpleClass(), false);
 
             var propertyNames = _buildRecord.UnconstructedMembers.Select(p => p.Name).OrderBy(n => n).ToArray();
             Assert.AreEqual(new []{"Property1", "Property2"}, propertyNames);
@@ -21,7 +21,7 @@ namespace NGineer.UnitTests.Internal
         [Test]
         public void Constructor_NullObject()
         {
-            Assert.DoesNotThrow(() => _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), null));
+            Assert.DoesNotThrow(() => _buildRecord = new ObjectBuildRecord(typeof(SimpleClassBase), null, false));
 
             var propertyNames = _buildRecord.UnconstructedMembers.Select(p => p.Name).OrderBy(n => n).ToArray();
             Assert.AreEqual(new []{"Property1"}, propertyNames);

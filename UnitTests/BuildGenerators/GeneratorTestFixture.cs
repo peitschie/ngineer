@@ -46,7 +46,7 @@ namespace NGineer.UnitTests.BuildGenerators
             {
                 try
                 {
-                    Generator.Create(supportedType, builder, BuildSession());
+                    Generator.CreateRecord(supportedType, builder, BuildSession());
                 }
                 catch (BuilderCalledException)
                 {
@@ -82,9 +82,8 @@ namespace NGineer.UnitTests.BuildGenerators
         protected TType CreateAndGenerate<TType>(IGenerator generator, IBuilder builder, BuildSession session)
         {
 			Assert.IsTrue(generator.GeneratesType(typeof(TType), builder, session), string.Format("Does not generate type {0}", typeof(TType)));
-            var obj = (TType)generator.Create(typeof(TType), builder, session);
-            generator.Populate(typeof(TType), obj, builder, session);
-            return obj;
+            var obj = generator.CreateRecord(typeof(TType), builder, session);
+            return (TType)obj.Object;
         }
 
 		protected virtual BuildSession BuildSession()

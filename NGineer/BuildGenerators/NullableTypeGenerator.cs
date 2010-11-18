@@ -11,14 +11,11 @@ namespace NGineer.BuildGenerators
             return type.IsNullable();
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             var nullableType = type.GetGenericArguments()[0];
-            return session.Random.Next(5) == 0 ? null : builder.Build(nullableType);
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return session.Random.Next(5) == 0 ? new ObjectBuildRecord(type, null, false)
+                : new ObjectBuildRecord(type, builder.Build(nullableType), false);
         }
     }
 }

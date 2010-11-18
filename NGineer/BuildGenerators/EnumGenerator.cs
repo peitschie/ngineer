@@ -12,13 +12,9 @@ namespace NGineer.BuildGenerators
             return type.IsEnum;
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
-            return GetRandomEnum(type, session.Random);
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return new ObjectBuildRecord(type, GetRandomEnum(type, session.Random), false);
         }
 
         private object GetRandomEnum(Type type, Random random)

@@ -30,15 +30,9 @@ namespace NGineer.UnitTests
 
         // Perform any custom creation actions required before returning a
         // newly constructed object
-        public object Create (Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
-            return new CustomClass (session.Random.Next (), "Demo Generator");
-        }
-
-        // Perform initializing of non-constructor related properties
-        // on the object after external setters have been called
-        public void Populate (Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return new ObjectBuildRecord(type, new CustomClass (session.Random.Next (), "Demo Generator"), false);
         }
     }
 

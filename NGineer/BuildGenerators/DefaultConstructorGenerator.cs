@@ -29,24 +29,14 @@ namespace NGineer.BuildGenerators
             return type != typeof(object) && (_type == null || Equals(_type, type));
         }
 
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-            foreach (var member in session.CurrentObject.Record.UnconstructedMembers)
-            {
-                session.PushMember(member);
-                member.SetValue(obj, builder.Build(member.ReturnType()));
-                session.PopMember(true);
-            }
-        }
-
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             object newObj = InvokeDefaultConstructor(type);
             if (newObj == null)
             {
                 throw new BuilderException(string.Format("Unable to construct {0} as no default constructor was found", type));
             }
-            return newObj;
+            return new ObjectBuildRecord(type, newObj, true);
         }
     }
 }

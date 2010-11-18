@@ -24,9 +24,8 @@ namespace NGineer.Internal
 
         public void Set(object obj, IBuilder builder, BuildSession session)
         {
-            var generatorValue = _generator.Create(MemberReturnType, builder, session);
-            _generator.Populate(MemberReturnType, generatorValue, builder, session);
-            Member.SetValue(obj, generatorValue);
+            var generatorValue = _generator.CreateRecord(MemberReturnType, builder, session);
+            Member.SetValue(obj, generatorValue.Object);
         }
     }
 }

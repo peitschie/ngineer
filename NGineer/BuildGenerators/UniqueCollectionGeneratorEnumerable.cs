@@ -23,19 +23,11 @@ namespace NGineer.BuildGenerators
 			return type.IsGenericType && type.IsAssignableFrom(typeof(List<TType>));
 		}
 			
-        public object Create(Type type, IBuilder builder, BuildSession session)
-		{
-			return new List<TType>();
-		}
-		
-	    public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-		{
-			Populate((IList<TType>)obj, builder, session);
-		}
-		
-		protected void Populate(IList<TType> list, IBuilder builder, BuildSession session)
-		{
-			RandomExtensions.Shuffle<TType>(list, _entries(builder, session), session.Random);
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
+        {
+            var list = new List<TType>();
+            RandomExtensions.Shuffle<TType>(list, _entries(builder, session), session.Random);
+            return new ObjectBuildRecord(type, list, false);
 		}
 	}
 }

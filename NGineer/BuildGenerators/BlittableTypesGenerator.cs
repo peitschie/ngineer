@@ -35,14 +35,19 @@ namespace NGineer.BuildGenerators
 
         private static readonly Dictionary<Type, MethodBase> Converters = new Dictionary<Type, MethodBase>();
 
-        private static byte NonBitConverterMethod(byte[] bytes, int startIndex)
+        private static byte NonBitConverterMethod_Byte(byte[] bytes, int startIndex)
         {
             return bytes[0];
         }
 
+        private static sbyte NonBitConverterMethod_SByte(byte[] bytes, int startIndex)
+        {
+            return (sbyte)bytes[0];
+        }
+
         static BlittableTypesGenerator()
         {
-            var methods = typeof (BitConverter).GetMethods();
+            var methods = typeof(BitConverter).GetMethods();
             foreach (var type in BitConverterTypes)
             {
                 var method = methods.Where(m => 
@@ -57,18 +62,11 @@ namespace NGineer.BuildGenerators
                 }
                 Converters.Add(type, method);
             }
-			// call our methods to shut up the compilers!
-			NonBitConverterMethod(new byte[1], 0);
-            var nonBitMethod = typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-            if(nonBitMethod == null)
-            {
-                // Changed to use the inner exception parameter due to Silverlight Compatibility
-                throw new MissingMethodException(typeof(BlittableTypesGenerator).Name + ".NonBitConverterMethod()");
-            }
-            foreach (var type in NonBitConverterTypes)
-            {
-                Converters.Add(type, nonBitMethod);
-            }
+            // call our methods to shut up the compilers!
+            NonBitConverterMethod_Byte(new byte[1], 0);
+            NonBitConverterMethod_SByte(new byte[1], 0);
+            Converters.Add(typeof(byte), typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_Byte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
+            Converters.Add(typeof(sbyte), typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_SByte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
         }
         #endregion
 
@@ -79,16 +77,12 @@ namespace NGineer.BuildGenerators
             return Converters.ContainsKey(type);
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             int size = Marshal.SizeOf(type);
             var bytes = new byte[size];
             session.Random.NextBytes(bytes);
-            return Converters[type].Invoke(null, new object[] {bytes, 0});
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return new ObjectBuildRecord(type, Converters[type].Invoke(null, new object[] {bytes, 0}), false);
         }
 
         #endregion

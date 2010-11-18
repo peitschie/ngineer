@@ -95,21 +95,20 @@ namespace NGineer
             private set;
         }
 
-        public void PushObject(Type type, object obj)
+        public bool ShouldIgnoreUnset(Type type)
         {
-            if(IsDisposed)
+            return _builder.ShouldIgnoreUnset(type);
+        }
+
+        public void PushObject(ObjectBuildRecord buildRecord)
+        {
+            if (IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
-            var buildRecord = obj as ObjectBuildRecord;
-            if(buildRecord != null)
+            if (!buildRecord.Counted)
             {
-                // On the second pass through, this object is already being populated, so does not require further population
-                buildRecord.RequiresPopulation = false;
-            }
-            else
-            {
-                if(BuilderInstanceTracker.IncludeInCount(type))
+                if (BuilderInstanceTracker.IncludeInCount(buildRecord.Type))
                     ConstructedCount++;
-                buildRecord = new ObjectBuildRecord(type, obj);
+                buildRecord.Counted = true;
             }
             CurrentObject = CurrentObject.AddChild(buildRecord);
             _constructedNodes.Add(CurrentObject);
@@ -133,16 +132,12 @@ namespace NGineer
             CurrentMember = property;
         }
 
-        public void PopMember(bool valueHasChanged)
+        public void PopMember()
         {
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
             var member = _memberStack.Pop();
             CurrentMember = _memberStack.Count > 0 ? _memberStack.Peek() : null;
-            if(valueHasChanged)
-            {
-                CurrentObject.RegisterConstructed(member);
-            }
         }
 
         public Range GetCollectionSize(Type type)
@@ -166,50 +161,49 @@ namespace NGineer
 
         public object Build(Type type)
         {
-            if(IsDisposed)
+            if (IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
-            if(BuildDepth == _builder.BuildDepth)
+            if (BuildDepth == _builder.BuildDepth)
             {
-                if(_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
+                if (_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
                 {
                     throw new DepthExceededException(_builder.BuildDepth, this);
                 }
                 return type.IsValueType ? Activator.CreateInstance(type) : null;
             }
-            if(ConstructedCount > _builder.MaximumObjects)
+            if (ConstructedCount > _builder.MaximumObjects)
             {
                 throw new MaximumInstancesReachedException(_builder.MaximumObjects, this);
             }
 
             var generator = _builder.GetGenerator(type, this);
-            var obj = generator.Create(type, this.Builder, this);
-            if(obj != null)
+            var obj = generator.CreateRecord(type, this.Builder, this);
+            PushObject(obj);
+            if (CurrentObject.RequiresPopulation)
             {
-                PushObject(type, obj);
-                obj = CurrentObject.Object;
-                if(CurrentObject.RequiresPopulation)
-                {
-                    DoMemberSetters();
-                    if(!_builder.ShouldIgnoreUnset(type))
-                    {
-                        generator.Populate(type, obj, this.Builder, this);
-                    }
-                    DoProcessors(type);
-                }
-                PopObject();
+                DoMemberSetters();
             }
-            return obj;
+            DoProcessors(type);
+            PopObject();
+            return obj.Object;
         }
 
         private void DoMemberSetters()
         {
-            foreach(var member in CurrentObject.UnconstructedMembers)
+            var unconstructed = CurrentObject.UnconstructedMembers
+                .Select(member => new {
+                    Member = member,
+                    Setter = _builder.MemberSetters.FirstOrDefault(setter => setter.IsForMember(member, this.Builder, this))
+                }).Where(e => e.Setter != null).ToList();
+            foreach (var member in unconstructed)
             {
-                PushMember(member);
-                var setter = _builder.MemberSetters.FirstOrDefault(s => s.IsForMember(member, this.Builder, this));
-                if(setter != null)
-                    setter.Set(CurrentObject.Object, this.Builder, this);
-                PopMember(setter != null);
+                CurrentObject.RegisterConstructed(member.Member);
+            }
+            foreach (var member in unconstructed)
+            {
+                PushMember(member.Member);
+                member.Setter.Set(CurrentObject.Object, this.Builder, this);
+                PopMember();
             }
         }
 

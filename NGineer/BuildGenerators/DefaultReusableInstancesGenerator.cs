@@ -27,13 +27,9 @@ namespace NGineer.BuildGenerators
         }
 
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             return session.Random.OneFromList(GetAllInstancesOf(session.ConstructedNodes, type));
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
         }
     }
 }

@@ -44,7 +44,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         private static void AddConstructedNode<TType>(TType obj, BuildSession session)
         {
-            session.ConstructedNodes.Add(new ObjectBuildTreeEntry(null, new ObjectBuildRecord(typeof(TType), obj), 0));
+            session.ConstructedNodes.Add(new ObjectBuildTreeEntry(null, new ObjectBuildRecord(typeof(TType), obj, false), 0));
         }
 
         [Test]
@@ -97,9 +97,7 @@ namespace NGineer.UnitTests.BuildGenerators
 
         private new ObjectBuildRecord CreateAndGenerate<TType>(IBuilder builder, BuildSession session)
         {
-            var obj = Generator.Create(typeof(TType), builder, session);
-            Generator.Populate(typeof(TType), obj, builder, session);
-            return obj as ObjectBuildRecord;
+            return Generator.CreateRecord(typeof(TType), builder, session);
         }
 
         private BuildSession CreateSession()

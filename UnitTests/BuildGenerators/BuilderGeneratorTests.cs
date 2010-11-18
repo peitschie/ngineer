@@ -27,7 +27,7 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void Constructor_GenerateString()
         {
-            Assert.AreEqual(TestString, Generator.Create(typeof(string), null, null));
+            Assert.AreEqual(TestString, Generator.CreateRecord(typeof(string), null, null).Object);
         }
 	}
 
@@ -54,7 +54,7 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void Constructor_GenerateString()
         {
-            Assert.AreEqual(TestString, Generator.Create(typeof(string), null, null));
+            Assert.AreEqual(TestString, Generator.CreateRecord(typeof(string), null, null).Object);
         }
     }
 }

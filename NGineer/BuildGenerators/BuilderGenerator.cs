@@ -19,13 +19,9 @@ namespace NGineer.BuildGenerators
             return _type.Equals(type);
         }
 
-        public virtual object Create(Type type, IBuilder builder, BuildSession session)
+        public virtual ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
-            return _constructor(builder, session);
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return new ObjectBuildRecord(type, _constructor(builder, session), false);
         }
     }
 

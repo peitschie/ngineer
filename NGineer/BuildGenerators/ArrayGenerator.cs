@@ -11,31 +11,24 @@ namespace NGineer.BuildGenerators
             return type.IsArray;
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
-            if(session.AvailableBuildDepth >= 2)
+            Array instance;
+            if (session.AvailableBuildDepth >= 2)
             {
                 var arrayType = type.GetElementType();
                 var range = session.GetCollectionSize(arrayType);
-                return Array.CreateInstance(arrayType, session.Random.NextInRange(range));
+                instance = Array.CreateInstance(arrayType, session.Random.NextInRange(range));
+                for (int i = 0; i < instance.Length; i++)
+                {
+                    instance.SetValue(builder.Build(arrayType), i);
+                }
             }
             else
             {
-                return Array.CreateInstance(type.GetElementType(), 0);
+                instance = Array.CreateInstance(type.GetElementType(), 0);
             }
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-            if(session.AvailableBuildDepth >= 1)
-            {
-                var arrayType = type.GetElementType();
-                var array = (Array) obj;
-                for (int i = 0; i < array.Length; i++)
-                {
-                    array.SetValue(builder.Build(arrayType), i);
-                }
-            }
+            return new ObjectBuildRecord(type, instance, false);
         }
     }
 }

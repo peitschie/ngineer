@@ -16,11 +16,18 @@ namespace NGineer.UnitTests.BuildGenerators
         {
             var builder = new TestBuilder
             {
-                DefaultCollectionSize = new Range(10,10),
+                DefaultCollectionSize = new Range(10, 10),
                 CollectionSizes = new TypeRegistry<Range>(),
                 BuildDepth = 10
             };
             return new BuildSession(builder, null, new Random(10));
+        }
+
+        protected override IBuilder GetBuilder()
+        {
+            var builder = new Mock<IBuilder>();
+            builder.Setup(b => b.Build(It.IsAny<Type>())).Returns(null);
+            return builder.Object;
         }
 
         protected override Type[] SupportedTypes()

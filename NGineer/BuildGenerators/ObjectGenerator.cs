@@ -1,4 +1,5 @@
 using System;
+using NGineer.Internal;
 namespace NGineer
 {
     public class ObjectGenerator : IGenerator
@@ -8,13 +9,9 @@ namespace NGineer
             return type == typeof(object);
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
-            return null;
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
+            return new ObjectBuildRecord(type, null, false);
         }
     }
 }

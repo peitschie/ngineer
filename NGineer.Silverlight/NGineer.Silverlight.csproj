@@ -106,9 +106,6 @@
     <Compile Include="..\NGineer\BuildGenerators\EnumGenerator.cs">
       <Link>BuildGenerators\EnumGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\NGineer\BuildGenerators\GarbageStringGenerator.cs">
-      <Link>BuildGenerators\GarbageStringGenerator.cs</Link>
-    </Compile>
     <Compile Include="..\NGineer\BuildGenerators\ListGenerator.cs">
       <Link>BuildGenerators\ListGenerator.cs</Link>
     </Compile>
@@ -254,6 +251,9 @@
     </Compile>
     <Compile Include="..\NGineer\IMemberSetter.cs">
       <Link>IMemberSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\NGineer\Internal\DefaultMemberSetter.cs">
+      <Link>Internal\DefaultMemberSetter.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

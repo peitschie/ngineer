@@ -77,7 +77,7 @@ namespace NGineer.UnitTests.BuildSequences
 
         private void PushChild<TType>(TType obj, int expectedDepth)
         {
-            _session.PushObject(typeof(TType), obj);
+            _session.PushObject(new ObjectBuildRecord(typeof(TType), obj, true));
             Assert.AreEqual(expectedDepth, NextInSequence());
         }
 

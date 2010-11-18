@@ -16,9 +16,9 @@ namespace NGineer
         IEnumerable<IInstanceProcessor> Processors { get; }
         IEnumerable<IMemberSetter> MemberSetters { get; }
 
-        bool ShouldIgnoreUnset(Type type);
         IGenerator GetGenerator(Type type, BuildSession session);
 
+        bool ShouldIgnoreUnset(Type type);
         IConfiguredBuilder CreateNew(BuildSession session);
     }
 }

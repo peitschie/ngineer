@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using NGineer.Internal;
 using NGineer.Utils;
@@ -7,11 +8,11 @@ namespace NGineer.BuildGenerators
 {
     public class ReuseInstancesGenerator<T> : IGenerator
     {
-        private readonly IEnumerable<T> _collection;
+        private readonly IEnumerable<ObjectBuildRecord> _collection;
 
         public ReuseInstancesGenerator(IEnumerable<T> collection)
         {
-            _collection = collection;
+            _collection = collection.Select(c => new ObjectBuildRecord(typeof(T), c, false));
         }
 
         public bool GeneratesType(Type type, IBuilder builder, BuildSession session)
@@ -19,13 +20,9 @@ namespace NGineer.BuildGenerators
             return typeof (T).Equals(type);
         }
 
-        public object Create(Type type, IBuilder builder, BuildSession session)
+        public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
         {
             return session.Random.OneFromList(_collection);
-        }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
         }
     }
 }

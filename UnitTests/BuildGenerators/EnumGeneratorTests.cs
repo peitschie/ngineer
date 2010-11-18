@@ -28,7 +28,7 @@ namespace NGineer.UnitTests.BuildGenerators
         public void GenerateSimpleEnum()
         {
             Generator = new EnumGenerator();
-            var enumValue = Generator.Create(typeof(TestEnum), null, BuildSession());
+            var enumValue = Generator.CreateRecord(typeof(TestEnum), null, BuildSession()).Object;
             Assert.IsNotNull(enumValue);
 			// can't think of a reliable way to tell wat the produced results will be...
         }
@@ -43,7 +43,7 @@ namespace NGineer.UnitTests.BuildGenerators
 			var session = BuildSession();
 			for(int tries = 0; tries < maxTries; tries++)
 			{
-            	var enumValue = (TestEnum)Generator.Create(typeof(TestEnum), null, session);
+            	var enumValue = (TestEnum)Generator.CreateRecord(typeof(TestEnum), null, session).Object;
             	Assert.IsNotNull(enumValue);
 				if(tries > 0 && lastValue != enumValue)
 				{

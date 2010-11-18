@@ -85,7 +85,6 @@
     <Compile Include="Builder.cs" />
     <Compile Include="IBuilder.cs" />
     <Compile Include="BuildGenerators\BlittableTypesGenerator.cs" />
-    <Compile Include="BuildGenerators\GarbageStringGenerator.cs" />
     <Compile Include="BuildGenerators\BoolGenerator.cs" />
     <Compile Include="BuildGenerators\BuilderGenerator.cs" />
     <Compile Include="Utils\MemberExpressions.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="BuildGenerators\ObjectGenerator.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
     <Compile Include="IMemberSetter.cs" />
+    <Compile Include="Internal\DefaultMemberSetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

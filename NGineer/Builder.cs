@@ -69,7 +69,7 @@ namespace NGineer
             }
         }
 
-        public Builder(int seed) :  this(seed, null, null)
+        public Builder(int seed) : this(seed, null, null)
         {
             WithGenerator(new DefaultConstructorGenerator());
             WithGenerator(new ObjectGenerator());
@@ -82,6 +82,7 @@ namespace NGineer
             WithGenerator(new CharGenerator());
             WithGenerator(new BlittableTypesGenerator());
             WithGenerator(new SimpleMemberNameStringGenerator());
+            AfterConstructionOf(new DefaultMemberSetter());
         }
 
         public Builder() : this(0)

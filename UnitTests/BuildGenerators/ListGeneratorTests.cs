@@ -44,6 +44,13 @@ namespace NGineer.UnitTests.BuildGenerators
                 };
         }
 
+        protected override IBuilder GetBuilder()
+        {
+            var builder = new Mock<IBuilder>();
+            builder.Setup(b => b.Build(It.IsAny<Type>())).Returns(null);
+            return builder.Object;
+        }
+
         [Test]
         public void Create_Simple_FixedSizedListOfStrings()
         {

@@ -98,18 +98,22 @@ namespace NGineer.UnitTests.BuilderTests
         }
 
         [Test]
-        public void SetNumberOfInstances_ObjectsNotRetouched_WhenReused()
+        public void SetNumberOfInstances_ObjectsNotRetouched_ButReprocessed_WhenReused()
         {
-            var count = 0;
+            var processCount = 0;
+            var setCount = 0;
             var builder = new Builder(1)
-                .For<SimpleClass>().Do(c => count++)
-                .SetDefaultCollectionSize(5,5)
+                .For<SimpleClass>()
+                    .Set(x => x.IntProperty, () => setCount++)
+                    .Do(c => processCount++)
+                .SetDefaultCollectionSize(5, 5)
                 .SetNumberOfInstances<SimpleClass>(1, 1)
                 .Sealed();
             var instances = builder.Build<SimpleClass[]>();
 
             Assert.AreSame(instances[0], instances[1]);
-            Assert.AreEqual(1, count);
+            Assert.AreEqual(1, setCount);
+            Assert.AreEqual(5, processCount);
         }
 
         [Test]

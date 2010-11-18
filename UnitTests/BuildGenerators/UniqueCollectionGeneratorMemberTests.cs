@@ -22,6 +22,14 @@ namespace NGineer.UnitTests.BuildGenerators
             return new UniqueCollectionGeneratorMember<ClassWithEnumAndProperties, SimpleEnum>(c => c.EnumProperty);
         }
 
+        protected override IBuilder GetBuilder()
+        {
+            var builder = new Mock<IBuilder>();
+            builder.Setup(b => b.Build<ClassWithEnumAndProperties>())
+                .Returns(() => new ClassWithEnumAndProperties());
+            return builder.Object;
+        }
+
         protected override Type[] SupportedTypes ()
         {
             return new []{
@@ -31,7 +39,7 @@ namespace NGineer.UnitTests.BuildGenerators
                 typeof(List<ClassWithEnumAndProperties>),
             };
         }
-        
+
         protected override Type[] UnsupportedTypes ()
         {
             return new[] {
@@ -44,7 +52,6 @@ namespace NGineer.UnitTests.BuildGenerators
             };
         }
 
-    
         [Test]
         public void GenerateAndPopulate_CustomClassType()
         {

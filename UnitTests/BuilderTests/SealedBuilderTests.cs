@@ -142,12 +142,7 @@ namespace NGineer.UnitTests.BuilderTests
                 throw new NotImplementedException();
             }
 
-            public object Create(Type type, IBuilder builder, BuildSession session)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
+            public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
             {
                 throw new NotImplementedException();
             }

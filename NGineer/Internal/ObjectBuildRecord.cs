@@ -14,12 +14,12 @@ namespace NGineer.Internal
         private readonly List<MemberInfo> _unconstructedMembers;
         private bool _requiresPopulation;
 
-        public ObjectBuildRecord(Type type, object obj)
+        public ObjectBuildRecord(Type type, object obj, bool requiresPopulation)
         {
             _type = type;
             _obj = obj;
             _unconstructedMembers = new List<MemberInfo>();
-            _requiresPopulation = true;
+            _requiresPopulation = requiresPopulation;
             if (_obj != null && !_type.IsAssignableFrom(_obj.GetType()))
             {
                 throw new InvalidCastException(string.Format("Object type {0} is not equivalent to passed in type {1}", obj.GetType(), type));
@@ -41,6 +41,8 @@ namespace NGineer.Internal
         {
             return _constructedMembers.Contains(member.Name);
         }
+
+        public bool Counted { get;set; }
 
         public bool RequiresPopulation
         {
@@ -65,6 +67,8 @@ namespace NGineer.Internal
             var existing = _unconstructedMembers.First(p => p.Name == member.Name);
             _constructedMembers.Add(member.Name);
             _unconstructedMembers.Remove(existing);
+            if (_unconstructedMembers.Count == 0)
+                _requiresPopulation = false;
         }
     }
 }

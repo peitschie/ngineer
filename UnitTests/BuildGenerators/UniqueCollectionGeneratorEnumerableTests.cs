@@ -48,8 +48,7 @@ namespace NGineer.UnitTests.BuildGenerators
 		[Test]
 		public void Populate_PopulatesWithCorrectNumberOfEntries()
 		{
-			var entries = new List<string>();
-			Generator.Populate(null, entries, null, BuildSession());
+			var entries = (List<string>)Generator.CreateRecord(typeof(List<string>), null, BuildSession()).Object;
 			Assert.AreEqual(_entries.Length, entries.Count);
 			foreach(var item in _entries)
 			{
@@ -63,12 +62,10 @@ namespace NGineer.UnitTests.BuildGenerators
 		{
 			bool different = false;
 			string lastOrder = null;
-			var entries = new List<string>();
 			var session = BuildSession();
 			for(int i = 0; i < 10; i++)
 			{
-				entries.Clear();
-				Generator.Populate(null, entries, null, session);
+				var entries = (List<string>)Generator.CreateRecord(typeof(List<string>), null, session).Object;
 				Assert.AreEqual(_entries.Length, entries.Count);
 				var current = string.Join(":", entries.ToArray());
 				if(lastOrder != null)
