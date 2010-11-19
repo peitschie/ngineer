@@ -70,8 +70,8 @@
     <Compile Include="BuilderTests\SetMaximumObjectsTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
     <Compile Include="Examples\Recipies.cs" />
-    <Compile Include="UseCases\Car\DemoServiceCallController.cs" />
-    <Compile Include="UseCases\Car\DemoServiceCallControllerTests.cs" />
+    <Compile Include="Examples\UseCases\Car\DemoServiceCallController.cs" />
+    <Compile Include="Examples\UseCases\Car\DemoServiceCallControllerTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
     <Compile Include="BuildGenerators\BoolGeneratorTests.cs" />
     <Compile Include="BuildGenerators\BuilderGeneratorTests.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="BuildGenerators\ListGeneratorTests.cs" />
     <Compile Include="BuildGenerators\GeneratorTestFixture.cs" />
     <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
-    <Compile Include="UseCases\Car\Types.cs" />
+    <Compile Include="Examples\UseCases\Car\Types.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
     <Compile Include="BuilderTests\BuilderTests.cs" />
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />

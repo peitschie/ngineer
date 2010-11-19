@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace NGineer.UnitTests.UseCases.Car
+namespace NGineer.UnitTests.Examples.UseCases.Car
 {
     [TestFixture]
     public class DemoServiceCallControllerTests
