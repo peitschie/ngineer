@@ -1,9 +1,8 @@
 using System;
 using NUnit.Framework;
-using NGineer.BuildGenerators;
 using NGineer.Internal;
 
-namespace NGineer.UnitTests
+namespace NGineer.UnitTests.Examples
 {
 
     public class CustomClass

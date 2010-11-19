@@ -14,6 +14,11 @@ namespace NGineer
             return new ReuseInstancesGenerator<TType>(collection);
         }
 
+        public static IGenerator ReuseOnly<TType>(params TType[] collection)
+        {
+            return new ReuseInstancesGenerator<TType>(collection);
+        }
+
         public static IGenerator Default<TType>()
         {
             return new DefaultConstructorGenerator(typeof (TType));

@@ -26,9 +26,5 @@ namespace NGineer.BuildGenerators
             _memberCounts[key] = lastCount + 1;
             return new ObjectBuildRecord(type, newString, false);
         }
-
-        public void Populate(Type type, object obj, IBuilder builder, BuildSession session)
-        {
-        }
     }
 }
