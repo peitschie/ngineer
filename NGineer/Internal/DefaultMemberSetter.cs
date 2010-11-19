@@ -1,3 +1,4 @@
+using System;
 using NGineer.Utils;
 using System.Reflection;
 
@@ -7,7 +8,14 @@ namespace NGineer.Internal
     {
         public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
         {
-            return !session.ShouldIgnoreUnset(session.CurrentObject.Type);
+            switch (member.MemberType)
+            {
+                case MemberTypes.Property:
+                    var propertyType = member as PropertyInfo;
+                    return propertyType != null && propertyType.GetIndexParameters().Length == 0 && !session.ShouldIgnoreUnset(session.CurrentObject.Type);
+                default:
+                    return !session.ShouldIgnoreUnset(session.CurrentObject.Type);
+            }
         }
 
         public void Set(object obj, IBuilder builder, BuildSession session)
