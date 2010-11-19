@@ -1,6 +1,6 @@
 using System;
 
-namespace NGineer.UnitTests.UseCases.Car
+namespace NGineer.UnitTests.Examples.UseCases.Car
 {
     public class Car
     {

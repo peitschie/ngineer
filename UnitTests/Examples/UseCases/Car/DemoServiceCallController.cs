@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace NGineer.UnitTests.UseCases.Car
+namespace NGineer.UnitTests.Examples.UseCases.Car
 {
     public class DemoServiceCallController
     {
