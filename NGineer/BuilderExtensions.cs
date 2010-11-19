@@ -35,22 +35,47 @@ namespace NGineer
             });
         }
 
-        public static ITypedBuilder<TDictType> SetKey<TDictType, TKey, TElement>(this ITypedBuilder<TDictType> builder, TKey key, TElement value)
+        public static ITypedBuilder<TDictType> AddEntry<TDictType, TKey, TElement>(this ITypedBuilder<TDictType> builder, TKey key, TElement value)
             where TDictType : IDictionary<TKey,TElement>
         {
             return builder.Do(x => x[key] = value);
         }
 
-        public static ITypedBuilder<TType> SetKey<TType, TDictType, TKey, TElement>(this ITypedBuilder<TType> builder,
+        public static ITypedBuilder<TType> AddEntry<TType, TDictType, TKey, TElement>(this ITypedBuilder<TType> builder,
             Expression<Func<TType, TDictType>> expression, TKey key, TElement value)
             where TDictType : IDictionary<TKey, TElement>
         {
             var getter = expression.Compile();
             return builder.Do(x =>
-                {
-                    var dict = (IDictionary<TKey, TElement>)getter(x);
-                    dict[key] = value;
-                });
+            {
+                var dict = (IDictionary<TKey, TElement>)getter(x);
+                dict[key] = value;
+            });
+        }
+
+        public static ITypedBuilder<TList> AddEntry<TList, TElement>(this ITypedBuilder<TList> builder,
+            TElement value)
+            where TList : IList<TElement>
+        {
+            return builder.Do(x =>
+            {
+                var list = (IList<TElement>)x;
+                list.Add(value);
+            });
+        }
+
+
+        public static ITypedBuilder<TType> AddEntry<TType, TList, TElement>(this ITypedBuilder<TType> builder,
+            Expression<Func<TType, TList>> expression,
+            TElement value)
+            where TList : IList<TElement>
+        {
+            var getter = expression.Compile();
+            return builder.Do(x =>
+            {
+                var list = (IList<TElement>)getter(x);
+                list.Add(value);
+            });
         }
     }
 }
