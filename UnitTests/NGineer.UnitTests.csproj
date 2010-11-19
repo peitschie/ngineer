@@ -133,6 +133,7 @@
     <Compile Include="Types\IInterfaceTest.cs" />
     <Compile Include="Types\CombinedClasses.cs" />
     <Compile Include="Types\ClassWithList.cs" />
+    <Compile Include="BuildGenerators\DictionaryGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

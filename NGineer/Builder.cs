@@ -70,6 +70,7 @@ namespace NGineer
         {
             WithGenerator(new DefaultConstructorGenerator());
             WithGenerator(new ObjectGenerator());
+            WithGenerator(new DictionaryGenerator());
             WithGenerator(new ListGenerator());
             WithGenerator(new ArrayGenerator());
             WithGenerator(new NullableTypeGenerator());
