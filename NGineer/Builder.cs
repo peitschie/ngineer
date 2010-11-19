@@ -13,7 +13,7 @@ namespace NGineer
         public static class Defaults
         {
             public const int BuildDepth = 5;
-            public static readonly Range CollectionSize = new Range(10, 20);
+            public static readonly Range CollectionSize = new Range(3, 6);
             public const int MaximumObjects = 5000;
         }
 
