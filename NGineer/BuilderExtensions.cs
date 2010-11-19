@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using NGineer.Internal;
 using NGineer.Utils;
 using System.Reflection;
@@ -32,6 +33,24 @@ namespace NGineer
             return builder.WithGenerator<object>((buildr, session) => {
                 throw new BuilderException(string.Format("{0}: Object type should not be generated", session.ConstructedChainInfo()));
             });
+        }
+
+        public static ITypedBuilder<TDictType> SetKey<TDictType, TKey, TElement>(this ITypedBuilder<TDictType> builder, TKey key, TElement value)
+            where TDictType : IDictionary<TKey,TElement>
+        {
+            return builder.Do(x => x[key] = value);
+        }
+
+        public static ITypedBuilder<TType> SetKey<TType, TDictType, TKey, TElement>(this ITypedBuilder<TType> builder,
+            Expression<Func<TType, TDictType>> expression, TKey key, TElement value)
+            where TDictType : IDictionary<TKey, TElement>
+        {
+            var getter = expression.Compile();
+            return builder.Do(x =>
+                {
+                    var dict = (IDictionary<TKey, TElement>)getter(x);
+                    dict[key] = value;
+                });
         }
     }
 }

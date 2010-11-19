@@ -69,6 +69,7 @@
     <Compile Include="BuilderTests\SetMaximumDepthTests.cs" />
     <Compile Include="BuilderTests\SetMaximumObjectsTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
+    <Compile Include="Examples\BuilderExtensionRecipies.cs" />
     <Compile Include="Examples\Recipies.cs" />
     <Compile Include="Examples\UseCases\Car\DemoServiceCallController.cs" />
     <Compile Include="Examples\UseCases\Car\DemoServiceCallControllerTests.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="BuildSequences\ConsecutiveIntSequenceControllerTests.cs" />
     <Compile Include="Examples\UseCases\Car\Types.cs" />
     <Compile Include="Internal\DefaultMemberSetterTests.cs" />
+    <Compile Include="Types\ClassWithDictionary.cs" />
     <Compile Include="Utils\MemberExpressionsTests.cs" />
     <Compile Include="BuilderTests\BuilderTests.cs" />
     <Compile Include="BuilderTests\AfterConstructionOfTests.cs" />
