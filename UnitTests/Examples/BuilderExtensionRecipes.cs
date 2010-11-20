@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace NGineer.UnitTests.Examples
 {
     [TestFixture]
-    public class BuilderExtensionRecipies
+    public class BuilderExtensionRecipes
     {
         private IBuilder _builder;
 

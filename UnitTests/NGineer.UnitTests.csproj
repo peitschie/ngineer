@@ -69,8 +69,6 @@
     <Compile Include="BuilderTests\SetMaximumDepthTests.cs" />
     <Compile Include="BuilderTests\SetMaximumObjectsTests.cs" />
     <Compile Include="BuildGenerators\SimpleMemberNameStringGeneratorTests.cs" />
-    <Compile Include="Examples\BuilderExtensionRecipies.cs" />
-    <Compile Include="Examples\Recipies.cs" />
     <Compile Include="Examples\UseCases\Car\DemoServiceCallController.cs" />
     <Compile Include="Examples\UseCases\Car\DemoServiceCallControllerTests.cs" />
     <Compile Include="ExtendedBuilderBehaviour.cs" />
@@ -134,6 +132,8 @@
     <Compile Include="Types\CombinedClasses.cs" />
     <Compile Include="Types\ClassWithList.cs" />
     <Compile Include="BuildGenerators\DictionaryGeneratorTests.cs" />
+    <Compile Include="Examples\BuilderExtensionRecipes.cs" />
+    <Compile Include="Examples\Recipes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

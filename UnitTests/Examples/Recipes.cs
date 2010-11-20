@@ -6,7 +6,7 @@ using System.Linq;
 namespace NGineer.UnitTests.Examples
 {
     [TestFixture]
-    public class Recipies
+    public class Recipes
     {
         private IBuilder _builder;
 
