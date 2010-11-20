@@ -7,11 +7,7 @@ namespace NGineer
     public interface ITypedBuilder<TType> : IBuilder
     {
         /// <summary>
-        /// Registers a post-constructor member setter to fill out a specific property or field.
-        /// The builder's parent setters are called prior to calling the current setters.
-        ///
-        /// Once a property or field has been set, it will not get populated in the next stage.  Post-population
-        /// steps will still be run on this object however.
+        /// Register a member setter for a specific property or field
         /// </summary>
         /// <param name="setter">
         /// A <see cref="IMemberSetter"/>
@@ -20,11 +16,78 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, IBuilder, BuildSession, TReturnType> value);
+
+        /// <summary>
+        /// Register a member setter for a specific property or field
+        /// </summary>
+        /// <param name="expression">
+        /// A <see cref="Expression<Func<TType, TReturnType>>"/>
+        /// </param>
+        /// <param name="value">
+        /// A <see cref="TReturnType"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
         ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, TReturnType value);
+
+        /// <summary>
+        /// Register a member setter for a specific property or field
+        /// </summary>
+        /// <param name="expression">
+        /// A <see cref="Expression<Func<TType, TReturnType>>"/>
+        /// </param>
+        /// <param name="value">
+        /// A <see cref="Func<TReturnType>"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
 		ITypedBuilder<TType> Set<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TReturnType> value);
-        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<BuildSession, TReturnType> value);
-        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, BuildSession, TReturnType> value);
+
+        /// <summary>
+        /// Register a member setter for a specific property or field
+        /// </summary>
+        /// <param name="expression">
+        /// A <see cref="Expression<Func<TType, System.Object>>"/>
+        /// </param>
+        /// <param name="generator">
+        /// A <see cref="IGenerator"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
         ITypedBuilder<TType> Set(Expression<Func<TType, object>> expression, IGenerator generator);
+
+        /// <summary>
+        /// A delayed setter that is executed after the object the has been constructed
+        /// This is useful when the the object depends on other members being constructed first
+        /// </summary>
+        /// <param name="expression">
+        /// A <see cref="Expression<Func<TType, TReturnType>>"/>
+        /// </param>
+        /// <param name="value">
+        /// A <see cref="Func<BuildSession, TReturnType>"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
+        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<BuildSession, TReturnType> value);
+
+        /// <summary>
+        /// A delayed setter that is executed after the object the has been constructed
+        /// This is useful when the the object depends on other members being constructed first
+        /// </summary>
+        /// <param name="expression">
+        /// A <see cref="Expression<Func<TType, TReturnType>>"/>
+        /// </param>
+        /// <param name="value">
+        /// A <see cref="Func<TType, BuildSession, TReturnType>"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
+        ITypedBuilder<TType> SetAfterBuild<TReturnType>(Expression<Func<TType, TReturnType>> expression, Func<TType, BuildSession, TReturnType> value);
 
         ITypedBuilder<TType> Ignore(Expression<Func<TType, object>> expression);
         ITypedBuilder<TType> Ignore<TReturnType>(Expression<Func<TType, TReturnType>> expression);
@@ -32,8 +95,7 @@ namespace NGineer
         ITypedBuilder<TType> IgnoreAll();
 
         /// <summary>
-        /// Registers a post-population member that is called after the object has been constructed and populated
-        /// by previous construction setters and object generators.
+        /// Registers an action that is called after an object of this type is constructed
         /// </summary>
         /// <param name="setter">
         /// A <see cref="ISetter"/>
@@ -42,7 +104,16 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         ITypedBuilder<TType> Do(Action<TType> setter);
-        ITypedBuilder<TType> Do(Action<TType, IBuilder, BuildSession> setter);
 
+        /// <summary>
+        /// Registers an action that is called after an object of this type is constructed
+        /// </summary>
+        /// <param name="setter">
+        /// A <see cref="Action<TType, IBuilder, BuildSession>"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="ITypedBuilder<TType>"/>
+        /// </returns>
+        ITypedBuilder<TType> Do(Action<TType, IBuilder, BuildSession> setter);
     }
 }
