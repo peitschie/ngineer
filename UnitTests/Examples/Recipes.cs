@@ -65,11 +65,15 @@ namespace NGineer.UnitTests.Examples
         [Test]
         public void Build_GetAllConstructedInstances()
         {
+            // The Distinct clause is required as an object may be
+            // reused if the maximum number of instances of an object type
+            // is reached
             var instances = _builder
                 .For<StringLists>()
                     .SetAfterBuild(x => x.AllInstances, (builder, session) => session.ConstructedNodes
                                                                 .Select(o => o.Object)
-                                                                .OfType<string>().ToList())
+                                                                .OfType<string>()
+                                                                .Distinct().ToList())
                .Build<StringLists>();
 
             foreach (var list in instances.List1)
