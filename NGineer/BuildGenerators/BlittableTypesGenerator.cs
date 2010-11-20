@@ -61,11 +61,11 @@ namespace NGineer.BuildGenerators
                 }
                 Converters.Add(type, method);
             }
-            // call our methods to shut up the compilers!
+            // call our methods to shut up the compilers
             NonBitConverterMethod_Byte(new byte[1], 0);
             NonBitConverterMethod_SByte(new byte[1], 0);
-            Converters.Add(typeof(byte), typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_Byte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
-            Converters.Add(typeof(sbyte), typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_SByte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
+            Converters.Add(NonBitConverterTypes[0], typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_SByte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
+            Converters.Add(NonBitConverterTypes[1], typeof(BlittableTypesGenerator).GetMethod("NonBitConverterMethod_Byte", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy));
         }
         #endregion
 
