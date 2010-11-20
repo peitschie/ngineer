@@ -36,6 +36,11 @@ namespace NGineer
         }
 
         #region ITypedBuilder<TTarget> implementation
+        public TTarget Build()
+        {
+            return _parent.Build<TTarget>();
+        }
+
         public ITypedBuilder<TTarget> Set<TReturnType>(Expression<Func<TTarget, TReturnType>> expression, Func<TTarget, IBuilder, BuildSession, TReturnType> value)
         {
             if(expression == null)

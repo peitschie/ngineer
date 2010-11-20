@@ -7,6 +7,14 @@ namespace NGineer
     public interface ITypedBuilder<TType> : IBuilder
     {
         /// <summary>
+        /// Build an instance of the TypedBuilder type
+        /// </summary>
+        /// <returns>
+        /// A <see cref="TType"/>
+        /// </returns>
+        TType Build();
+
+        /// <summary>
         /// Register a member setter for a specific property or field
         /// </summary>
         /// <param name="setter">
