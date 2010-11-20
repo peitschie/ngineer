@@ -1,5 +1,7 @@
 using NGineer.UnitTests.Types;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NGineer.UnitTests.Examples
 {
@@ -47,6 +49,40 @@ namespace NGineer.UnitTests.Examples
                 Assert.IsTrue(ReferenceEquals(instance.Instance, existingEntity1) 
                     || ReferenceEquals(instance.Instance, existingEntity2) 
                     || ReferenceEquals(instance.Instance, existingEntity3));
+            }
+        }
+        #endregion
+
+        #region Build_GetAllConstructedInstances
+        public class StringLists
+        {
+            public IList<string> List1;
+            public string[] List2;
+            public IEnumerable<string> List3;
+            public IList<string> AllInstances;
+        }
+
+        [Test]
+        public void Build_GetAllConstructedInstances()
+        {
+            var instances = _builder
+                .For<StringLists>()
+                    .SetAfterBuild(x => x.AllInstances, (builder, session) => session.ConstructedNodes
+                                                                .Select(o => o.Object)
+                                                                .OfType<string>().ToList())
+               .Build<StringLists>();
+
+            foreach (var list in instances.List1)
+            {
+                Assert.IsTrue(instances.AllInstances.Contains(list));
+            }
+            foreach (var list in instances.List2)
+            {
+                Assert.IsTrue(instances.AllInstances.Contains(list));
+            }
+            foreach (var list in instances.List3)
+            {
+                Assert.IsTrue(instances.AllInstances.Contains(list));
             }
         }
         #endregion
