@@ -1,0 +1,7 @@
+<PartCoverSettings>
+  <Target>C:\Program Files\NUnit 2.5.7\bin\net-2.0\nunit-console.exe</Target>
+  <TargetWorkDir>C:\Source\Bazaar\ngineer\trunk\Output</TargetWorkDir>
+  <TargetArgs>NGineer.UnitTests.dll</TargetArgs>
+  <Rule>+[NGineer]*</Rule>
+  <Rule>-[NGineer.Tests]*</Rule>
+</PartCoverSettings>
