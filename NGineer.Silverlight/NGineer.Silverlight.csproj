@@ -136,6 +136,9 @@
     <Compile Include="..\NGineer\BuildGenerators\UniqueCollectionGeneratorMember.cs">
       <Link>BuildGenerators\UniqueCollectionGeneratorMember.cs</Link>
     </Compile>
+    <Compile Include="..\NGineer\BuildHelpers.cs">
+      <Link>BuildHelpers.cs</Link>
+    </Compile>
     <Compile Include="..\NGineer\BuildSequences\ConsecutiveSequenceController.cs">
       <Link>BuildSequences\ConsecutiveSequenceController.cs</Link>
     </Compile>

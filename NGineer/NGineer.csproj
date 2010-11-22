@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -70,6 +70,7 @@
     <Compile Include="BuildGenerators\NullableTypeGenerator.cs" />
     <Compile Include="BuildGenerators\DateTimeGenerator.cs" />
     <Compile Include="BuildGenerators\EnumGenerator.cs" />
+    <Compile Include="BuildHelpers.cs" />
     <Compile Include="BuildSequences\ConsecutiveSequenceController.cs" />
     <Compile Include="BuildSequences\IntSequenceGenerator.cs" />
     <Compile Include="BuildSequences\ISequenceGenerator.cs" />
