@@ -79,13 +79,25 @@ namespace NGineer
         }
 
 
-        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, int>> property, int startIndex = 0)
+        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, int>> property)
+        {
+            return builder.SetConsecutiveInt(property, 0);
+        }
+
+
+        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, int>> property, int startIndex)
         {
             return builder.Set(property, (obj, buildr, session) => startIndex++);
         }
 
 
-        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, string>> property, int startIndex = 0)
+        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, string>> property)
+        {
+            return builder.SetConsecutiveInt(property, 0);
+        }
+
+
+        public static ITypedBuilder<TObj> SetConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, string>> property, int startIndex)
         {
             return builder.Set(property, (obj, buildr, session) => startIndex++.ToString());
         }
@@ -94,7 +106,7 @@ namespace NGineer
         public static ITypedBuilder<TObj> SetSiblingConsecutiveInt<TObj>(this ITypedBuilder<TObj> builder, Expression<Func<TObj, int>> property)
         {
             var sequence = Sequences.SiblingConsecutiveInt();
-            return builder.Set(property, (o, b, s) => sequence.Next(o, b, s));
+            return builder.Set<int>(property, (o, b, s) => sequence.Next(o, b, s));
         }
 
 
