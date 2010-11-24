@@ -1046,7 +1046,7 @@ public void Build_ReusingExistingInstancesOnly()
 }
 &lt;/code&gt;</pre>
 </div>
-<div title="Roadmap" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005131300" modified="201007021011" changecount="8">
+<div title="Roadmap" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005131300" modified="201011241102" changecount="9">
 <pre>!!Future releases
 * Allow build depths to be set on a per-type basis (e.g., limit build depth to 0 below un-interesting parts of the test tree)
 * Allow more natural setter expressions for AfterConstructionOf members.  Need to parse the expression tree to get out the details for this
@@ -1058,6 +1058,12 @@ public void Build_ReusingExistingInstancesOnly()
 ** Generate API documentation as part of build
 ** Prevent setting of multi-level member expressions: e.g. c.Object.Object1
 * Improve determining of collection sizes to attempt to get the closest match rather than the first match
+* Ability to generate permutations of a given type
+* Integration with xml schema to create &quot;valid&quot; objects
+* Speed improvements for large sets
+* Better session management between disconnected builders
+* Better control over what parts of a given tree get populated
+* Interactive object builders for generating fixed data sets
 !!Features for 0.1
 * Full support for instance re-use
 * Full support for list and array creation
