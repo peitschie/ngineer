@@ -147,6 +147,12 @@ namespace NGineer
             return this;
         }
 
+        public ITypedBuilder<TTarget> SetNumberOfInstances(int min, int max)
+        {
+            _parent.SetNumberOfInstances<TTarget>(min, max);
+            return this;
+        }
+
         #endregion
 
         #region IBuilder implementation

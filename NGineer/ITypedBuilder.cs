@@ -125,6 +125,23 @@ namespace NGineer
         ITypedBuilder<TType> Do(Action<TType, IBuilder, BuildSession> setter);
 
         /// <summary>
+        /// Specify the number of items to put a list or collection of a specific type.
+        /// </summary>
+        /// <param name="type">
+        /// A <see cref="Type"/>
+        /// </param>
+        /// <param name="minimum">
+        /// A <see cref="System.Int32"/>
+        /// </param>
+        /// <param name="maximum">
+        /// A <see cref="System.Int32"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        ITypedBuilder<TType> SetCollectionSize(int min, int max);
+
+        /// <summary>
         /// Specifies the maximum number of unique instances of this type to create before re-using existing instances
         /// </summary>
         /// <param name="minimum">
@@ -136,6 +153,6 @@ namespace NGineer
         /// <returns>
         /// A <see cref="IBuilder"/>
         /// </returns>
-        ITypedBuilder<TType> SetCollectionSize(int min, int max);
+        ITypedBuilder<TType> SetNumberOfInstances(int min, int max);
     }
 }
