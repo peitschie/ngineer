@@ -153,6 +153,18 @@ namespace NGineer
             return this;
         }
 
+        public ITypedBuilder<TTarget> Return(Func<IBuilder, BuildSession, TTarget> generator)
+        {
+            _parent.WithGenerator(generator);
+            return this;
+        }
+
+        public ITypedBuilder<TTarget> Return(Func<TTarget> generator)
+        {
+            _parent.WithGenerator(generator);
+            return this;
+        }
+
         #endregion
 
         #region IBuilder implementation

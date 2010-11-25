@@ -154,5 +154,29 @@ namespace NGineer
         /// A <see cref="IBuilder"/>
         /// </returns>
         ITypedBuilder<TType> SetNumberOfInstances(int min, int max);
+
+        /// <summary>
+        /// Adds a custom generator to use for creating new objects
+        /// The most recently injected generator is used first
+        /// </summary>
+        /// <param name="generator">
+        /// A <see cref="IGenerator"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        ITypedBuilder<TType> Return(Func<IBuilder, BuildSession, TType> generator);
+
+        /// <summary>
+        /// Adds a custom generator to use for creating new objects
+        /// The most recently injected generator is used first
+        /// </summary>
+        /// <param name="generator">
+        /// A <see cref="IGenerator"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        ITypedBuilder<TType> Return(Func<TType> generator);
     }
 }
