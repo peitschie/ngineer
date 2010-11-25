@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NGineer.BuildGenerators;
 using NGineer.UnitTests.Types;
+using NGineer.Exceptions;
 
 
 namespace NGineer.UnitTests.BuilderTests
@@ -331,5 +332,25 @@ namespace NGineer.UnitTests.BuilderTests
 			Assert.AreNotEqual(10, combinedClasses.Property2.InterfaceProperty);
 			Assert.AreNotEqual(10, combinedClasses.Property3.InterfaceProperty);
 		}
+
+        [Test]
+        public void Set_ReadonlyMembers_ThrowsException_lp681214()
+        {
+            var typedBuilder = new Builder().For<SingleReadonlyClass>();
+            Assert.Throws<BuilderException>(() => typedBuilder.Set(x => x.GetOnlyProperty, 10));
+            Assert.Throws<BuilderException>(() => typedBuilder.Set(x => x.ReadonlyField, 10));
+
+            var constantMember = typeof(SingleReadonlyClass).GetMember("ConstantField").First();
+            Assert.Throws<BuilderException>(() => typedBuilder.AfterConstructionOf(
+                                                    BuilderUtils.GetMemberSetter<object, int>(constantMember, null, false)));
+        }
+
+        public void Set_PrivateMember_DoesntThrowException()
+        {
+            var privateMember = typeof(SingleReadonlyClass).GetMember("PrivateField",
+                                    BindingFlags.NonPublic | BindingFlags.Instance).First();
+            Assert.Throws<BuilderException>(() => new Builder().AfterConstructionOf(
+                                                    BuilderUtils.GetMemberSetter<object, int>(privateMember, null, false)));
+        }
 	}
 }

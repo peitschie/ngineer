@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using NGineer.Utils;
+using NGineer.Exceptions;
 namespace NGineer.Internal
 {
 	public class AbstractMemberSetter
@@ -14,6 +15,8 @@ namespace NGineer.Internal
 		{
 			if (member == null)
 				throw new ArgumentNullException("member");
+            if (!member.CanWrite())
+                throw new BuilderException(string.Format("{0}: member is not writable", member));
 			Member = member;
 			MemberReturnType = member.ReturnType();
 			DeclaringType = declaringType;

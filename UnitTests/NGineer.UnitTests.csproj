@@ -134,6 +134,7 @@
     <Compile Include="BuildGenerators\DictionaryGeneratorTests.cs" />
     <Compile Include="Examples\BuilderExtensionRecipes.cs" />
     <Compile Include="Examples\Recipes.cs" />
+    <Compile Include="Types\SingleReadonlyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
