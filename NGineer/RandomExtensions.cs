@@ -35,10 +35,27 @@ namespace NGineer
 				entries.RemoveAt(nextIndex);
 			}	
 		}
-		
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="random">
+        /// A <see cref="Random"/>
+        /// </param>
+        /// <param name="min">
+        /// A <see cref="System.Int32"/>
+        /// Inclusive lower bound of Range
+        /// </param>
+        /// <param name="max">
+        /// A <see cref="System.Int32"/>
+        /// Inclusive upper bound of Range
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Int32"/>
+        /// </returns>
 		public static int NextInRange(this Random random, int min, int max)
 		{
-			return random.Next(max - min) + min;
+			return random.Next(max - min + 1) + min;
 		}
 		
 		public static int NextInRange(this Random random, Range range)
