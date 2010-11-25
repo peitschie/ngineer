@@ -41,7 +41,7 @@ namespace NGineer
         public static IBuilder ThrowWhenGeneratingObjectType(this IBuilder builder)
         {
             return builder.WithGenerator<object>((buildr, session) => {
-                throw new BuilderException("Object type should not be generated", session);
+                throw new BuilderException("Object type should not be generated");
             });
         }
 

@@ -120,7 +120,7 @@ namespace NGineer
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
             if(CurrentObject.Parent == null)
-                throw new BuilderException("Unable to pop beyond the root element of the built object tree", this);
+                throw new BuilderException("Unable to pop beyond the root element of the built object tree");
             CurrentObject = CurrentObject.Parent;
         }
 
@@ -170,7 +170,7 @@ namespace NGineer
                 {
                     if (_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
                     {
-                        throw new DepthExceededException(_builder.BuildDepth, this);
+                        throw new DepthExceededException(_builder.BuildDepth);
                     }
                     return type.IsValueType ? Activator.CreateInstance(type) : null;
                 }

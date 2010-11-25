@@ -21,8 +21,7 @@ namespace NGineer.UnitTests.BuilderTests
             _builder.ThrowWhenGeneratingObjectType();
             var wrappedException = Assert.Throws<WrappedBuilderException>(() => _builder.Build<ClassWithObject>());
             Assert.IsInstanceOf<BuilderException>(wrappedException.InnerException);
-            var exception = (BuilderException)wrappedException.InnerException;
-            Assert.IsTrue(exception.Message.Contains("ObjectMember"));
+            Assert.IsTrue(wrappedException.Message.Contains("ObjectMember"), wrappedException.Message);
         }
 
         [Test]

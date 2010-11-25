@@ -7,8 +7,8 @@ namespace NGineer.Exceptions
     {
         private readonly int _depth;
 
-        public DepthExceededException(int depth, BuildSession session)
-            : base(string.Format("Maximum build depth of {0} was exceeded", depth), session)
+        public DepthExceededException(int depth)
+            : base(string.Format("Maximum build depth of {0} was exceeded", depth))
         {
             _depth = depth;
         }

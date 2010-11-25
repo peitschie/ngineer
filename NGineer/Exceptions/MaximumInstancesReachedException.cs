@@ -7,14 +7,16 @@ namespace NGineer.Exceptions
 {
     public class MaximumInstancesReachedException : BuilderException
     {
+        private readonly BuildSession _session;
         private readonly int _maxInstances;
         private List<BuilderStatEntry> _stats;
         private string _statsTop10;
 
         public MaximumInstancesReachedException(int maxInstances, BuildSession session)
             : base(string.Format("Maximum number of new objects was exceeded at {0} objects: {1}", maxInstances,
-            GenerateSummaryString(GenerateStats(session))), session)
+            GenerateSummaryString(GenerateStats(session))))
         {
+            _session = session;
             _maxInstances = maxInstances;
         }
 
@@ -25,6 +27,8 @@ namespace NGineer.Exceptions
                 return _statsTop10 ?? (_statsTop10 = GenerateSummaryString(Statistics));
             }
         }
+
+        public BuildSession Session { get { return _session; } }
 
         public IList<BuilderStatEntry> Statistics
         {
