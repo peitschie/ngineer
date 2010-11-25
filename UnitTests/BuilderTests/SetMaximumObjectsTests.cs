@@ -16,8 +16,11 @@ namespace NGineer.UnitTests.BuilderTests
             var builder = new Builder(1)
                 .SetCollectionSize<TestClass2>(Builder.Defaults.MaximumObjects + 1, Builder.Defaults.MaximumObjects + 1)
                 .Sealed();
-            var exception = Assert.Throws<MaximumInstancesReachedException>(() => builder.Build<TestClass2[]>());
-            Assert.AreEqual(string.Format("Maximum number of new objects was exceeded at {0} objects: TestClass2(5001)", Builder.Defaults.MaximumObjects), exception.Message);
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => builder.Build<TestClass2[]>());
+            Assert.IsInstanceOf<MaximumInstancesReachedException>(wrappedException.InnerException);
+            var exception = (MaximumInstancesReachedException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Contains(string.Format("Maximum number of new objects was exceeded at {0} objects: TestClass2(5001)", Builder.Defaults.MaximumObjects)),
+                          exception.Message);
             Assert.AreEqual(2, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(TestClass2), Builder.Defaults.MaximumObjects+1), exception.Statistics[index++]);
@@ -31,8 +34,11 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetCollectionSize<TestClass2>(10, 10)
                 .SetMaximumObjects(8)
                 .Sealed();
-            var exception = Assert.Throws<MaximumInstancesReachedException>(() => builder.Build<TestClass2[]>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 8 objects: TestClass2(9)", exception.Message);
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => builder.Build<TestClass2[]>());
+            Assert.IsInstanceOf<MaximumInstancesReachedException>(wrappedException.InnerException);
+            var exception = (MaximumInstancesReachedException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Contains("Maximum number of new objects was exceeded at 8 objects: TestClass2(9)"),
+                          exception.Message);
             Assert.AreEqual(2, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(TestClass2), 9), exception.Statistics[index++]);
@@ -68,8 +74,11 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetMaximumObjects(3)
                 .SetNumberOfInstances<RecursiveClass>(4, 4)
                 .Sealed();
-            var exception = Assert.Throws<MaximumInstancesReachedException>(() => builder.Build<RecursiveClass>());
-            Assert.AreEqual("Maximum number of new objects was exceeded at 3 objects: RecursiveClass(4)", exception.Message);
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => builder.Build<RecursiveClass>());
+            Assert.IsInstanceOf<MaximumInstancesReachedException>(wrappedException.InnerException);
+            var exception = (MaximumInstancesReachedException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Contains("Maximum number of new objects was exceeded at 3 objects: RecursiveClass(4)"),
+                            exception.Message);
             Assert.AreEqual(2, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(RecursiveClass), 4), exception.Statistics[index++]);
@@ -83,9 +92,12 @@ namespace NGineer.UnitTests.BuilderTests
                 .SetDefaultCollectionSize(10, 10)
                 .SetMaximumObjects(4)
                 .Sealed();
-        	var exception = Assert.Throws<MaximumInstancesReachedException>(() => builder.Build<SimpleClass[]>());
-        	Assert.AreEqual("Maximum number of new objects was exceeded at 4 objects: TestClass2(3)SimpleClass(2)", 
-				exception.Message.Replace("\n","").Replace("\r",""));
+        	var wrappedException = Assert.Throws<WrappedBuilderException>(() => builder.Build<SimpleClass[]>());
+            Assert.IsInstanceOf<MaximumInstancesReachedException>(wrappedException.InnerException);
+            var exception = (MaximumInstancesReachedException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Replace("\n","").Replace("\r","")
+                          .Contains("Maximum number of new objects was exceeded at 4 objects: TestClass2(3)SimpleClass(2)"),
+                            exception.Message);
             Assert.AreEqual(4, exception.Statistics.Count);
             int index = 0;
             Assert.AreEqual(new BuilderStatEntry(typeof(string), 5), exception.Statistics[index++]);

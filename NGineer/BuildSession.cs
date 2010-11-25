@@ -120,7 +120,7 @@ namespace NGineer
             if(IsDisposed)
                 throw new ObjectDisposedException("BuildSession");
             if(CurrentObject.Parent == null)
-                throw new BuilderException("Unable to pop beyond the root element of the built object tree");
+                throw new BuilderException("Unable to pop beyond the root element of the built object tree", this);
             CurrentObject = CurrentObject.Parent;
         }
 
@@ -162,29 +162,38 @@ namespace NGineer
 
         public object Build(Type type)
         {
-            if (IsDisposed)
-                throw new ObjectDisposedException("BuildSession");
-            if (BuildDepth == _builder.BuildDepth)
+            try
             {
-                if (_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
+                if (IsDisposed)
+                    throw new ObjectDisposedException("BuildSession");
+                if (BuildDepth == _builder.BuildDepth)
                 {
-                    throw new DepthExceededException(_builder.BuildDepth, this);
+                    if (_builder.IsBuildDepthUnset || _builder.ThrowWhenBuildDepthReached)
+                    {
+                        throw new DepthExceededException(_builder.BuildDepth, this);
+                    }
+                    return type.IsValueType ? Activator.CreateInstance(type) : null;
                 }
-                return type.IsValueType ? Activator.CreateInstance(type) : null;
+                if (ConstructedCount > _builder.MaximumObjects)
+                {
+                    throw new MaximumInstancesReachedException(_builder.MaximumObjects, this);
+                }
+    
+                var generator = _builder.GetGenerator(type, this);
+                var obj = generator.CreateRecord(type, Builder, this);
+                using(PushObject(obj))
+                {
+                    DoMemberSetters();
+                    DoProcessors(type);
+                }
+                return obj.Object;
             }
-            if (ConstructedCount > _builder.MaximumObjects)
+            catch(Exception e)
             {
-                throw new MaximumInstancesReachedException(_builder.MaximumObjects, this);
+                if(e is WrappedBuilderException)
+                    throw;
+                throw new WrappedBuilderException(this, e);
             }
-
-            var generator = _builder.GetGenerator(type, this);
-            var obj = generator.CreateRecord(type, Builder, this);
-            using(PushObject(obj))
-            {
-                DoMemberSetters();
-                DoProcessors(type);
-            }
-            return obj.Object;
         }
 
         private void DoMemberSetters()

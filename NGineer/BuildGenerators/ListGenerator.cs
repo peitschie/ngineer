@@ -22,7 +22,7 @@ namespace NGineer.BuildGenerators
             var constructor = constructorType.GetConstructor(Type.EmptyTypes);
             if (constructor == null)
             {
-                throw new BuilderException(string.Format("Unable to construct {0} as no default constructor was found", type));
+                throw new BuilderException(string.Format("Unable to construct {0} as no default constructor was found", type), session);
             }
 
             var list = (IList)constructor.Invoke(new object[0]);

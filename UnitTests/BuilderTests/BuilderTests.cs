@@ -79,7 +79,8 @@ namespace NGineer.UnitTests.BuilderTests
 							.For<RecursiveClass>().Do(s1 => {})
 							.Build<RecursiveClass>();
 				});
-			Assert.Throws<BuilderSealedException>(() => newClass.Build<RecursiveClass>());
+			var wrappedException = Assert.Throws<WrappedBuilderException>(() => newClass.Build<RecursiveClass>());
+            Assert.IsInstanceOf<BuilderSealedException>(wrappedException.InnerException);
 		}
 
         [Test]

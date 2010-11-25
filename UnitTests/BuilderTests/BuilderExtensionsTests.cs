@@ -19,7 +19,9 @@ namespace NGineer.UnitTests.BuilderTests
         public void ThrowWhenGeneratingObjectType_ThrowsIfObjectIsConstructed()
         {
             _builder.ThrowWhenGeneratingObjectType();
-            var exception = Assert.Throws<BuilderException>(() => _builder.Build<ClassWithObject>());
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => _builder.Build<ClassWithObject>());
+            Assert.IsInstanceOf<BuilderException>(wrappedException.InnerException);
+            var exception = (BuilderException)wrappedException.InnerException;
             Assert.IsTrue(exception.Message.Contains("ObjectMember"));
         }
 

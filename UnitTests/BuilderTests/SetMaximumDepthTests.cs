@@ -45,18 +45,24 @@ namespace NGineer.UnitTests.BuilderTests
         [Test]
         public void DefaultValue_ThrowsExceptionWhenReached()
         {
-            var exception = Assert.Throws<DepthExceededException>(() => new Builder(1).Build<RecursiveClass>());
-            Assert.AreEqual(string.Format("Maximum build depth of 5 was exceeded: {0}", CreateString(5)), exception.Message);
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => new Builder(1).Build<RecursiveClass>());
+            Assert.IsInstanceOf<DepthExceededException>(wrappedException.InnerException);
+            var exception = (DepthExceededException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Contains("Maximum build depth of 5 was exceeded"),
+                          exception.Message);
         }
 
         [Test]
         public void SetMaximumDepth_ManuallySet_CanThrowExceptionWhenReached()
         {
-            var exception = Assert.Throws<DepthExceededException>(() => new Builder(1)
+            var wrappedException = Assert.Throws<WrappedBuilderException>(() => new Builder(1)
                 .SetMaximumDepth(10)
                 .ThrowsWhenMaximumDepthReached()
                 .Build<RecursiveClass>());
-            Assert.AreEqual(string.Format("Maximum build depth of 10 was exceeded: {0}", CreateString(10)), exception.Message);
+            Assert.IsInstanceOf<DepthExceededException>(wrappedException.InnerException);
+            var exception = (DepthExceededException)wrappedException.InnerException;
+            Assert.IsTrue(exception.Message.Contains("Maximum build depth of 10 was exceeded"),
+                          exception.Message);
         }
 
         [Test]
@@ -184,20 +190,6 @@ namespace NGineer.UnitTests.BuilderTests
             {
                 Assert.IsNotNull(entry);
             }
-        }
-
-        private static string CreateString(int count)
-        {
-            var type = typeof (RecursiveClass);
-            var builder = new StringBuilder();
-            builder.Append(type.Name + " RecursiveReference");
-            for (int i = 0; i < count-1; i++)
-            {
-                builder.Insert(0, "->");
-                builder.Insert(0, type.Name + " RecursiveReference");
-            }
-            builder.Append("->Int32 IntProperty");
-            return builder.ToString();
         }
     }
 }
