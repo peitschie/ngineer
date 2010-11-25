@@ -123,5 +123,19 @@ namespace NGineer
         /// A <see cref="ITypedBuilder<TType>"/>
         /// </returns>
         ITypedBuilder<TType> Do(Action<TType, IBuilder, BuildSession> setter);
+
+        /// <summary>
+        /// Specifies the maximum number of unique instances of this type to create before re-using existing instances
+        /// </summary>
+        /// <param name="minimum">
+        /// A <see cref="System.Int32"/>
+        /// </param>
+        /// <param name="maximum">
+        /// A <see cref="System.Int32"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBuilder"/>
+        /// </returns>
+        ITypedBuilder<TType> SetCollectionSize(int min, int max);
     }
 }

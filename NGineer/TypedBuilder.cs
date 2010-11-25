@@ -141,6 +141,12 @@ namespace NGineer
             return this;
         }
 
+        public ITypedBuilder<TTarget> SetCollectionSize(int min, int max)
+        {
+            _parent.SetCollectionSize<TTarget>(min, max);
+            return this;
+        }
+
         #endregion
 
         #region IBuilder implementation

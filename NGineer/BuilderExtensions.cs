@@ -210,12 +210,6 @@ namespace NGineer
             return builder.Set<int>(property, (o, b, s) => sequence.Next(o, b, s));
         }
 
-
-        public static ITypedBuilder<TObj> SetCollectionSize<TObj>(this ITypedBuilder<TObj> builder, int min, int max)
-        {
-            return builder.SetCollectionSize<TObj>(min, max).For<TObj>();
-        }
-
         /// <summary>
         /// Populate a member using the sessioned builder
         /// This is intended to allow easy restoring after ignoring all members on a given type
