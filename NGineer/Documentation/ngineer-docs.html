@@ -977,7 +977,7 @@ merge(config.optionsDesc,{
 */
 //}}}</pre>
 </div>
-<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201006031009" changecount="2">
+<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201011260826" changecount="3">
 <pre>&lt;code c#&gt;
 public class CustomClass
 {
@@ -1003,22 +1003,15 @@ public class CustomClassGenerator : IGenerator
 
     // Perform any custom creation actions required before returning a
     // newly constructed object
-    public object Create (Type type, IBuilder builder, BuildSession session)
+    public ObjectBuildRecord CreateRecord(Type type, IBuilder builder, BuildSession session)
     {
-        return new CustomClass (session.Random.Next (), &quot;Demo Generator&quot;);
-    }
-
-    // Perform initializing of non-constructor related properties
-    // on the object after external setters have been called
-    public void Populate (Type type, object obj, IBuilder builder, BuildSession session)
-    {
+        return new ObjectBuildRecord(type, new CustomClass (session.Random.Next (), &quot;Demo Generator&quot;), false);
     }
 }
 
 // Register a new generator to handle creating the class with no default constructor
-var customClass = new Builder (1)
-    .WithGenerator (new CustomClassGenerator ())
-    .Build&lt;CustomClass&gt; ();
+var customClass = new Builder (1).WithGenerator (new CustomClassGenerator ()).Build&lt;CustomClass&gt; ();
+Assert.AreEqual(&quot;Demo Generator&quot;, customClass.Name);
 &lt;/code&gt;</pre>
 </div>
 <div title="Reuse existing instances for a given type" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011200456" modified="201011200457" changecount="3">
