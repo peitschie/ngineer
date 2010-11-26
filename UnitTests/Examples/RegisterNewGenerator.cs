@@ -42,7 +42,9 @@ namespace NGineer.UnitTests.Examples
         public void Do ()
         {
             // Register a new generator to handle creating the class with no default constructor
-            var customClass = new Builder (1).WithGenerator (new CustomClassGenerator ()).Build<CustomClass> ();
+            var customClass = new Builder()
+                .WithGenerator (new CustomClassGenerator())
+                .Build<CustomClass>();
             Assert.AreEqual("Demo Generator", customClass.Name);
         }
     }

@@ -756,7 +756,7 @@ var simpleClass = new Builder(1)
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
 * [[Examples]]</pre>
 </div>
-<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011200515" changecount="11">
+<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260827" changecount="12">
 <pre>!!Introduction
 Introductory articles explaining some very basic ~NGineer concepts and showing a few short examples to whet the appetite
 * [[Diving In]]
@@ -776,7 +776,7 @@ Short code snippets showing how to use various ~NGineer extensions shipped with 
 !!Extending ~NGineer
 Most core ~NGineer behaviour is implemented using a few publicly exposed interfaces.  This section covers tweaks and &quot;by convention&quot; behaviours that might be desirable in specific circumstances
 * [[Ignore all members marked with the [XmlIgnore] attribute (IMemberSetter)]]
-* [[Create instances of a class that has no default constructor (IGenerator)]]
+* [[Create instances of a class that has no default constructor (IGenerator)|Register a new generator to for specific types]]
 * [[Save all constructed objects in an NHibernate session (IInstanceProcessor)]]
 !!Use cases
 These examples covers slightly more indepth usages of NGineer
@@ -977,7 +977,7 @@ merge(config.optionsDesc,{
 */
 //}}}</pre>
 </div>
-<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201011260826" changecount="3">
+<div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201011260833" changecount="5">
 <pre>&lt;code c#&gt;
 public class CustomClass
 {
@@ -1010,7 +1010,9 @@ public class CustomClassGenerator : IGenerator
 }
 
 // Register a new generator to handle creating the class with no default constructor
-var customClass = new Builder (1).WithGenerator (new CustomClassGenerator ()).Build&lt;CustomClass&gt; ();
+var customClass = new Builder()
+    .WithGenerator (new CustomClassGenerator())
+    .Build&lt;CustomClass&gt;();
 Assert.AreEqual(&quot;Demo Generator&quot;, customClass.Name);
 &lt;/code&gt;</pre>
 </div>
