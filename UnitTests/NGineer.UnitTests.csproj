@@ -137,6 +137,7 @@
     <Compile Include="Examples\Recipes.cs" />
     <Compile Include="Types\SingleReadonlyClass.cs" />
     <Compile Include="Examples\IgnoreXmlIgnoredAttribute.cs" />
+    <Compile Include="Examples\SaveConstructedInstances.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">

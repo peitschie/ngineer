@@ -756,7 +756,7 @@ var simpleClass = new Builder(1)
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
 * [[Examples]]</pre>
 </div>
-<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260827" changecount="12">
+<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260843" changecount="13">
 <pre>!!Introduction
 Introductory articles explaining some very basic ~NGineer concepts and showing a few short examples to whet the appetite
 * [[Diving In]]
@@ -777,7 +777,7 @@ Short code snippets showing how to use various ~NGineer extensions shipped with 
 Most core ~NGineer behaviour is implemented using a few publicly exposed interfaces.  This section covers tweaks and &quot;by convention&quot; behaviours that might be desirable in specific circumstances
 * [[Ignore all members marked with the [XmlIgnore] attribute (IMemberSetter)]]
 * [[Create instances of a class that has no default constructor (IGenerator)|Register a new generator to for specific types]]
-* [[Save all constructed objects in an NHibernate session (IInstanceProcessor)]]
+* [[Save all constructed objects in an (NHibernate-like) session (IInstanceProcessor)]]
 !!Use cases
 These examples covers slightly more indepth usages of NGineer
 * [[Car service light]]</pre>
@@ -1103,6 +1103,70 @@ public void Build_ReusingExistingInstancesOnly()
 * Easy support sequence generation for common operations such as
 ** consecutive numbering of peers
 ** random but unique sequences</pre>
+</div>
+<div title="Save all constructed objects in an (NHibernate-like) session (IInstanceProcessor)" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011260854" changecount="1">
+<pre>&lt;code c#&gt;
+public interface ISession
+{
+    void Save(DatabaseEntity obj);
+}
+
+public class FakeSession : ISession
+{
+    public void Save(DatabaseEntity obj)
+    {
+        obj.IsSaved = true;
+    }
+}
+
+public class DatabaseEntity
+{
+    public bool IsSaved { get; set; }
+}
+
+public class ExtendedDatabaseEntity : DatabaseEntity
+{
+}
+
+public class ObjectPersistor : IInstanceProcessor
+{
+    private readonly ISession _session;
+
+    public ObjectPersistor(ISession session)
+    {
+        _session = session;
+    }
+
+    public bool IsForType(Type type)
+    {
+        return type == typeof(DatabaseEntity) || type.IsSubclassOf(typeof(DatabaseEntity));
+    }
+
+    public void Process(object obj, IBuilder builder, BuildSession session)
+    {
+        var databaseEntity = (DatabaseEntity)obj;
+        // Need to guard against the entity having already been saved
+        // The instance Processor is called after ever object is constructed and set,
+        // but in instances where an object is being re-used, the instance processor will
+        // still be called
+        if(!databaseEntity.IsSaved)
+        {
+            _session.Save(databaseEntity);
+        }
+    }
+}
+
+// Register a new instance processor to persist database entities
+var builder = new Builder()
+    // AfterPopulationOf processors are run after an object is constructed and
+    // all setters have been run
+    .AfterPopulationOf(new ObjectPersistor(new FakeSession()));
+var customClass = builder.Build&lt;DatabaseEntity&gt;();
+Assert.IsTrue(customClass.IsSaved);
+
+var extendedClass = builder.Build&lt;ExtendedDatabaseEntity&gt;();
+Assert.IsTrue(extendedClass.IsSaved);
+&lt;/code&gt;</pre>
 </div>
 <div title="SiteSubtitle" creator="Philip Peitsch" modifier="Philip Peitsch" created="201005121150" changecount="1">
 <pre>A .NET object builder designed for easy generation of data for testing purposes</pre>
