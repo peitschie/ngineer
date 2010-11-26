@@ -52,5 +52,45 @@ namespace NGineer.UnitTests.Examples
 
             Assert.IsTrue(instance.List.Contains("demonstration"));
         }
+
+        #region Build_WithGenerator_ConcreteTypesInPlaceOfAbstractTypes
+        public abstract class AbstractParent
+        {
+            public string ParentProperty { get; set; }
+        }
+
+        public class Child1 : AbstractParent
+        {
+            public string Child1Property { get; set; }
+        }
+
+        public class Child2 : AbstractParent
+        {
+            public string Child2Property { get; set; }
+        }
+
+        [Test]
+        public void Build_WithGenerator_ConcreteTypesInPlaceOfAbstractTypes()
+        {
+            var instances = _builder
+                                .SetCollectionSize<AbstractParent>(5,10)
+                                .WithGenerator<AbstractParent>(typeof(Child1), typeof(Child2))
+                                .Build<AbstractParent[]>();
+
+            Assert.That(instances.OfType<Child1>().Count(), Is.GreaterThan(0));
+            foreach(var child1 in instances.OfType<Child1>())
+            {
+                Assert.IsNotNull(child1.ParentProperty);
+                Assert.IsNotNull(child1.Child1Property);
+            }
+
+            Assert.That(instances.OfType<Child2>().Count(), Is.GreaterThan(0));
+            foreach(var child2 in instances.OfType<Child2>())
+            {
+                Assert.IsNotNull(child2.ParentProperty);
+                Assert.IsNotNull(child2.Child2Property);
+            }
+        }
+        #endregion
     }
 }

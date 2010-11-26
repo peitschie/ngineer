@@ -660,6 +660,47 @@ TertiaryDark: #666
 Error: #f88
 </pre>
 </div>
+<div title="Construct random concrete instances for a given abstract type" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011260957" modified="201011260959" changecount="6">
+<pre>&lt;code c#&gt;
+public abstract class AbstractParent
+{
+    public string ParentProperty { get; set; }
+}
+
+public class Child1 : AbstractParent
+{
+    public string Child1Property { get; set; }
+}
+
+public class Child2 : AbstractParent
+{
+    public string Child2Property { get; set; }
+}
+
+[Test]
+public void Build_WithGenerator_ConcreteTypesInPlaceOfAbstractTypes()
+{
+    var instances = _builder
+                        .SetCollectionSize&lt;AbstractParent&gt;(5,10)
+                        .WithGenerator&lt;AbstractParent&gt;(typeof(Child1), typeof(Child2))
+                        .Build&lt;AbstractParent[]&gt;();
+
+    Assert.That(instances.OfType&lt;Child1&gt;().Count(), Is.GreaterThan(0));
+    foreach(var child1 in instances.OfType&lt;Child1&gt;())
+    {
+        Assert.IsNotNull(child1.ParentProperty);
+        Assert.IsNotNull(child1.Child1Property);
+    }
+
+    Assert.That(instances.OfType&lt;Child2&gt;().Count(), Is.GreaterThan(0));
+    foreach(var child2 in instances.OfType&lt;Child2&gt;())
+    {
+        Assert.IsNotNull(child2.ParentProperty);
+        Assert.IsNotNull(child2.Child2Property);
+    }
+}
+&lt;/code&gt;</pre>
+</div>
 <div title="Create complex hierarchy" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121359" modified="201008271307" changecount="6">
 <pre>First, one lets define the types...
 &lt;code c#&gt;
@@ -756,7 +797,7 @@ var simpleClass = new Builder(1)
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
 * [[Examples]]</pre>
 </div>
-<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260843" changecount="13">
+<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260956" changecount="14">
 <pre>!!Introduction
 Introductory articles explaining some very basic ~NGineer concepts and showing a few short examples to whet the appetite
 * [[Diving In]]
@@ -773,6 +814,7 @@ Short code snippets showing how to use various ~NGineer extensions shipped with 
 * [[Add a known entry to a dictionary property]]
 * [[Add a known entry to a list]]
 * [[Add a known entry to a list property]]
+* [[Construct random concrete instances for a given abstract type]]
 !!Extending ~NGineer
 Most core ~NGineer behaviour is implemented using a few publicly exposed interfaces.  This section covers tweaks and &quot;by convention&quot; behaviours that might be desirable in specific circumstances
 * [[Ignore all members marked with the [XmlIgnore] attribute (IMemberSetter)]]
