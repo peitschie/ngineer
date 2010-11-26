@@ -23,8 +23,10 @@ namespace NGineer.UnitTests.Examples.UseCases.Car
                 .SetCollectionSize<Wheel>(4,4) // Only dealing with standard cars for now
                 .For<Wheel>().Set(x => x.IsFlat, false) // No flat tyres
                 .For<Car>() // Car should not require an oil change for distance or date
-                    .Set(x => x.DistanceSinceLastOilChange, (obj, builder, session) => session.Random.NextInRange(0, DemoServiceCallController.DistanceBetweenOilChanges))
-                    .Set(x => x.LastOilChange, (obj, builder, session) => DateTime.Now.Subtract(TimeSpan.FromDays(session.Random.NextInRange(0, DemoServiceCallController.DaysSinceOilChange-1))))
+                    .Set(x => x.DistanceSinceLastOilChange,
+                         (obj, builder, session) => session.Random.NextInRange(0, DemoServiceCallController.DistanceBetweenOilChanges))
+                    .Set(x => x.LastOilChange,
+                         (obj, builder, session) => DateTime.Now.Subtract(TimeSpan.FromDays(session.Random.NextInRange(0, DemoServiceCallController.DaysSinceOilChange-1))))
                 ;
         }
 

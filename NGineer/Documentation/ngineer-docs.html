@@ -642,6 +642,92 @@ Assert.That(array.Length, Is.GreaterThanOrEqualTo(10));
 Assert.That(array.Length, Is.LessThanOrEqualTo(20));
 &lt;/code&gt;</pre>
 </div>
+<div title="Car service light" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011261033" modified="201011261047" changecount="5">
+<pre>Click here to view the demonstration controller code &amp; declared types: [[Project code]]
+&lt;code c#&gt;
+using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+
+namespace NGineer.UnitTests.Examples.UseCases.Car
+{
+    [TestFixture]
+    public class DemoServiceCallControllerTests
+    {
+        private IBuilder _builder; // Stores the configured builder for each test run
+        private Car _car; // Created only as it is a commonly used variable
+
+        [SetUp]
+        public void SetUp()
+        {
+            // In order to prevent different data being generated depending on which tests are run,
+            // it is good practice to create a new Builder for each particular test.  You don't need
+            // to create multiple builders within a test however
+
+            // Want the default car to be &quot;good&quot; in all ways so each test can break it
+            // only in the way required
+            _builder = new Builder()
+                .SetCollectionSize&lt;Wheel&gt;(4,4) // Only dealing with standard cars for now
+                .For&lt;Wheel&gt;().Set(x =&gt; x.IsFlat, false) // No flat tyres
+                .For&lt;Car&gt;() // Car should not require an oil change for distance or date
+                    .Set(x =&gt; x.DistanceSinceLastOilChange,
+                         (obj, builder, session) =&gt; session.Random.NextInRange(0, DemoServiceCallController.DistanceBetweenOilChanges))
+                    .Set(x =&gt; x.LastOilChange,
+                         (obj, builder, session) =&gt; DateTime.Now.Subtract(TimeSpan.FromDays(session.Random.NextInRange(0, DemoServiceCallController.DaysSinceOilChange-1))))
+                ;
+        }
+
+        [Test]
+        public void CarWithNoIssues_DoesNotRequireService()
+        {
+            // Standard non-broken car as defined by default
+            _car = _builder.Build&lt;Car&gt;();
+
+            Assert.IsFalse(DemoServiceCallController.RequiresService(_car));
+        }
+        
+        [Test]
+        public void CarWithOneFlatTire_RequiresService()
+        {
+            // Only want a single tire to be flat, all 3 other tires should be ok
+            var values = new Queue&lt;bool&gt;(new []{false, true, false, false});
+
+            _car = _builder
+                // Each time a wheel is constructed, the next available value is pop'ed and returned
+                .For&lt;Wheel&gt;().Set(x =&gt; x.IsFlat, values.Dequeue) 
+                .Build&lt;Car&gt;();
+
+            Assert.IsTrue(DemoServiceCallController.RequiresService(_car));
+        }
+
+        [Test]
+        public void CarHasGoneFurtherThanAllowedDistanceBetweenOilChanges_RequiresService()
+        {
+            _car = _builder
+                .For&lt;Car&gt;().Set(x =&gt; x.DistanceSinceLastOilChange, DemoServiceCallController.DistanceBetweenOilChanges + 1)
+                .Build&lt;Car&gt;();
+
+            Assert.IsTrue(DemoServiceCallController.RequiresService(_car));
+        }
+
+        [Test]
+        public void CarHasBeenMoreThanAllowedNumberOfDaysSinceOilChange_RequiresService()
+        {
+            _car = _builder
+                .For&lt;Car&gt;().Set(x =&gt; x.LastOilChange, DateTime.Now.Subtract(TimeSpan.FromDays(DemoServiceCallController.DaysSinceOilChange + 1)))
+                .Build&lt;Car&gt;();
+
+            Assert.IsTrue(DemoServiceCallController.RequiresService(_car));
+        }
+    }
+}
+&lt;/code&gt;
+!!Further points for consideration
+* Changing the location of the Wheel collection would not break any of these tests.  That is, if wheels were added onto a &quot;Transportation&quot; sub-class, the tests would still pass as expected
+* Moving the locations of various settings would only require a few changes to the fixture setup and directly applicable tests
+* Some variations can be easily added to the constructed objects (e.g., change the builder to handle cars with 2 wheels up to 16 wheels)
+* Tests will automatically fill in new entities without change.  This is useful if the controller is modified to check a new property (e.g., an Engine object) that must be not null.  The test setup and use of ~NGineer makes changes to the fixture likely not required in order for the existing tests to function correctly</pre>
+</div>
 <div title="ColorPalette" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121216" modified="201005121219" changecount="6">
 <pre>Background: #fff
 Foreground: #000
@@ -797,19 +883,19 @@ var simpleClass = new Builder(1)
 This is of course the most basic use of NGineer with simple primitives.  The functionality is much more advanced than just that.  See the following more indepth and complex build demonstrations for more examples
 * [[Examples]]</pre>
 </div>
-<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011260956" changecount="14">
+<div title="Examples" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201006030957" modified="201011261038" changecount="16">
 <pre>!!Introduction
 Introductory articles explaining some very basic ~NGineer concepts and showing a few short examples to whet the appetite
 * [[Diving In]]
 * [[Create complex hierarchy]]
 * [[Register a new generator to for specific types]]
-!!Short examples using standard NGineer methods
+!!Short examples using standard ~NGineer methods
 Short code snippets showing how to use various features of the core ~NGineer behaviours to construct simple or complex types
 * [[Build an array of a known size]]
 * [[Reuse existing instances for a given type]]
 * [[Get all constructed instances of a given type]]
 !!Short examples using ~NGineer extensions
-Short code snippets showing how to use various ~NGineer extensions shipped with NGineer
+Short code snippets showing how to use various ~NGineer extensions shipped with ~NGineer
 * [[Add a known entry to a dictionary]]
 * [[Add a known entry to a dictionary property]]
 * [[Add a known entry to a list]]
@@ -821,8 +907,9 @@ Most core ~NGineer behaviour is implemented using a few publicly exposed interfa
 * [[Create instances of a class that has no default constructor (IGenerator)|Register a new generator to for specific types]]
 * [[Save all constructed objects in an (NHibernate-like) session (IInstanceProcessor)]]
 !!Use cases
-These examples covers slightly more indepth usages of NGineer
-* [[Car service light]]</pre>
+These examples covers slightly more indepth usages of ~NGineer
+!!![[Car service light]]
+A short example showing how to structure a test fixture &amp; ~NGineer builder to easily exercise various branches in a given block of controller code</pre>
 </div>
 <div title="Get all constructed instances of a given type" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011200459" modified="201011200512" changecount="3">
 <pre>&lt;code c#&gt;
@@ -1054,6 +1141,55 @@ merge(config.optionsDesc,{
 	});
 */
 //}}}</pre>
+</div>
+<div title="Project code" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011261035" modified="201011261036" changecount="3">
+<pre>Types and controllers use for the Car service light use case
+&lt;code c#&gt;
+Using System;
+
+namespace NGineer.UnitTests.Examples.UseCases.Car
+{
+    public class Car
+    {
+        public SerialNumber VIN;
+        public Wheel[] Wheels;
+        public string Registration;
+        public int DistanceSinceLastOilChange;
+        public DateTime? LastOilChange;
+    }
+
+    public class Wheel
+    {
+        public bool IsFlat;
+    }
+
+    public class SerialNumber
+    {
+        public string Serial;
+    }
+
+    public class DemoServiceCallController
+    {
+        public const int DistanceBetweenOilChanges = 10000;
+        public const int DaysSinceOilChange = 100;
+
+        public static bool RequiresService(Car car)
+        {
+            if (car.Wheels.Any(wheel =&gt; wheel.IsFlat))
+                return true;
+            
+            if (car.DistanceSinceLastOilChange &gt; DistanceBetweenOilChanges)
+                return true;
+
+            if (car.LastOilChange.HasValue 
+                &amp;&amp; DateTime.Now.Subtract(car.LastOilChange.Value).TotalDays &gt; DaysSinceOilChange)
+                return true;
+
+            return false;
+        }
+    }
+}
+&lt;/code&gt;</pre>
 </div>
 <div title="Register a new generator to for specific types" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121402" modified="201011260833" changecount="5">
 <pre>&lt;code c#&gt;
