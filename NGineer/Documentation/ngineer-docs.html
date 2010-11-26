@@ -821,6 +821,42 @@ public void Build_GetAllConstructedInstances()
 }
 &lt;/code&gt;</pre>
 </div>
+<div title="Ignore all members marked with the [XmlIgnore] attribute (IMemberSetter)" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201011260837" modified="201011260838" changecount="2">
+<pre>&lt;code c#&gt;
+public class XmlClass
+{
+    [XmlIgnore]
+    public string XmlIgnoredProperty { get; set; }
+
+    public string ConstructedProperty { get; set; }
+}
+
+public class IgnoreXmlIgnoredAttributeSetter : IMemberSetter
+{
+    public bool IsForMember(MemberInfo member, IBuilder builder, BuildSession session)
+    {
+        // Return true for any member that has an XmlIgnore attribute on it.
+        // This signifies to NGineer that this setter will consume the given member and prevent
+        // any other member setter from being run on it
+        return member.GetCustomAttributes(typeof(XmlIgnoreAttribute), true).Length &gt; 0;
+    }
+
+    public void Set(object obj, IBuilder builder, BuildSession session)
+    {
+        // Perform no population.  Simple consume these members and leave them untouched
+    }
+}
+
+// Register a new member setter to handle xml ignored properties
+var customClass = new Builder()
+    // AfterConstructionOf setters are run after an object is constructed by a generator
+    // but before any instance processors are called
+    .AfterConstructionOf(new IgnoreXmlIgnoredAttributeSetter())
+    .Build&lt;XmlClass&gt;();
+Assert.IsNotNull(customClass.ConstructedProperty);
+Assert.IsNull(customClass.XmlIgnoredProperty);
+&lt;/code&gt;</pre>
+</div>
 <div title="Implementation" creator="PhilipPeitsch" modifier="PhilipPeitsch" created="201005121409" modified="201011200320" changecount="7">
 <pre>//Note: this page is currently being written.  Apologies for it being incomplete!//
 

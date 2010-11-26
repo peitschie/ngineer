@@ -61,6 +61,7 @@
       <HintPath>..\Libraries\Moq\net35\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Examples\BuilderExtensionRecipes.cs" />
     <Compile Include="Examples\Recipes.cs" />
     <Compile Include="Types\SingleReadonlyClass.cs" />
+    <Compile Include="Examples\IgnoreXmlIgnoredAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NGineer\NGineer.csproj">
