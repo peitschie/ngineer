@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NGineer.UnitTests.Types;
 using NUnit.Framework;
+using System.Linq;
 
 namespace NGineer.UnitTests.Examples
 {

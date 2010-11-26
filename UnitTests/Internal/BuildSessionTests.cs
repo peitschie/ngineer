@@ -14,19 +14,21 @@ namespace NGineer.UnitTests.Internal
         private BuildSession _session;
         private TypeRegistry<Range> _registry;
         private Range _defaultRange;
+        private Random _random;
 
         [SetUp]
         public void SetUp()
         {
             _defaultRange = new Range(10, 1000);
             _registry = new TypeRegistry<Range>();
+            _random = new Random(0);
         }
 
         [Test]
         public void GetCollectionSize_ReturnsDefaultIfNoneDefined()
         {
             var defRange = new Range(10, 1000);
-            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, (Random)null);
+            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, _random);
             Assert.AreSame(defRange, _session.GetCollectionSize(typeof(string)));
         }
 
@@ -36,7 +38,7 @@ namespace NGineer.UnitTests.Internal
             var stringRange = new Range(-10, 1); 
             var defRange = new Range(10, 1000);
             _registry.SetForType<string>(stringRange);
-            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, (Random)null);
+            _session = new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = defRange }, null, _random);
             
             Assert.AreSame(stringRange, _session.GetCollectionSize(typeof(string)));
         }
@@ -142,7 +144,7 @@ namespace NGineer.UnitTests.Internal
 
         private BuildSession ConstructSession()
         {
-            return new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = _defaultRange }, null, (Random)null);
+            return new BuildSession(new TestBuilder{ CollectionSizes = _registry, DefaultCollectionSize = _defaultRange }, null, _random);
         }
     }
 }

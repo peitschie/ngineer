@@ -23,7 +23,7 @@ namespace NGineer.UnitTests.BuildGenerators
         [Test]
         public void Create_SimpleType_NamedMember()
         {
-            var session = new BuildSession(null, null, (Random)null);
+            var session = new BuildSession(null, null, new Random(0));
             var obj = new SimpleType();
 
             session.PushObject(new ObjectBuildRecord(typeof(SimpleType), obj, true));

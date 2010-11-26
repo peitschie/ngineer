@@ -9,6 +9,7 @@ namespace NGineer
 {
     public sealed class BuildSession : IDisposable
     {
+        private readonly long _sessionId;
         private readonly Random _random;
         private readonly IConfiguredBuilder _builder;
         private readonly ObjectBuildTreeEntry _objectTreeRoot;
@@ -22,6 +23,7 @@ namespace NGineer
             _wrappedBuilder = new SessionedBuilder(builder, this);
             if (parent != null && !parent.IsDisposed)
             {
+                _sessionId = parent._sessionId;
                 _random = parent._random;
                 _constructedNodes = parent._constructedNodes;
                 _objectTreeRoot = parent._objectTreeRoot;
@@ -30,6 +32,7 @@ namespace NGineer
             }
             else
             {
+                _sessionId = random.Next();
                 _random = random;
                 _constructedNodes = new List<ObjectBuildTreeEntry>();
                 _objectTreeRoot = new ObjectBuildTreeEntry(null, null, -1);
@@ -39,6 +42,11 @@ namespace NGineer
         }
 
         #region Readonly Properties
+        public long SessionId
+        {
+            get { return _sessionId; }
+        }
+
         public bool IsDisposed {
             get;
             private set;
